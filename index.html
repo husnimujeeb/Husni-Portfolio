@@ -275,28 +275,42 @@
     <p>Select a note to read the full testimonial.</p>
   </div>
   <div class="feedback-track" aria-label="Client testimonials">
-    <button class="feedback-card" type="button" data-client="Client name" data-role="Client role / company" data-rating="5" data-feedback="Replace this sample with a verified client testimonial. Include the challenge, your collaboration, and the result.">
+    <button class="feedback-card" type="button" data-client="Client name" data-role="Client role / company" data-rating="5" data-avatar="assets/client-avatar-placeholder.svg" data-work-images="assets/client-work-preview.svg" data-feedback="Replace this sample with a verified client testimonial. Include the challenge, your collaboration, and the result.">
       <span class="client-avatar">CN</span><span class="feedback-card-copy"><span class="feedback-card-top"><strong>Client name</strong><span class="stars" aria-label="5 out of 5 stars">★★★★★</span></span><span class="feedback-excerpt">“A clear, thoughtful partner from the first idea to the final delivery.”</span></span>
     </button>
-    <button class="feedback-card" type="button" data-client="Client name" data-role="Client role / company" data-rating="5" data-feedback="Replace this sample with a verified client testimonial. Use the full quote provided by your client.">
+    <button class="feedback-card" type="button" data-client="Client name" data-role="Client role / company" data-rating="5" data-avatar="assets/client-avatar-placeholder.svg" data-work-images="assets/client-work-preview.svg" data-feedback="Replace this sample with a verified client testimonial. Use the full quote provided by your client.">
       <span class="client-avatar">CN</span><span class="feedback-card-copy"><span class="feedback-card-top"><strong>Client name</strong><span class="stars" aria-label="5 out of 5 stars">★★★★★</span></span><span class="feedback-excerpt">“The work gave our brand a stronger and more consistent presence.”</span></span>
     </button>
-    <button class="feedback-card" type="button" data-client="Client name" data-role="Client role / company" data-rating="5" data-feedback="Replace this sample with a verified client testimonial. Describe a real result where possible.">
+    <button class="feedback-card" type="button" data-client="Client name" data-role="Client role / company" data-rating="5" data-avatar="assets/client-avatar-placeholder.svg" data-work-images="assets/client-work-preview.svg" data-feedback="Replace this sample with a verified client testimonial. Describe a real result where possible.">
       <span class="client-avatar">CN</span><span class="feedback-card-copy"><span class="feedback-card-top"><strong>Client name</strong><span class="stars" aria-label="5 out of 5 stars">★★★★★</span></span><span class="feedback-excerpt">“Professional, responsive, and exceptionally focused on the details.”</span></span>
     </button>
-    <button class="feedback-card" type="button" data-client="Client name" data-role="Client role / company" data-rating="5" data-feedback="Replace this sample with a verified client testimonial. Keep it brief, specific, and honest.">
+    <button class="feedback-card" type="button" data-client="Client name" data-role="Client role / company" data-rating="5" data-avatar="assets/client-avatar-placeholder.svg" data-work-images="assets/client-work-preview.svg" data-feedback="Replace this sample with a verified client testimonial. Keep it brief, specific, and honest.">
       <span class="client-avatar">CN</span><span class="feedback-card-copy"><span class="feedback-card-top"><strong>Client name</strong><span class="stars" aria-label="5 out of 5 stars">★★★★★</span></span><span class="feedback-excerpt">“A collaborative process and design that genuinely represents our business.”</span></span>
     </button>
   </div>
 </section>
 
 <div class="feedback-modal" id="feedback-modal" aria-hidden="true" role="dialog" aria-modal="true" aria-labelledby="feedback-modal-client">
-  <button class="feedback-modal-close" type="button" aria-label="Close testimonial">×</button>
-  <div class="feedback-modal-avatar" id="feedback-modal-avatar"></div>
-  <p class="feedback-modal-stars" id="feedback-modal-stars"></p>
-  <blockquote id="feedback-modal-quote"></blockquote>
-  <p class="feedback-modal-client" id="feedback-modal-client"></p>
-  <p class="feedback-modal-role" id="feedback-modal-role"></p>
+  <div class="feedback-dialog">
+    <button class="feedback-modal-close" type="button" aria-label="Close testimonial">×</button>
+    <div class="feedback-person">
+      <img class="feedback-modal-avatar" id="feedback-modal-avatar" src="" alt="" />
+      <div><p class="feedback-modal-client" id="feedback-modal-client"></p><p class="feedback-modal-role" id="feedback-modal-role"></p></div>
+    </div>
+    <p class="feedback-modal-stars" id="feedback-modal-stars" aria-label="Client rating"></p>
+    <blockquote id="feedback-modal-quote"></blockquote>
+    <button class="feedback-work-preview" type="button" id="feedback-work-preview">
+      <img id="feedback-work-preview-image" src="" alt="Project preview" />
+      <span>View project preview <b aria-hidden="true">↗</b></span>
+    </button>
+  </div>
+</div>
+
+<div class="work-gallery" id="work-gallery" aria-hidden="true" role="dialog" aria-modal="true" aria-label="Project image gallery">
+  <button class="gallery-close" type="button" aria-label="Close project image">×</button>
+  <button class="gallery-nav gallery-prev" type="button" aria-label="Previous image">‹</button>
+  <figure><img id="gallery-image" src="" alt="Client project preview" /><figcaption id="gallery-caption"></figcaption></figure>
+  <button class="gallery-nav gallery-next" type="button" aria-label="Next image">›</button>
 </div>
 
 <!-- ==================================== -->
