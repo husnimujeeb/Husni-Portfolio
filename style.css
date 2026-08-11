@@ -1107,3 +1107,8 @@ body.modal-open { overflow: hidden; }
 .gallery-nav { width: 42px; height: 42px; font-size: 32px; line-height: 1; }
 .gallery-nav:disabled { opacity: .35; cursor: default; }
 @media (max-width: 640px) { .feedback-dialog { padding: 24px; } .feedback-work-preview { grid-template-columns: 110px 1fr; } .feedback-work-preview img { width: 110px; height: 76px; } .work-gallery { grid-template-columns: 1fr; } .work-gallery figure { width: 100%; } .gallery-nav { position: absolute; top: 50%; } .gallery-prev { left: 12px; } .gallery-next { right: 12px; } }
+
+
+/* Keep the custom cursor above modal overlays. */
+body.modal-open #c-dot { z-index: 12001; }
+body.modal-open #c-ring { z-index: 12000; }
