@@ -684,3 +684,42 @@ qa('.handles-box').forEach(box => {
    RESIZE — refresh ScrollTrigger
 ================================================ */
 window.addEventListener('resize', () => ScrollTrigger.refresh());
+
+/* CLIENT FEEDBACK MODAL */
+(function initFeedbackModal() {
+  const track = q('.feedback-track');
+  qa('.feedback-card').forEach(card => track.appendChild(card.cloneNode(true)));
+  const modal = q('#feedback-modal');
+  const close = q('.feedback-modal-close');
+  const quote = q('#feedback-modal-quote');
+  const client = q('#feedback-modal-client');
+  const role = q('#feedback-modal-role');
+  const avatar = q('#feedback-modal-avatar');
+  const stars = q('#feedback-modal-stars');
+
+  function closeModal() {
+    modal.classList.remove('is-open');
+    modal.setAttribute('aria-hidden', 'true');
+    document.body.classList.remove('modal-open');
+  }
+
+  qa('.feedback-card').forEach(card => {
+    card.addEventListener('click', () => {
+      const name = card.dataset.client;
+      const rating = Number(card.dataset.rating);
+      quote.textContent = '“' + card.dataset.feedback + '”';
+      client.textContent = name;
+      role.textContent = card.dataset.role;
+      avatar.textContent = name.split(' ').map(word => word[0]).join('').slice(0, 2);
+      stars.textContent = '★'.repeat(rating) + '☆'.repeat(5 - rating);
+      modal.classList.add('is-open');
+      modal.setAttribute('aria-hidden', 'false');
+      document.body.classList.add('modal-open');
+      close.focus();
+    });
+  });
+
+  close.addEventListener('click', closeModal);
+  modal.addEventListener('click', event => { if (event.target === modal) closeModal(); });
+  document.addEventListener('keydown', event => { if (event.key === 'Escape' && modal.classList.contains('is-open')) closeModal(); });
+})();
