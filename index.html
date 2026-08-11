@@ -41,12 +41,10 @@
 <!-- ========== NAVIGATION ========== -->
 <nav id="nav" role="navigation" aria-label="Main navigation">
   <div class="nav-links">
-    <a href="#about"       id="nav-about"       class="nav-link active" data-nav="about">About me</a>
-    <a href="#branding"    id="nav-branding"    class="nav-link"        data-nav="branding">Branding</a>
-    <a href="#social"      id="nav-social"      class="nav-link"        data-nav="social">Social media</a>
-    <a href="#printing"    id="nav-printing"    class="nav-link"        data-nav="printing">Printing</a>
-    <a href="#photography" id="nav-photography" class="nav-link"        data-nav="photography">Photography</a>
-    <a href="#contact"     id="nav-contact"     class="nav-link"        data-nav="contact">Contact me</a>
+    <a href="#about" id="nav-about" class="nav-link active" data-nav="about">About me</a>
+    <a href="#works" id="nav-works" class="nav-link" data-nav="works">My works</a>
+    <a href="#feedback" id="nav-feedback" class="nav-link" data-nav="feedback">Feedback</a>
+    <a href="#contact" id="nav-contact" class="nav-link" data-nav="contact">Contact</a>
   </div>
   <div class="nav-rule"></div>
 </nav>
@@ -122,13 +120,13 @@
 <!-- ==================================== -->
 <!--   SECTION 2 — TABLE OF CONTENTS      -->
 <!-- ==================================== -->
-<section id="toc" class="section toc-section" aria-label="Table of contents">
+<section id="works" class="section toc-section" aria-label="My works">
   <div class="handles-box" id="toc-box">
     <div class="hb-border"></div>
     <span class="h h-tl"></span><span class="h h-tm"></span><span class="h h-tr"></span>
     <span class="h h-ml"></span><span class="h h-mr"></span>
     <span class="h h-bl"></span><span class="h h-bm"></span><span class="h h-br"></span>
-    <div class="big-title" id="toc-title">TABLE OF CONTENT</div>
+    <div class="big-title" id="toc-title">MY WORKS</div>
   </div>
 
   <nav class="toc-grid" aria-label="Portfolio sections">
@@ -268,7 +266,41 @@
 </section>
 
 <!-- ==================================== -->
-<!--   SECTION 7 — CONTACT               -->
+<!--   SECTION 7 — CLIENT FEEDBACK       -->
+<!-- ==================================== -->
+<section id="feedback" class="section feedback-section" aria-label="Client feedback">
+  <div class="feedback-intro">
+    <p class="feedback-kicker">CLIENT FEEDBACK</p>
+    <h2>Trusted for thoughtful, high-impact creative work.</h2>
+    <p>Select a note to read the full testimonial.</p>
+  </div>
+  <div class="feedback-track" aria-label="Client testimonials">
+    <button class="feedback-card" type="button" data-client="Client name" data-role="Client role / company" data-rating="5" data-feedback="Replace this sample with a verified client testimonial. Include the challenge, your collaboration, and the result.">
+      <span class="client-avatar">CN</span><span class="feedback-card-copy"><span class="feedback-card-top"><strong>Client name</strong><span class="stars" aria-label="5 out of 5 stars">★★★★★</span></span><span class="feedback-excerpt">“A clear, thoughtful partner from the first idea to the final delivery.”</span></span>
+    </button>
+    <button class="feedback-card" type="button" data-client="Client name" data-role="Client role / company" data-rating="5" data-feedback="Replace this sample with a verified client testimonial. Use the full quote provided by your client.">
+      <span class="client-avatar">CN</span><span class="feedback-card-copy"><span class="feedback-card-top"><strong>Client name</strong><span class="stars" aria-label="5 out of 5 stars">★★★★★</span></span><span class="feedback-excerpt">“The work gave our brand a stronger and more consistent presence.”</span></span>
+    </button>
+    <button class="feedback-card" type="button" data-client="Client name" data-role="Client role / company" data-rating="5" data-feedback="Replace this sample with a verified client testimonial. Describe a real result where possible.">
+      <span class="client-avatar">CN</span><span class="feedback-card-copy"><span class="feedback-card-top"><strong>Client name</strong><span class="stars" aria-label="5 out of 5 stars">★★★★★</span></span><span class="feedback-excerpt">“Professional, responsive, and exceptionally focused on the details.”</span></span>
+    </button>
+    <button class="feedback-card" type="button" data-client="Client name" data-role="Client role / company" data-rating="5" data-feedback="Replace this sample with a verified client testimonial. Keep it brief, specific, and honest.">
+      <span class="client-avatar">CN</span><span class="feedback-card-copy"><span class="feedback-card-top"><strong>Client name</strong><span class="stars" aria-label="5 out of 5 stars">★★★★★</span></span><span class="feedback-excerpt">“A collaborative process and design that genuinely represents our business.”</span></span>
+    </button>
+  </div>
+</section>
+
+<div class="feedback-modal" id="feedback-modal" aria-hidden="true" role="dialog" aria-modal="true" aria-labelledby="feedback-modal-client">
+  <button class="feedback-modal-close" type="button" aria-label="Close testimonial">×</button>
+  <div class="feedback-modal-avatar" id="feedback-modal-avatar"></div>
+  <p class="feedback-modal-stars" id="feedback-modal-stars"></p>
+  <blockquote id="feedback-modal-quote"></blockquote>
+  <p class="feedback-modal-client" id="feedback-modal-client"></p>
+  <p class="feedback-modal-role" id="feedback-modal-role"></p>
+</div>
+
+<!-- ==================================== -->
+<!--   SECTION 8 — CONTACT               -->
 <!-- ==================================== -->
 <section id="contact" class="section contact-section" aria-label="Contact Husni Mujeeb">
   <div class="contact-inner">
@@ -280,6 +312,19 @@
     </h2>
 
     <div class="contact-rule"></div>
+
+    <form class="contact-form" action="https://formsubmit.co/husnimujeeb.co@gmail.com" method="POST">
+      <input type="hidden" name="_subject" value="New portfolio enquiry" />
+      <input type="hidden" name="_next" value="https://husnimujeeb.github.io/Husni-Portfolio/#contact" />
+      <input type="hidden" name="_captcha" value="false" />
+      <div class="contact-form-grid">
+        <label>Name<input type="text" name="name" autocomplete="name" required /></label>
+        <label>Contact number<input type="tel" name="phone" autocomplete="tel" required /></label>
+        <label>Email<input type="email" name="email" autocomplete="email" required /></label>
+        <label class="contact-form-message">Message<textarea name="message" rows="5" required></textarea></label>
+      </div>
+      <button class="contact-submit" type="submit">Send message <span aria-hidden="true">↗</span></button>
+    </form>
 
     <div class="contact-links">
       <a href="mailto:husnimujeeb.co@gmail.com" class="clink magnetic-btn" id="clink-email">
