@@ -1,0 +1,335 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Husni Mujeeb — Art Director & Photographer | Sri Lanka</title>
+  <meta name="description" content="Husni Mujeeb — Art Director and Photographer based in Sri Lanka. 4+ years, 100+ clients. Specializing in brand identity, visual design, social media, photography and more." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+
+<!-- ========== GRAIN OVERLAY ========== -->
+<div id="grain" aria-hidden="true"></div>
+
+<!-- ========== SCROLL PROGRESS ========== -->
+<div id="scroll-progress" aria-hidden="true"></div>
+
+<!-- ========== PRELOADER ========== -->
+<div id="preloader" aria-hidden="true">
+  <div class="pre-bg-word">HUSNI</div>
+  <div class="pre-center">
+    <div class="pre-name">
+      <span class="pre-first">HUSNI</span>
+      <span class="pre-last">MUJEEB</span>
+    </div>
+    <p class="pre-role">Art Director &nbsp;·&nbsp; Sri Lanka</p>
+    <div class="pre-bar-row">
+      <div class="pre-bar"><div class="pre-fill" id="pre-fill"></div></div>
+      <span class="pre-count"><span id="pre-num">0</span>%</span>
+    </div>
+  </div>
+</div>
+
+<!-- ========== CUSTOM CURSOR ========== -->
+<div id="c-dot"  aria-hidden="true"></div>
+<div id="c-ring" aria-hidden="true"></div>
+
+<!-- ========== NAVIGATION ========== -->
+<nav id="nav" role="navigation" aria-label="Main navigation">
+  <div class="nav-links">
+    <a href="#about"       id="nav-about"       class="nav-link active" data-nav="about">About me</a>
+    <a href="#branding"    id="nav-branding"    class="nav-link"        data-nav="branding">Branding</a>
+    <a href="#social"      id="nav-social"      class="nav-link"        data-nav="social">Social media</a>
+    <a href="#printing"    id="nav-printing"    class="nav-link"        data-nav="printing">Printing</a>
+    <a href="#photography" id="nav-photography" class="nav-link"        data-nav="photography">Photography</a>
+    <a href="#contact"     id="nav-contact"     class="nav-link"        data-nav="contact">Contact me</a>
+  </div>
+  <div class="nav-rule"></div>
+</nav>
+
+<!-- ==================================== -->
+<!--   SECTION 1 — HERO / ABOUT ME        -->
+<!-- ==================================== -->
+<section id="about" class="section hero-section" aria-label="About Husni Mujeeb">
+  <canvas id="hero-canvas" aria-hidden="true"></canvas>
+
+  <!-- Spotlight glow at top center -->
+  <div class="hero-spotlight" aria-hidden="true"></div>
+
+  <!-- Dot grid (top-right area) -->
+  <div class="hero-dots" aria-hidden="true"></div>
+
+  <!-- Giant background "PORTFOLIO" text -->
+  <div class="hero-bg-text" aria-hidden="true">
+    <div class="hero-word-top" id="hw-top">PORT</div>
+    <div class="hero-word-bot" id="hw-bot">FOLIO</div>
+  </div>
+
+  <!-- Photo stage: photo + selection frame + badges -->
+  <div class="hero-stage" id="hero-stage">
+
+    <!-- Portrait photo -->
+    <img src="assets/husni-photo.png" alt="Husni Mujeeb — Art Director" class="hero-portrait" id="hero-portrait" />
+
+    <!-- Selection frame with red handles (the design-tool motif) -->
+    <div class="frame-group" id="frame-group">
+      <div class="sel-frame" id="sel-frame">
+        <span class="sfh sfh-tl"></span>
+        <span class="sfh sfh-tm"></span>
+        <span class="sfh sfh-tr"></span>
+        <span class="sfh sfh-ml"></span>
+        <span class="sfh sfh-mr"></span>
+        <span class="sfh sfh-bl"></span>
+        <span class="sfh sfh-bm"></span>
+        <span class="sfh sfh-br"></span>
+      </div>
+
+      <!-- Badge: Art Director (top-left) -->
+      <div class="hero-badge badge-ad" id="badge-ad">
+        <span class="badge-pill">Art Director</span>
+        <svg class="badge-arrow badge-arrow-ad" viewBox="0 0 60 60" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M 15 10 Q 35 15 48 42" stroke="#E8431A" stroke-width="2.5" stroke-linecap="round"/>
+          <path d="M 38 41 L 51 46 L 47 32 Z" fill="#E8431A"/>
+        </svg>
+      </div>
+
+      <!-- Badge: 4+ Years (bottom-right) -->
+      <div class="hero-badge badge-yr" id="badge-yr">
+        <svg class="badge-arrow badge-arrow-yr" viewBox="0 0 60 60" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M 45 10 Q 25 15 12 42" stroke="#E8431A" stroke-width="2.5" stroke-linecap="round"/>
+          <path d="M 13 32 L 9 46 L 22 41 Z" fill="#E8431A"/>
+        </svg>
+        <span class="badge-pill">4+ Years</span>
+      </div>
+
+      <!-- Design-tool cursor arrow (bottom-right accent) -->
+      <div class="hero-tool-cursor" aria-hidden="true">▶</div>
+    </div>
+
+  </div>
+
+  <!-- Scroll hint -->
+  <div class="scroll-hint" id="scroll-hint">
+    <span class="scroll-hint-line"></span>
+    <span class="scroll-hint-text">SCROLL</span>
+  </div>
+</section>
+
+<!-- ==================================== -->
+<!--   SECTION 2 — TABLE OF CONTENTS      -->
+<!-- ==================================== -->
+<section id="toc" class="section toc-section" aria-label="Table of contents">
+  <div class="handles-box" id="toc-box">
+    <div class="hb-border"></div>
+    <span class="h h-tl"></span><span class="h h-tm"></span><span class="h h-tr"></span>
+    <span class="h h-ml"></span><span class="h h-mr"></span>
+    <span class="h h-bl"></span><span class="h h-bm"></span><span class="h h-br"></span>
+    <div class="big-title" id="toc-title">TABLE OF CONTENT</div>
+  </div>
+
+  <nav class="toc-grid" aria-label="Portfolio sections">
+    <a href="#branding"    class="toc-item magnetic-btn" id="toc-1"><span class="toc-num">1</span><span class="toc-tag">BRANDING</span></a>
+    <a href="#social"      class="toc-item magnetic-btn" id="toc-2"><span class="toc-num">2</span><span class="toc-tag">SOCIAL MEDIA</span></a>
+    <a href="#printing"    class="toc-item magnetic-btn" id="toc-3"><span class="toc-num">3</span><span class="toc-tag">DIGITAL PRINTING</span></a>
+    <a href="#photography" class="toc-item magnetic-btn" id="toc-4"><span class="toc-num">4</span><span class="toc-tag">PHOTOGRAPHY</span></a>
+    <a href="#contact"     class="toc-item magnetic-btn" id="toc-5"><span class="toc-num">5</span><span class="toc-tag">CONTACT ME</span></a>
+  </nav>
+</section>
+
+<!-- ==================================== -->
+<!--   SECTION 3 — BRANDING              -->
+<!-- ==================================== -->
+<section id="branding" class="section work-section" aria-label="Branding work">
+  <div class="sec-intro">
+    <div class="handles-box">
+      <div class="hb-border"></div>
+      <span class="h h-tl"></span><span class="h h-tm"></span><span class="h h-tr"></span>
+      <span class="h h-ml"></span><span class="h h-mr"></span>
+      <span class="h h-bl"></span><span class="h h-bm"></span><span class="h h-br"></span>
+      <div class="big-title split-title">BRANDING</div>
+      <span class="sec-cursor" aria-hidden="true">▶</span>
+    </div>
+    <p class="sec-desc">I create memorable brand identities that communicate a clear vision and build lasting connections. From logo design and color systems to typography and brand guidelines, I craft cohesive visual identities that help businesses stand out with confidence and consistency.</p>
+    <div class="stags">
+      <span class="stag">Logo Design</span>
+      <span class="stag">Brand Identity</span>
+      <span class="stag">Visual Systems</span>
+      <span class="stag">Packaging</span>
+    </div>
+  </div>
+  <div class="work-grid">
+    <div class="work-card tilt-card" id="bc-1"><div class="card-face" style="--g1:#1a0a05;--g2:#3d1a0a"><span class="cf-icon">◈</span></div><div class="card-info"><span class="card-cat">Branding</span><h3 class="card-title">Logo Design</h3></div><div class="card-shine"></div></div>
+    <div class="work-card tilt-card" id="bc-2"><div class="card-face" style="--g1:#050d1a;--g2:#0a2040"><span class="cf-icon">◇</span></div><div class="card-info"><span class="card-cat">Branding</span><h3 class="card-title">Brand System</h3></div><div class="card-shine"></div></div>
+    <div class="work-card tilt-card" id="bc-3"><div class="card-face" style="--g1:#0a0a0a;--g2:#2a0a1a"><span class="cf-icon">◉</span></div><div class="card-info"><span class="card-cat">Branding</span><h3 class="card-title">Visual Identity</h3></div><div class="card-shine"></div></div>
+    <div class="work-card tilt-card" id="bc-4"><div class="card-face" style="--g1:#0a1205;--g2:#1a2d0a"><span class="cf-icon">▣</span></div><div class="card-info"><span class="card-cat">Branding</span><h3 class="card-title">Packaging</h3></div><div class="card-shine"></div></div>
+    <div class="work-card tilt-card" id="bc-5"><div class="card-face" style="--g1:#1a0505;--g2:#400a0a"><span class="cf-icon">◐</span></div><div class="card-info"><span class="card-cat">Branding</span><h3 class="card-title">Color System</h3></div><div class="card-shine"></div></div>
+    <div class="work-card tilt-card" id="bc-6"><div class="card-face" style="--g1:#05050a;--g2:#151525"><span class="cf-icon">Ξ</span></div><div class="card-info"><span class="card-cat">Branding</span><h3 class="card-title">Typography</h3></div><div class="card-shine"></div></div>
+  </div>
+</section>
+
+<!-- ==================================== -->
+<!--   SECTION 4 — SOCIAL MEDIA          -->
+<!-- ==================================== -->
+<section id="social" class="section work-section" aria-label="Social media design work">
+  <div class="sec-intro">
+    <div class="handles-box">
+      <div class="hb-border"></div>
+      <span class="h h-tl"></span><span class="h h-tm"></span><span class="h h-tr"></span>
+      <span class="h h-ml"></span><span class="h h-mr"></span>
+      <span class="h h-bl"></span><span class="h h-bm"></span><span class="h h-br"></span>
+      <div class="big-title split-title">SOCIAL MEDIA</div>
+      <span class="sec-cursor" aria-hidden="true">▶</span>
+    </div>
+    <p class="sec-desc">I design engaging social media visuals that capture attention, strengthen brand identity, and drive audience engagement. Every design is crafted to communicate the right message while maintaining a consistent and professional brand presence.</p>
+    <div class="stags">
+      <span class="stag">Social Media Templates</span>
+      <span class="stag">Feed Design</span>
+      <span class="stag">Story Design</span>
+      <span class="stag">Reels Thumbnails</span>
+    </div>
+  </div>
+  <div class="work-grid">
+    <div class="work-card tilt-card" id="sc-1"><div class="card-face" style="--g1:#0a0514;--g2:#200a3d"><span class="cf-icon">▦</span></div><div class="card-info"><span class="card-cat">Social Media</span><h3 class="card-title">Feed Post</h3></div><div class="card-shine"></div></div>
+    <div class="work-card tilt-card" id="sc-2"><div class="card-face" style="--g1:#14050a;--g2:#3d0a20"><span class="cf-icon">◱</span></div><div class="card-info"><span class="card-cat">Social Media</span><h3 class="card-title">Story Design</h3></div><div class="card-shine"></div></div>
+    <div class="work-card tilt-card" id="sc-3"><div class="card-face" style="--g1:#050a14;--g2:#0a2040"><span class="cf-icon">▷</span></div><div class="card-info"><span class="card-cat">Social Media</span><h3 class="card-title">Reel Cover</h3></div><div class="card-shine"></div></div>
+    <div class="work-card tilt-card" id="sc-4"><div class="card-face" style="--g1:#14100a;--g2:#3d2d0a"><span class="cf-icon">◆</span></div><div class="card-info"><span class="card-cat">Social Media</span><h3 class="card-title">Campaign</h3></div><div class="card-shine"></div></div>
+    <div class="work-card tilt-card" id="sc-5"><div class="card-face" style="--g1:#0a1410;--g2:#0a3d2d"><span class="cf-icon">▨</span></div><div class="card-info"><span class="card-cat">Social Media</span><h3 class="card-title">Ad Banner</h3></div><div class="card-shine"></div></div>
+    <div class="work-card tilt-card" id="sc-6"><div class="card-face" style="--g1:#140a05;--g2:#3d2005"><span class="cf-icon">◫</span></div><div class="card-info"><span class="card-cat">Social Media</span><h3 class="card-title">Template</h3></div><div class="card-shine"></div></div>
+  </div>
+</section>
+
+<!-- ==================================== -->
+<!--   SECTION 5 — DIGITAL PRINTING      -->
+<!-- ==================================== -->
+<section id="printing" class="section work-section" aria-label="Digital printing work">
+  <div class="sec-intro">
+    <div class="handles-box">
+      <div class="hb-border"></div>
+      <span class="h h-tl"></span><span class="h h-tm"></span><span class="h h-tr"></span>
+      <span class="h h-ml"></span><span class="h h-mr"></span>
+      <span class="h h-bl"></span><span class="h h-bm"></span><span class="h h-br"></span>
+      <div class="big-title split-title">PRINTING</div>
+      <span class="sec-cursor" aria-hidden="true">▶</span>
+    </div>
+    <p class="sec-desc">From striking flyers to premium business cards, I design print materials that make a lasting impression. Every piece is crafted with precision, combining strong visual hierarchy and tactile design principles for maximum real-world impact.</p>
+    <div class="stags">
+      <span class="stag">Flyers</span>
+      <span class="stag">Posters</span>
+      <span class="stag">Brochures</span>
+      <span class="stag">Business Cards</span>
+      <span class="stag">Banners</span>
+      <span class="stag">Certificates</span>
+    </div>
+  </div>
+  <div class="work-grid">
+    <div class="work-card tilt-card" id="pc-1"><div class="card-face" style="--g1:#0f0505;--g2:#2a0808"><span class="cf-icon">◧</span></div><div class="card-info"><span class="card-cat">Printing</span><h3 class="card-title">Flyer Design</h3></div><div class="card-shine"></div></div>
+    <div class="work-card tilt-card" id="pc-2"><div class="card-face" style="--g1:#050510;--g2:#10102a"><span class="cf-icon">▬</span></div><div class="card-info"><span class="card-cat">Printing</span><h3 class="card-title">Business Card</h3></div><div class="card-shine"></div></div>
+    <div class="work-card tilt-card" id="pc-3"><div class="card-face" style="--g1:#050a0a;--g2:#102020"><span class="cf-icon">▥</span></div><div class="card-info"><span class="card-cat">Printing</span><h3 class="card-title">Poster</h3></div><div class="card-shine"></div></div>
+    <div class="work-card tilt-card" id="pc-4"><div class="card-face" style="--g1:#100505;--g2:#2a0a0a"><span class="cf-icon">▭</span></div><div class="card-info"><span class="card-cat">Printing</span><h3 class="card-title">Banner</h3></div><div class="card-shine"></div></div>
+    <div class="work-card tilt-card" id="pc-5"><div class="card-face" style="--g1:#050a05;--g2:#0a200a"><span class="cf-icon">▤</span></div><div class="card-info"><span class="card-cat">Printing</span><h3 class="card-title">Brochure</h3></div><div class="card-shine"></div></div>
+    <div class="work-card tilt-card" id="pc-6"><div class="card-face" style="--g1:#100a00;--g2:#2a1a00"><span class="cf-icon">◌</span></div><div class="card-info"><span class="card-cat">Printing</span><h3 class="card-title">Certificate</h3></div><div class="card-shine"></div></div>
+  </div>
+</section>
+
+<!-- ==================================== -->
+<!--   SECTION 6 — PHOTOGRAPHY           -->
+<!-- ==================================== -->
+<section id="photography" class="section work-section" aria-label="Photography work">
+  <div class="sec-intro">
+    <div class="handles-box">
+      <div class="hb-border"></div>
+      <span class="h h-tl"></span><span class="h h-tm"></span><span class="h h-tr"></span>
+      <span class="h h-ml"></span><span class="h h-mr"></span>
+      <span class="h h-bl"></span><span class="h h-bm"></span><span class="h h-br"></span>
+      <div class="big-title split-title">PHOTOGRAPHY</div>
+      <span class="sec-cursor" aria-hidden="true">▶</span>
+    </div>
+    <p class="sec-desc">Every frame tells a story. I capture portraits, products, events, and street moments with a cinematic eye — turning fleeting moments into powerful visuals that communicate, connect, and endure.</p>
+    <div class="stags">
+      <span class="stag">Portrait</span>
+      <span class="stag">Product</span>
+      <span class="stag">Event</span>
+      <span class="stag">Street</span>
+    </div>
+  </div>
+  <!-- Masonry grid -->
+  <div class="photo-grid">
+    <div class="photo-item tilt-card" id="ph-1"><div class="photo-bg" style="--ph:440px;--pg1:#0f0808;--pg2:#1f0808"></div><div class="photo-label">Portrait</div></div>
+    <div class="photo-item tilt-card" id="ph-2"><div class="photo-bg" style="--ph:260px;--pg1:#080f14;--pg2:#0a1825"></div><div class="photo-label">Product</div></div>
+    <div class="photo-item tilt-card" id="ph-3"><div class="photo-bg" style="--ph:360px;--pg1:#14080f;--pg2:#280a18"></div><div class="photo-label">Street</div></div>
+    <div class="photo-item tilt-card" id="ph-4"><div class="photo-bg" style="--ph:280px;--pg1:#0f1408;--pg2:#182808"></div><div class="photo-label">Event</div></div>
+    <div class="photo-item tilt-card" id="ph-5"><div class="photo-bg" style="--ph:400px;--pg1:#14100a;--pg2:#281a08"></div><div class="photo-label">Portrait</div></div>
+    <div class="photo-item tilt-card" id="ph-6"><div class="photo-bg" style="--ph:320px;--pg1:#0a0a14;--pg2:#121228"></div><div class="photo-label">Street</div></div>
+  </div>
+</section>
+
+<!-- ==================================== -->
+<!--   SECTION 7 — CONTACT               -->
+<!-- ==================================== -->
+<section id="contact" class="section contact-section" aria-label="Contact Husni Mujeeb">
+  <div class="contact-inner">
+    <p class="contact-eyebrow">GET IN TOUCH</p>
+    <h2 class="contact-headline" id="contact-headline">
+      Let's bring your <span class="acc">vision</span> to life —<br/>
+      reach out and let's create<br/>
+      something <span class="acc">great</span> together.
+    </h2>
+
+    <div class="contact-rule"></div>
+
+    <div class="contact-links">
+      <a href="mailto:husnimujeeb.co@gmail.com" class="clink magnetic-btn" id="clink-email">
+        <span class="clink-label">Email</span>
+        <span class="clink-value">husnimujeeb.co@gmail.com</span>
+      </a>
+      <div class="clink-sep"></div>
+      <a href="tel:+94151509395" class="clink magnetic-btn" id="clink-phone">
+        <span class="clink-label">Phone</span>
+        <span class="clink-value">+94 15 150 9395</span>
+      </a>
+    </div>
+
+    <div class="socials-row">
+      <a href="https://instagram.com/husni_mujeeb" target="_blank" rel="noopener" class="social-card magnetic-btn" id="soc-ig">
+        <span class="soc-ico">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r="1" fill="currentColor" stroke="none"/></svg>
+        </span>
+        <span class="soc-name">Instagram</span>
+        <span class="soc-handle">@husni_mujeeb</span>
+      </a>
+      <a href="https://www.linkedin.com/in/husni-mujeeb-1a7396364" target="_blank" rel="noopener" class="social-card magnetic-btn" id="soc-li">
+        <span class="soc-ico">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"/><rect x="2" y="9" width="4" height="12"/><circle cx="4" cy="4" r="2"/></svg>
+        </span>
+        <span class="soc-name">LinkedIn</span>
+        <span class="soc-handle">husni-mujeeb</span>
+      </a>
+      <a href="https://wa.me/94751509395" target="_blank" rel="noopener" class="social-card magnetic-btn" id="soc-wa">
+        <span class="soc-ico">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"/></svg>
+        </span>
+        <span class="soc-name">WhatsApp</span>
+        <span class="soc-handle">+94 75 150 9395</span>
+      </a>
+    </div>
+
+    <footer class="site-footer">
+      <span class="footer-name">HUSNI MUJEEB</span>
+      <span class="footer-dot">·</span>
+      <span class="footer-copy">Art Director · Sri Lanka · © 2026</span>
+    </footer>
+  </div>
+</section>
+
+<!-- ========== SCRIPTS ========== -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r134/three.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@studio-freight/lenis@1.0.42/dist/lenis.min.js"></script>
+<script src="script.js"></script>
+</body>
+</html>
