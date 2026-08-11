@@ -1112,3 +1112,7 @@ body.modal-open { overflow: hidden; }
 /* Keep the custom cursor above modal overlays. */
 body.modal-open #c-dot { z-index: 12001; }
 body.modal-open #c-ring { z-index: 12000; }
+
+
+/* Keep My works category headings fully visible without changing their animation. */
+.work-section .big-title { color: #ffffff; }
