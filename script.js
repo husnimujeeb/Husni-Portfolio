@@ -16,7 +16,7 @@ gsap.registerPlugin(ScrollTrigger);
 
 /* ─── LENIS SMOOTH SCROLL ─────────────────── */
 const lenis = new Lenis({
-  duration: 1.5,
+  duration: 0.8,
   easing: t => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
   direction: 'vertical',
   smooth: true,
@@ -65,12 +65,12 @@ lenis.on('scroll', ({ progress }) => {
   // Stagger name reveal
   gsap.to([firstName, lastName], {
     opacity: 1, y: 0,
-    duration: 0.8,
-    stagger: 0.12,
+    duration: 0.45,
+    stagger: 0.035,
     ease: 'power3.out',
     delay: 0.2,
   });
-  gsap.to(q('.pre-role'), { opacity: 1, duration: 0.6, delay: 0.7 });
+  gsap.to(q('.pre-role'), { opacity: 1, duration: 0.35, delay: 0.7 });
 
   // Counter
   let count = 0;
@@ -89,7 +89,7 @@ lenis.on('scroll', ({ progress }) => {
   function exitPreloader() {
     const tl = gsap.timeline();
     tl.to([firstName, lastName, q('.pre-role'), q('.pre-bar-row')], {
-      y: -50, opacity: 0, stagger: 0.06, duration: 0.5, ease: 'power3.in',
+      y: -50, opacity: 0, stagger: 0.035, duration: 0.3, ease: 'power3.in',
     })
     .to(loader, {
       yPercent: -102, duration: 1, ease: 'power4.inOut',
@@ -244,10 +244,10 @@ function initHero() {
 
   /* 1. Background words fly in from top/bottom with 3D flip */
   tl.to(topChars, {
-    opacity: 1, y: 0, rotateX: 0, stagger: 0.04, duration: 1,
+    opacity: 1, y: 0, rotateX: 0, stagger: 0.025, duration: 1,
   })
   .to(botChars, {
-    opacity: 1, y: 0, rotateX: 0, stagger: 0.04, duration: 1,
+    opacity: 1, y: 0, rotateX: 0, stagger: 0.025, duration: 1,
   }, '<0.05')
 
   /* 2. Photo drops in */
@@ -257,25 +257,25 @@ function initHero() {
 
   /* 3. Selection frame border draws in */
   .to(selFrame, {
-    scaleX: 1, scaleY: 1, duration: 0.6, ease: 'power3.inOut',
+    scaleX: 1, scaleY: 1, duration: 0.35, ease: 'power3.inOut',
   }, '-=0.4')
 
   /* 4. Handles pop in with back.out */
   .to(handles, {
     scale: 1, opacity: 1,
-    stagger: 0.05, duration: 0.4, ease: 'back.out(2.5)',
+    stagger: 0.03, duration: 0.4, ease: 'back.out(2.5)',
   }, '-=0.2')
 
   /* 5. Badges slide in */
   .to(badgeAd, {
-    opacity: 1, x: 0, y: 0, duration: 0.7, ease: 'back.out(1.8)',
+    opacity: 1, x: 0, y: 0, duration: 0.4, ease: 'back.out(1.8)',
   }, '-=0.1')
   .to(badgeYr, {
-    opacity: 1, x: 0, y: 0, duration: 0.7, ease: 'back.out(1.8)',
+    opacity: 1, x: 0, y: 0, duration: 0.4, ease: 'back.out(1.8)',
   }, '-=0.5')
 
   /* 6. Cursor + scroll hint */
-  .to([toolCursor, hint], { opacity: 1, duration: 0.5 }, '-=0.2');
+  .to([toolCursor, hint], { opacity: 1, duration: 0.3 }, '-=0.2');
 
   /* ── Mouse parallax on hero ──────────────────── */
   const heroSec = q('.hero-section');
@@ -290,7 +290,7 @@ function initHero() {
       rotateX: dy * -6,
       rotateY: dx *  6,
       transformPerspective: 1200,
-      duration: 0.9,
+      duration: 0.5,
       ease: 'power2.out',
     });
 
@@ -349,7 +349,7 @@ ScrollTrigger.create({
     const box = q('#toc-box');
     const handles = box.querySelectorAll('.h');
     gsap.from(handles, {
-      scale: 0, opacity: 0, stagger: 0.05,
+      scale: 0, opacity: 0, stagger: 0.03,
       duration: 0.4, ease: 'back.out(2)',
     });
 
@@ -359,8 +359,8 @@ ScrollTrigger.create({
     gsap.from(chars, {
       opacity: 0, y: 50, rotateX: -70,
       transformOrigin: '50% 100%',
-      stagger: 0.04,
-      duration: 0.7,
+      stagger: 0.025,
+      duration: 0.4,
       ease: 'power4.out',
     });
 
@@ -368,8 +368,8 @@ ScrollTrigger.create({
     gsap.from(qa('.toc-item'), {
       opacity: 0, y: 60, rotateY: -30,
       transformOrigin: 'left center',
-      stagger: 0.1,
-      duration: 0.8,
+      stagger: 0.03,
+      duration: 0.45,
       ease: 'power4.out',
       delay: 0.3,
     });
@@ -404,11 +404,11 @@ qa('.sec-intro').forEach((intro, i) => {
       const tl = gsap.timeline();
 
       /* Border draw */
-      tl.to(border, { scaleX: 1, scaleY: 1, duration: 0.7, ease: 'power3.inOut' })
+      tl.to(border, { scaleX: 1, scaleY: 1, duration: 0.4, ease: 'power3.inOut' })
         /* Handles bounce in */
         .to(handles, {
           scale: 1, opacity: 1,
-          stagger: 0.04,
+          stagger: 0.025,
           duration: 0.35,
           ease: 'back.out(2.5)',
         }, '-=0.3')
@@ -416,7 +416,7 @@ qa('.sec-intro').forEach((intro, i) => {
         .to(chars, {
           opacity: 1, y: 0, rotateX: 0,
           stagger: 0.03,
-          duration: 0.75,
+          duration: 0.42,
           ease: 'power4.out',
         }, '-=0.1')
         /* Cursor arrow */
@@ -424,13 +424,13 @@ qa('.sec-intro').forEach((intro, i) => {
         /* Description fade up */
         .from(desc, {
           opacity: 0, y: 30,
-          duration: 0.7,
+          duration: 0.4,
           ease: 'power2.out',
         }, '-=0.2')
         /* Service tags */
         .from(stags, {
           opacity: 0, y: 16, scale: 0.9,
-          stagger: 0.06,
+          stagger: 0.035,
           duration: 0.4,
           ease: 'power2.out',
         }, '-=0.4');
@@ -452,8 +452,8 @@ qa('.work-grid').forEach(grid => {
     rotateX: 18,
     transformPerspective: 900,
     transformOrigin: '50% bottom',
-    stagger: 0.09,
-    duration: 0.8,
+    stagger: 0.0255,
+    duration: 0.45,
     ease: 'power3.out',
   });
 });
@@ -498,7 +498,7 @@ qa('.tilt-card').forEach(card => {
     cancelAnimationFrame(animFrame);
     gsap.to(card, {
       rotateX: 0, rotateY: 0, scale: 1,
-      duration: 0.8,
+      duration: 0.45,
       ease: 'elastic.out(1, 0.4)',
     });
   });
@@ -511,7 +511,7 @@ gsap.from(qa('.photo-item'), {
   scrollTrigger: { trigger: '.photo-grid', start: 'top 80%', once: true },
   opacity: 0, y: 60, scale: 0.95,
   stagger: { each: 0.1, from: 'random' },
-  duration: 0.8,
+  duration: 0.45,
   ease: 'power3.out',
 });
 
@@ -525,7 +525,7 @@ qa('.photo-item').forEach((item, i) => {
       trigger: item,
       start: 'top bottom',
       end: 'bottom top',
-      scrub: 1.5,
+      scrub: 0.65,
     },
   });
 });
@@ -548,7 +548,7 @@ qa('.magnetic-btn').forEach(btn => {
   btn.addEventListener('mouseleave', () => {
     gsap.to(btn, {
       x: 0, y: 0,
-      duration: 0.7,
+      duration: 0.4,
       ease: 'elastic.out(1, 0.35)',
     });
   });
@@ -567,17 +567,17 @@ ScrollTrigger.create({
 
     const tl = gsap.timeline();
     tl.from(q('.contact-eyebrow'), {
-      opacity: 0, y: 20, duration: 0.5, ease: 'power2.out',
+      opacity: 0, y: 20, duration: 0.3, ease: 'power2.out',
     })
     .from(chars, {
       opacity: 0, y: 60, rotateX: -60,
       transformOrigin: '50% 100%',
       stagger: 0.012,
-      duration: 0.7,
+      duration: 0.4,
       ease: 'power4.out',
     }, '-=0.2')
     .from(qa('.contact-links, .socials-row, .site-footer'), {
-      opacity: 0, y: 30, stagger: 0.15, duration: 0.6, ease: 'power3.out',
+      opacity: 0, y: 30, stagger: 0.035, duration: 0.35, ease: 'power3.out',
     }, '-=0.3');
   },
 });
@@ -593,7 +593,7 @@ gsap.to('#hw-top', {
     trigger: '#about',
     start: 'top top',
     end: 'bottom top',
-    scrub: 1.5,
+    scrub: 0.65,
   },
 });
 gsap.to('#hw-bot', {
@@ -603,7 +603,7 @@ gsap.to('#hw-bot', {
     trigger: '#about',
     start: 'top top',
     end: 'bottom top',
-    scrub: 1.5,
+    scrub: 0.65,
   },
 });
 /* Portrait photo parallax out on scroll */
@@ -614,7 +614,7 @@ gsap.to('#hero-portrait', {
     trigger: '#about',
     start: 'top top',
     end: 'bottom top',
-    scrub: 2,
+    scrub: 0.75,
   },
 });
 
@@ -635,7 +635,7 @@ qa('.big-title').forEach(title => {
   });
   title.addEventListener('mouseleave', () => {
     title.querySelectorAll('.char').forEach(ch => {
-      gsap.to(ch, { y: 0, color: '', duration: 0.6, ease: 'elastic.out(1, 0.4)' });
+      gsap.to(ch, { y: 0, color: '', duration: 0.35, ease: 'elastic.out(1, 0.4)' });
     });
   });
 });
@@ -649,7 +649,7 @@ qa('.panel').forEach(panel => {
     const rect = panel.getBoundingClientRect();
     const x = e.clientX - rect.left;
     const y = e.clientY - rect.top;
-    gsap.to(glow, { x: x - 60, y: y - 60, duration: 0.5, ease: 'power2.out' });
+    gsap.to(glow, { x: x - 60, y: y - 60, duration: 0.3, ease: 'power2.out' });
   });
   panel.addEventListener('mouseleave', () => {
     gsap.to(glow, { x: -30, y: -30, duration: 1, ease: 'power2.out' });
@@ -685,10 +685,11 @@ qa('.handles-box').forEach(box => {
 ================================================ */
 window.addEventListener('resize', () => ScrollTrigger.refresh());
 
-/* CLIENT FEEDBACK MODAL */
-(function initFeedbackModal() {
+/* CLIENT FEEDBACK MODAL AND PROJECT GALLERY */
+(function initFeedbackExperience() {
   const track = q('.feedback-track');
   qa('.feedback-card').forEach(card => track.appendChild(card.cloneNode(true)));
+
   const modal = q('#feedback-modal');
   const close = q('.feedback-modal-close');
   const quote = q('#feedback-modal-quote');
@@ -696,22 +697,52 @@ window.addEventListener('resize', () => ScrollTrigger.refresh());
   const role = q('#feedback-modal-role');
   const avatar = q('#feedback-modal-avatar');
   const stars = q('#feedback-modal-stars');
+  const preview = q('#feedback-work-preview');
+  const previewImage = q('#feedback-work-preview-image');
+
+  const gallery = q('#work-gallery');
+  const galleryImage = q('#gallery-image');
+  const galleryCaption = q('#gallery-caption');
+  const galleryClose = q('.gallery-close');
+  const galleryPrevious = q('.gallery-prev');
+  const galleryNext = q('.gallery-next');
+  let images = [];
+  let currentImage = 0;
 
   function closeModal() {
     modal.classList.remove('is-open');
     modal.setAttribute('aria-hidden', 'true');
-    document.body.classList.remove('modal-open');
+    if (!gallery.classList.contains('is-open')) document.body.classList.remove('modal-open');
+  }
+
+  function renderGallery() {
+    galleryImage.src = images[currentImage];
+    galleryCaption.textContent = 'Project preview ' + (currentImage + 1) + ' of ' + images.length;
+    galleryPrevious.disabled = images.length < 2;
+    galleryNext.disabled = images.length < 2;
+  }
+
+  function closeGallery() {
+    gallery.classList.remove('is-open');
+    gallery.setAttribute('aria-hidden', 'true');
+    if (!modal.classList.contains('is-open')) document.body.classList.remove('modal-open');
+    preview.focus();
   }
 
   qa('.feedback-card').forEach(card => {
     card.addEventListener('click', () => {
       const name = card.dataset.client;
       const rating = Number(card.dataset.rating);
+      images = card.dataset.workImages.split(',').map(src => src.trim()).filter(Boolean);
+      currentImage = 0;
       quote.textContent = '“' + card.dataset.feedback + '”';
       client.textContent = name;
       role.textContent = card.dataset.role;
-      avatar.textContent = name.split(' ').map(word => word[0]).join('').slice(0, 2);
+      avatar.src = card.dataset.avatar || '';
+      avatar.alt = name + ' profile image';
       stars.textContent = '★'.repeat(rating) + '☆'.repeat(5 - rating);
+      previewImage.src = images[0] || '';
+      previewImage.alt = name + ' project preview';
       modal.classList.add('is-open');
       modal.setAttribute('aria-hidden', 'false');
       document.body.classList.add('modal-open');
@@ -719,7 +750,27 @@ window.addEventListener('resize', () => ScrollTrigger.refresh());
     });
   });
 
+  preview.addEventListener('click', () => {
+    if (!images.length) return;
+    renderGallery();
+    gallery.classList.add('is-open');
+    gallery.setAttribute('aria-hidden', 'false');
+    document.body.classList.add('modal-open');
+    galleryClose.focus();
+  });
+
+  galleryPrevious.addEventListener('click', () => { currentImage = (currentImage - 1 + images.length) % images.length; renderGallery(); });
+  galleryNext.addEventListener('click', () => { currentImage = (currentImage + 1) % images.length; renderGallery(); });
   close.addEventListener('click', closeModal);
+  galleryClose.addEventListener('click', closeGallery);
   modal.addEventListener('click', event => { if (event.target === modal) closeModal(); });
-  document.addEventListener('keydown', event => { if (event.key === 'Escape' && modal.classList.contains('is-open')) closeModal(); });
+  gallery.addEventListener('click', event => { if (event.target === gallery) closeGallery(); });
+  document.addEventListener('keydown', event => {
+    if (event.key === 'Escape') {
+      if (gallery.classList.contains('is-open')) closeGallery();
+      else if (modal.classList.contains('is-open')) closeModal();
+    }
+    if (gallery.classList.contains('is-open') && event.key === 'ArrowLeft') galleryPrevious.click();
+    if (gallery.classList.contains('is-open') && event.key === 'ArrowRight') galleryNext.click();
+  });
 })();
