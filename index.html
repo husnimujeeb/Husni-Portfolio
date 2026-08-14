@@ -7,7 +7,7 @@
   <meta name="description" content="Husni Mujeeb — Art Director and Photographer based in Sri Lanka. 4+ years, 100+ clients. Specializing in brand identity, visual design, social media, photography and more." />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Caveat:wght@600;700&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="style.css" />
 </head>
 <body>
@@ -40,12 +40,19 @@
 
 <!-- ========== NAVIGATION ========== -->
 <nav id="nav" role="navigation" aria-label="Main navigation">
+  <div class="nav-brand">
+    <span class="brand-first">HUSNI</span>
+    <span class="brand-last">MUJEEB</span>
+  </div>
+  <button id="nav-toggle" class="nav-toggle" aria-label="Toggle menu" aria-expanded="false">
+    <span class="bar"></span>
+    <span class="bar"></span>
+    <span class="bar"></span>
+  </button>
   <div class="nav-links">
     <a href="#about"       id="nav-about"       class="nav-link active" data-nav="about">About me</a>
-    <a href="#branding"    id="nav-branding"    class="nav-link"        data-nav="branding">Branding</a>
-    <a href="#social"      id="nav-social"      class="nav-link"        data-nav="social">Social media</a>
-    <a href="#printing"    id="nav-printing"    class="nav-link"        data-nav="printing">Printing</a>
-    <a href="#photography" id="nav-photography" class="nav-link"        data-nav="photography">Photography</a>
+    <a href="#toc"         id="nav-works"       class="nav-link"        data-nav="toc">My works</a>
+    <a href="#feedback"    id="nav-feedback"    class="nav-link"        data-nav="feedback">Feedback</a>
     <a href="#contact"     id="nav-contact"     class="nav-link"        data-nav="contact">Contact me</a>
   </div>
   <div class="nav-rule"></div>
@@ -57,62 +64,112 @@
 <section id="about" class="section hero-section" aria-label="About Husni Mujeeb">
   <canvas id="hero-canvas" aria-hidden="true"></canvas>
 
-  <!-- Spotlight glow at top center -->
-  <div class="hero-spotlight" aria-hidden="true"></div>
+  <!-- Opening animation line -->
+  <div class="hero-opening-line" id="opening-line" aria-hidden="true"></div>
 
-  <!-- Dot grid (top-right area) -->
-  <div class="hero-dots" aria-hidden="true"></div>
-
-  <!-- Giant background "PORTFOLIO" text -->
+  <!-- Giant background "CREATIVE DIRECTOR" text -->
   <div class="hero-bg-text" aria-hidden="true">
-    <div class="hero-word-top" id="hw-top">PORT</div>
-    <div class="hero-word-bot" id="hw-bot">FOLIO</div>
+    <div class="hero-bg-word" id="hw-top">CREATIVE DIRECTOR</div>
   </div>
 
-  <!-- Photo stage: photo + selection frame + badges -->
-  <div class="hero-stage" id="hero-stage">
+  <!-- Floating Ambient Decorative Elements -->
+  <div class="hero-float-elem float-1" aria-hidden="true">+</div>
+  <div class="hero-float-elem float-2" aria-hidden="true">◈</div>
+  <div class="hero-float-elem float-3" aria-hidden="true"></div>
 
-    <!-- Portrait photo -->
-    <img src="assets/husni-photo.png" alt="Husni Mujeeb — Art Director" class="hero-portrait" id="hero-portrait" />
+  <!-- 3-Column Interactive Stage -->
+  <div class="hero-stage-grid">
+    
+    <!-- LEFT COLUMN -->
+    <div class="hero-col-left">
+      <div class="hero-tag" id="hero-tag">ART DIRECTOR</div>
+      
+      <h1 class="hero-title" id="hero-title">
+        <span class="title-first" id="hero-first">HUSNI</span>
+        <span class="title-last" id="hero-last">M U J E E B</span>
+      </h1>
 
-    <!-- Selection frame with red handles (the design-tool motif) -->
-    <div class="frame-group" id="frame-group">
-      <div class="sel-frame" id="sel-frame">
-        <span class="sfh sfh-tl"></span>
-        <span class="sfh sfh-tm"></span>
-        <span class="sfh sfh-tr"></span>
-        <span class="sfh sfh-ml"></span>
-        <span class="sfh sfh-mr"></span>
-        <span class="sfh sfh-bl"></span>
-        <span class="sfh sfh-bm"></span>
-        <span class="sfh sfh-br"></span>
+      <p class="hero-bio" id="hero-bio">
+        I craft powerful visual identities and digital experiences that help brands stand out and connect with their audience.
+      </p>
+
+      <div class="hero-actions" id="hero-actions">
+        <a href="#branding" class="hero-btn primary-btn magnetic-btn">
+          View My Work <span class="btn-arrow">↗</span>
+        </a>
+        <a href="#contact" class="hero-btn secondary-btn magnetic-btn">
+          Download CV <span class="btn-icon">↓</span>
+        </a>
       </div>
 
-      <!-- Badge: Art Director (top-left) -->
-      <div class="hero-badge badge-ad" id="badge-ad">
-        <span class="badge-pill">Art Director</span>
-        <svg class="badge-arrow badge-arrow-ad" viewBox="0 0 60 60" fill="none" xmlns="http://www.w3.org/2000/svg">
-          <path d="M 15 10 Q 35 15 48 42" stroke="#E8431A" stroke-width="2.5" stroke-linecap="round"/>
-          <path d="M 38 41 L 51 46 L 47 32 Z" fill="#E8431A"/>
-        </svg>
+      <!-- Skills & Expertise Glass Card -->
+      <div class="hero-skills-card panel" id="hero-skills">
+        <div class="panel-glow"></div>
+        <div class="skills-card-header">SKILLS & EXPERTISE</div>
+        <div class="skills-grid">
+          <div class="skill-item"><span class="sk-ico">🎨</span> Graphic Design</div>
+          <div class="skill-item"><span class="sk-ico">👁️</span> Visual Storytelling</div>
+          <div class="skill-item vibe-coding-item"><span class="sk-ico sk-code">&lt;/&gt;</span> Vibe Coding</div>
+
+          <div class="skill-item"><span class="sk-ico">💎</span> Brand Identity</div>
+          <div class="skill-item"><span class="sk-ico">✨</span> AI Content Creation</div>
+          <div class="skill-item"><span class="sk-ico sk-badge">C</span> Canva</div>
+
+          <div class="skill-item"><span class="sk-ico">🖥️</span> UI/UX Design</div>
+          <div class="skill-item"><span class="sk-ico">💬</span> Prompt Engineering</div>
+          <div class="skill-item"><span class="sk-ico sk-badge ps-badge">Ps</span> Adobe Photoshop</div>
+
+          <div class="skill-item"><span class="sk-ico">📷</span> Photography</div>
+          <div class="skill-item"><span class="sk-ico">📈</span> Digital Marketing</div>
+          <div class="skill-item"><span class="sk-ico sk-badge ai-badge">Ai</span> Adobe Illustrator</div>
+
+          <div class="skill-item"><span class="sk-ico">📹</span> Videography</div>
+          <div class="skill-item"><span class="sk-ico">✏️</span> Content Creation</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- CENTER COLUMN (PORTRAIT & ORBITAL RING) -->
+    <div class="hero-col-center">
+      <div class="portrait-wrapper" id="portrait-wrapper">
+        <div class="portrait-ring" id="portrait-ring" aria-hidden="true"></div>
+        <img src="assets/husni-photo.png" alt="Husni Mujeeb — Art Director" class="hero-portrait-img" id="hero-portrait" />
+      </div>
+    </div>
+
+    <!-- RIGHT COLUMN -->
+    <div class="hero-col-right">
+      <!-- Stats Glass Card -->
+      <div class="hero-stats-card panel" id="hero-stats">
+        <div class="panel-glow"></div>
+        <div class="stat-box">
+          <div class="stat-num">100+</div>
+          <div class="stat-lbl">Clients</div>
+        </div>
+        <div class="stat-divider"></div>
+        <div class="stat-box">
+          <div class="stat-num">4+</div>
+          <div class="stat-lbl">Years<br/>Experience</div>
+        </div>
       </div>
 
-      <!-- Badge: 4+ Years (bottom-right) -->
-      <div class="hero-badge badge-yr" id="badge-yr">
-        <svg class="badge-arrow badge-arrow-yr" viewBox="0 0 60 60" fill="none" xmlns="http://www.w3.org/2000/svg">
-          <path d="M 45 10 Q 25 15 12 42" stroke="#E8431A" stroke-width="2.5" stroke-linecap="round"/>
-          <path d="M 13 32 L 9 46 L 22 41 Z" fill="#E8431A"/>
-        </svg>
-        <span class="badge-pill">4+ Years</span>
+      <!-- Creative DNA / Quote Card -->
+      <div class="hero-dna-card panel" id="hero-dna">
+        <div class="panel-glow"></div>
+        <div class="quote-mark">“</div>
+        <p class="dna-quote-text">
+          I create meaningful brand identities, engaging digital experiences, and impactful visual content through graphic design, UI/UX, photography, videography, marketing, and AI-powered creativity.
+        </p>
+        <div class="dna-author">
+          <span class="signature-text">Husni Mujeeb</span>
+          <span class="signature-role">ART DIRECTOR</span>
+        </div>
       </div>
-
-      <!-- Design-tool cursor arrow (bottom-right accent) -->
-      <div class="hero-tool-cursor" aria-hidden="true">▶</div>
     </div>
 
   </div>
 
-  <!-- Scroll hint -->
+  <!-- Scroll Hint -->
   <div class="scroll-hint" id="scroll-hint">
     <span class="scroll-hint-line"></span>
     <span class="scroll-hint-text">SCROLL</span>
@@ -265,10 +322,120 @@
     <div class="photo-item tilt-card" id="ph-5"><div class="photo-bg" style="--ph:400px;--pg1:#14100a;--pg2:#281a08"></div><div class="photo-label">Portrait</div></div>
     <div class="photo-item tilt-card" id="ph-6"><div class="photo-bg" style="--ph:320px;--pg1:#0a0a14;--pg2:#121228"></div><div class="photo-label">Street</div></div>
   </div>
+<!-- ==================================== -->
+<!--   SECTION 7 — FEEDBACK & REVIEWS    -->
+<!-- ==================================== -->
+<section id="feedback" class="section feedback-section" aria-label="Feedback and Reviews">
+  <div class="sec-intro">
+    <div class="handles-box">
+      <div class="hb-border"></div>
+      <span class="h h-tl"></span><span class="h h-tm"></span><span class="h h-tr"></span>
+      <span class="h h-ml"></span><span class="h h-mr"></span>
+      <span class="h h-bl"></span><span class="h h-bm"></span><span class="h h-br"></span>
+      <div class="big-title split-title">CLIENT FEEDBACK</div>
+      <span class="sec-cursor" aria-hidden="true">▶</span>
+    </div>
+    <p class="sec-desc">Explore live feedback from clients and collaborators. Click any feedback card to read full details or drop your own feedback below!</p>
+  </div>
+
+  <!-- Continuously Moving Feedback Marquee Ticker -->
+  <div class="marquee-wrapper" id="marquee-wrapper">
+    <div class="marquee-track" id="marquee-track">
+      <!-- Generated dynamically in script.js -->
+    </div>
+  </div>
+
+  <div class="feedback-container">
+    <!-- Interactive Feedback Submission Form -->
+    <div class="feedback-form-card panel">
+      <div class="panel-glow"></div>
+      <h3 class="form-title">Leave Your Feedback</h3>
+      <form id="feedback-form" class="feedback-form">
+        <div class="form-row">
+          <div class="form-group">
+            <label for="fb-name" class="form-label">Full Name *</label>
+            <input type="text" id="fb-name" class="form-input" placeholder="e.g. Alex Johnson" required />
+          </div>
+          <div class="form-group">
+            <label for="fb-email" class="form-label">Email Address *</label>
+            <input type="email" id="fb-email" class="form-input" placeholder="alex@company.com" required />
+          </div>
+        </div>
+
+        <div class="form-row">
+          <div class="form-group">
+            <label for="fb-subject" class="form-label">Subject / Project Category *</label>
+            <select id="fb-subject" class="form-input form-select" required>
+              <option value="General Feedback">General Feedback</option>
+              <option value="Branding">Branding</option>
+              <option value="UI/UX Design">UI/UX Design</option>
+              <option value="Photography & Videography">Photography & Videography</option>
+              <option value="AI & Vibe Coding">AI & Vibe Coding</option>
+            </select>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label">Rating *</label>
+            <div class="star-rating-picker" id="star-picker" role="radiogroup" aria-label="Rating stars">
+              <span class="star-opt active" data-rating="1">★</span>
+              <span class="star-opt active" data-rating="2">★</span>
+              <span class="star-opt active" data-rating="3">★</span>
+              <span class="star-opt active" data-rating="4">★</span>
+              <span class="star-opt active" data-rating="5">★</span>
+              <input type="hidden" id="fb-rating" value="5" />
+            </div>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label">Attach Image / Screenshot (Optional)</label>
+          <div class="file-upload-box">
+            <input type="file" id="fb-image" accept="image/*" class="file-input" />
+            <span class="file-label">📷 Upload Image / Project Photo</span>
+          </div>
+          <div id="image-preview-container" class="image-preview-container hidden">
+            <img id="image-preview" src="" alt="Preview" />
+            <button type="button" id="remove-image-btn" class="remove-img-btn" aria-label="Remove image">✕</button>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label for="fb-message" class="form-label">Feedback Message *</label>
+          <textarea id="fb-message" class="form-input form-textarea" rows="4" placeholder="Share your experience working with Husni Mujeeb..." required></textarea>
+        </div>
+
+        <button type="submit" class="hero-btn primary-btn submit-btn magnetic-btn">
+          Submit Feedback <span class="btn-arrow">↗</span>
+        </button>
+        <div id="form-status" class="form-status" aria-live="polite"></div>
+      </form>
+    </div>
+  </div>
 </section>
 
+<!-- ========== FEEDBACK DETAIL POPUP MODAL ========== -->
+<div id="feedback-modal" class="modal-overlay" aria-hidden="true">
+  <div class="modal-card panel">
+    <button class="modal-close" id="modal-close" aria-label="Close popup">✕</button>
+    <div class="modal-header">
+      <img id="modal-avatar" src="" alt="" class="modal-avatar-img" />
+      <div class="modal-meta">
+        <h3 id="modal-name" class="modal-client-name"></h3>
+        <span id="modal-project" class="modal-project-tag"></span>
+        <div id="modal-stars" class="modal-stars"></div>
+      </div>
+    </div>
+    <div class="modal-body">
+      <p id="modal-text" class="modal-full-text"></p>
+      <div id="modal-image-wrapper" class="modal-image-wrapper hidden">
+        <img id="modal-attached-img" src="" alt="Attached project work" class="modal-attached-img" />
+      </div>
+    </div>
+  </div>
+</div>
+
 <!-- ==================================== -->
-<!--   SECTION 7 — CONTACT               -->
+<!--   SECTION 8 — CONTACT               -->
 <!-- ==================================== -->
 <section id="contact" class="section contact-section" aria-label="Contact Husni Mujeeb">
   <div class="contact-inner">
@@ -279,20 +446,69 @@
       something <span class="acc">great</span> together.
     </h2>
 
-    <div class="contact-rule"></div>
+    <div class="contact-grid">
+      <!-- Left Side Direct Contact Info Cards -->
+      <div class="contact-info-col">
+        <div class="cinfo-card panel">
+          <div class="panel-glow"></div>
+          <div class="cinfo-icon">✉️</div>
+          <div class="cinfo-details">
+            <span class="cinfo-label">DIRECT EMAIL</span>
+            <a href="mailto:husnimujeeb.co@gmail.com" class="cinfo-value">husnimujeeb.co@gmail.com</a>
+          </div>
+        </div>
 
-    <div class="contact-links">
-      <a href="mailto:husnimujeeb.co@gmail.com" class="clink magnetic-btn" id="clink-email">
-        <span class="clink-label">Email</span>
-        <span class="clink-value">husnimujeeb.co@gmail.com</span>
-      </a>
-      <div class="clink-sep"></div>
-      <a href="tel:+94151509395" class="clink magnetic-btn" id="clink-phone">
-        <span class="clink-label">Phone</span>
-        <span class="clink-value">+94 15 150 9395</span>
-      </a>
+        <div class="cinfo-card panel">
+          <div class="panel-glow"></div>
+          <div class="cinfo-icon">📞</div>
+          <div class="cinfo-details">
+            <span class="cinfo-label">PHONE & WHATSAPP</span>
+            <a href="https://wa.me/94751509395" target="_blank" rel="noopener" class="cinfo-value">+94 15 150 9395</a>
+          </div>
+        </div>
+
+        <div class="cinfo-card panel">
+          <div class="panel-glow"></div>
+          <div class="cinfo-icon">📍</div>
+          <div class="cinfo-details">
+            <span class="cinfo-label">LOCATION</span>
+            <span class="cinfo-value">Sri Lanka · Available Worldwide</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Right Side Message Form -->
+      <div class="contact-form-card panel">
+        <div class="panel-glow"></div>
+        <h3 class="cform-title">Send a Direct Message</h3>
+        <form id="contact-form" class="contact-form">
+          <div class="form-row">
+            <div class="form-group">
+              <label for="c-name" class="form-label">Name *</label>
+              <input type="text" id="c-name" class="form-input" placeholder="Your Name" required />
+            </div>
+            <div class="form-group">
+              <label for="c-phone" class="form-label">Contact Number *</label>
+              <input type="tel" id="c-phone" class="form-input" placeholder="+94 77 123 4567" required />
+            </div>
+          </div>
+          <div class="form-group">
+            <label for="c-email" class="form-label">Email Address *</label>
+            <input type="email" id="c-email" class="form-input" placeholder="yourname@gmail.com" required />
+          </div>
+          <div class="form-group">
+            <label for="c-message" class="form-label">Your Message *</label>
+            <textarea id="c-message" class="form-input form-textarea" rows="4" placeholder="Tell me about your project or inquiry..." required></textarea>
+          </div>
+          <button type="submit" class="hero-btn primary-btn submit-btn magnetic-btn">
+            Send Message ↗
+          </button>
+          <div id="contact-status" class="form-status" aria-live="polite"></div>
+        </form>
+      </div>
     </div>
 
+    <!-- Social Media Badges -->
     <div class="socials-row">
       <a href="https://instagram.com/husni_mujeeb" target="_blank" rel="noopener" class="social-card magnetic-btn" id="soc-ig">
         <span class="soc-ico">
