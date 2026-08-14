@@ -1425,13 +1425,6 @@ body.c-link  #c-ring { width: 70px; height: 70px; border-color: rgba(255,255,255
   transform: translateY(-3px);
 }
 
-@media (max-width: 900px) {
-  .contact-grid { grid-template-columns: 1fr; }
-  .contact-form-card { padding: 28px 22px; }
-}
-
-
-
 /* ================================================
    CONTACT SECTION
 ================================================ */
@@ -1443,6 +1436,7 @@ body.c-link  #c-ring { width: 70px; height: 70px; border-color: rgba(255,255,255
   padding: 80px 60px;
   position: relative;
   overflow: hidden;
+  width: 100%;
 }
 /* Background pulse rings */
 .contact-section::before,
@@ -1475,10 +1469,12 @@ body.c-link  #c-ring { width: 70px; height: 70px; border-color: rgba(255,255,255
   flex-direction: column;
   align-items: center;
   text-align: center;
-  gap: 40px;
+  gap: 36px;
   position: relative;
   z-index: 1;
   width: 100%;
+  max-width: 1200px;
+  margin: 0 auto;
 }
 .contact-eyebrow {
   font-size: 10px;
@@ -1488,17 +1484,15 @@ body.c-link  #c-ring { width: 70px; height: 70px; border-color: rgba(255,255,255
 }
 .contact-headline {
   font-family: var(--display);
-  font-size: clamp(32px, 5.5vw, 72px);
+  font-size: clamp(28px, 5.5vw, 68px);
   letter-spacing: 0.03em;
-  line-height: 1.1;
+  line-height: 1.15;
   max-width: 820px;
+  margin: 0 auto;
 }
 .contact-headline .acc { color: var(--acc); }
-.contact-rule {
-  width: 60px;
-  height: 1px;
-  background: var(--gray-2);
-}
+.desktop-br { display: inline; }
+
 .contact-links {
   display: flex;
   align-items: center;
@@ -1529,30 +1523,6 @@ body.c-link  #c-ring { width: 70px; height: 70px; border-color: rgba(255,255,255
   background: var(--gray-2);
 }
 
-/* Social Cards */
-.socials-row { display: flex; flex-wrap: wrap; justify-content: center; gap: 20px; }
-.social-card {
-  display: flex;
-  align-items: center;
-  gap: 14px;
-  padding: 16px 26px;
-  border: 1px solid var(--border);
-  border-radius: 14px;
-  background: var(--panel-bg);
-  backdrop-filter: blur(12px);
-  transition: border-color 0.3s, background 0.3s;
-  will-change: transform;
-}
-.social-card:hover { border-color: var(--acc); background: var(--acc-dim); }
-.soc-ico { color: var(--acc); display: flex; align-items: center; }
-.soc-name {
-  font-size: 12px;
-  font-weight: 600;
-  letter-spacing: 0.05em;
-  text-transform: uppercase;
-}
-.soc-handle { font-size: 12px; color: var(--gray); margin-top: 2px; }
-
 /* Footer */
 .site-footer {
   display: flex;
@@ -1571,13 +1541,13 @@ body.c-link  #c-ring { width: 70px; height: 70px; border-color: rgba(255,255,255
 .footer-dot { color: var(--gray-2); }
 
 /* ================================================
-   RESPONSIVE
+   RESPONSIVE MEDIA QUERIES
 ================================================ */
 
 /* ── Hover-None Touch Devices (any resolution) ───── */
 @media (hover: none) {
   body { cursor: auto; }
-  #c-dot, #c-ring { display: none; }
+  #c-dot, #c-ring { display: none !important; }
 }
 
 /* ── Desktop & Tablet Medium (≤ 1150px) ────────── */
@@ -1608,10 +1578,10 @@ body.c-link  #c-ring { width: 70px; height: 70px; border-color: rgba(255,255,255
   }
 }
 
-/* ── Mobile Navigation Toggle Activation (≤ 900px) ── */
+/* ── Tablet & Mobile (≤ 900px) ─────────────────── */
 @media (max-width: 900px) {
   #nav {
-    padding: 16px 24px;
+    padding: 16px 20px;
     display: flex;
     justify-content: space-between;
     align-items: center;
@@ -1662,12 +1632,39 @@ body.c-link  #c-ring { width: 70px; height: 70px; border-color: rgba(255,255,255
   .nav-link.active {
     color: var(--acc);
   }
+
+  /* Form & Contact Layout Stacking */
+  .desktop-br { display: none; }
+  .form-row {
+    grid-template-columns: 1fr !important;
+    gap: 20px;
+  }
+  .contact-grid {
+    grid-template-columns: 1fr;
+    gap: 24px;
+  }
+  .feedback-container {
+    padding: 0 16px;
+  }
+  .feedback-form-card,
+  .contact-form-card {
+    padding: 28px 22px;
+    border-radius: 20px;
+  }
+  .contact-section {
+    padding: 70px 20px 40px;
+    min-height: auto;
+  }
+  .cinfo-value {
+    font-size: 14px;
+    word-break: break-word;
+  }
 }
 
 /* ── Mobile Portrait (≤ 767px) ─────────────────── */
 @media (max-width: 767px) {
   .hero-section {
-    padding: 90px 20px 40px;
+    padding: 90px 16px 40px;
   }
   .hero-stage-grid {
     grid-template-columns: 1fr;
@@ -1685,80 +1682,225 @@ body.c-link  #c-ring { width: 70px; height: 70px; border-color: rgba(255,255,255
   }
   .hero-bio {
     text-align: center;
+    font-size: 13px;
   }
   .hero-actions {
     justify-content: center;
+    width: 100%;
+    flex-wrap: wrap;
+    gap: 12px;
+  }
+  .hero-actions .hero-btn {
+    flex: 1 1 140px;
+    justify-content: center;
+  }
+  .hero-skills-card {
+    max-width: 100%;
+    padding: 16px 14px;
   }
   .skills-grid {
     grid-template-columns: repeat(2, 1fr);
+    gap: 8px;
   }
   .hero-col-right {
     grid-column: 1;
     grid-row: 3;
+    width: 100%;
+  }
+  .hero-stats-card,
+  .hero-quote-card {
+    max-width: 100%;
   }
 
+  /* Form & Contact Inputs */
+  .feedback-form-card,
+  .contact-form-card {
+    padding: 24px 18px;
+    border-radius: 18px;
+  }
+  .form-title,
+  .cform-title {
+    font-size: 26px;
+    margin-bottom: 20px;
+    text-align: center;
+  }
+  .form-input {
+    font-size: 13.5px;
+    padding: 12px 14px;
+  }
+  .star-rating-picker {
+    justify-content: space-around;
+    padding: 0 12px;
+  }
+  .submit-btn {
+    width: 100%;
+    justify-content: center;
+    padding: 14px 20px;
+    font-size: 14px;
+  }
+  .contact-info-col {
+    width: 100%;
+    gap: 12px;
+  }
+  .cinfo-card {
+    padding: 16px 18px;
+    gap: 14px;
+    border-radius: 16px;
+  }
+  .cinfo-icon {
+    width: 44px;
+    height: 44px;
+    font-size: 20px;
+  }
   .contact-links { flex-direction: column; gap: 20px; }
   .clink-sep { display: none; }
   .clink-value { font-size: clamp(14px, 4vw, 20px); }
-  .socials-row { flex-direction: column; gap: 12px; width: 100%; }
-  .social-card { width: 100%; justify-content: center; }
+  .socials-row {
+    flex-direction: column;
+    gap: 10px;
+    width: 100%;
+    margin-top: 30px;
+  }
+  .social-card {
+    width: 100%;
+    justify-content: center;
+    padding: 13px 20px;
+  }
+
+  /* Feedback Marquee */
+  .fb-card {
+    width: 290px;
+    padding: 18px 18px;
+  }
+  .marquee-wrapper {
+    margin: 25px 0 35px;
+  }
+
+  /* Modal Popup */
+  .modal-card {
+    padding: 24px 18px;
+    border-radius: 18px;
+    max-height: 88vh;
+    overflow-y: auto;
+    width: 94%;
+  }
+  .modal-client-name {
+    font-size: 20px;
+  }
+  .modal-avatar-img {
+    width: 48px;
+    height: 48px;
+  }
+  .modal-full-text {
+    font-size: 13px;
+    line-height: 1.6;
+  }
+  .modal-attached-img {
+    max-height: 220px;
+  }
   
   .site-footer {
     flex-direction: column;
     gap: 8px;
     text-align: center;
-    margin-top: 30px;
+    margin-top: 24px;
   }
   .footer-dot { display: none; }
 }
 
 /* ── Mobile Small (≤ 580px) ─────────────────── */
 @media (max-width: 580px) {
-  .work-grid { grid-template-columns: 1fr; padding: 0 20px 50px; gap: 14px; }
+  .work-grid { grid-template-columns: 1fr; padding: 0 16px 40px; gap: 14px; }
   .work-card { aspect-ratio: 16/10; }
-  .photo-grid { columns: 1; padding: 0 20px 50px; }
+  .photo-grid { columns: 1; padding: 0 16px 40px; }
 
   .hero-bg-word {
-    font-size: clamp(50px, 14vw, 100px);
+    font-size: clamp(45px, 13vw, 90px);
   }
   .hero-portrait-img {
     max-height: 290px;
   }
   .portrait-ring {
-    width: 230px;
-    height: 230px;
-  }
-  .skills-grid {
-    grid-template-columns: 1fr;
+    width: 220px;
+    height: 220px;
   }
 
   .scroll-hint { bottom: 20px; }
   .scroll-hint-line { height: 32px; }
-  .toc-section { padding: 50px 24px; min-height: auto; gap: 36px; }
-  .toc-grid { gap: 14px 20px; }
-  .toc-num { font-size: clamp(40px, 12vw, 60px); }
-  .toc-tag { font-size: 10px; padding: 8px 16px; }
-  .sec-intro { padding: 50px 24px 30px; min-height: auto; }
-  .handles-box { padding: 18px 32px; }
-  .big-title { font-size: clamp(36px, 12vw, 72px); }
+  .toc-section { padding: 50px 16px; min-height: auto; gap: 30px; }
+  .toc-grid { gap: 14px 16px; }
+  .toc-num { font-size: clamp(36px, 11vw, 54px); }
+  .toc-tag { font-size: 10px; padding: 7px 14px; }
+  .sec-intro { padding: 45px 16px 24px; min-height: auto; }
+  .handles-box { padding: 16px 24px; }
+  .big-title { font-size: clamp(32px, 10vw, 60px); }
   .sec-desc { font-size: 13px; }
 }
 
 /* ── Small Mobile (≤ 480px) ─────────────────────── */
 @media (max-width: 480px) {
-  .contact-headline { font-size: clamp(20px, 6.5vw, 36px); }
-  .sec-intro { padding: 40px 16px 24px; }
-  .handles-box { padding: 14px 20px; }
-  .big-title { font-size: clamp(28px, 11vw, 56px); }
+  .contact-section { padding: 50px 14px 30px; }
+  .contact-headline { font-size: clamp(22px, 6.8vw, 34px); }
+  .feedback-section { padding: 30px 0 40px; }
+  .feedback-container { padding: 0 12px; }
+  .feedback-form-card,
+  .contact-form-card {
+    padding: 20px 14px;
+    border-radius: 16px;
+  }
+  .form-title,
+  .cform-title {
+    font-size: 22px;
+  }
+  .form-label {
+    font-size: 10.5px;
+  }
+  .cinfo-card {
+    padding: 14px 14px;
+    gap: 12px;
+  }
+  .cinfo-value {
+    font-size: 13px;
+  }
+  .cinfo-icon {
+    width: 40px;
+    height: 40px;
+    font-size: 18px;
+    border-radius: 10px;
+  }
+
+  .sec-intro { padding: 35px 14px 20px; }
+  .handles-box { padding: 12px 16px; }
+  .big-title { font-size: clamp(26px, 9.5vw, 48px); }
   .sec-desc { font-size: 12px; max-width: 100%; }
-  .stag { font-size: 10px; padding: 5px 10px; }
-  .work-grid { padding: 0 16px 40px; }
-  .photo-grid { padding: 0 16px 40px; }
+  .stag { font-size: 9.5px; padding: 5px 9px; }
+  .work-grid { padding: 0 12px 30px; }
+  .photo-grid { padding: 0 12px 30px; }
+
+  .fb-card {
+    width: 260px;
+    padding: 14px 14px;
+  }
+  .fb-name { font-size: 13px; }
+  .fb-text { font-size: 12px; }
 
   /* Preloader Safety */
-  .pre-name { font-size: clamp(36px, 9vw, 80px); }
-  .pre-bg-word { font-size: clamp(80px, 18vw, 180px); }
-  .pre-bar-row { width: 180px; }
+  .pre-name { font-size: clamp(32px, 8.5vw, 70px); }
+  .pre-bg-word { font-size: clamp(70px, 16vw, 150px); }
+  .pre-bar-row { width: 160px; }
 }
+
+/* ── Extra Small Mobile (≤ 360px) ───────────────── */
+@media (max-width: 360px) {
+  .hero-section { padding: 80px 10px 30px; }
+  .hero-actions .hero-btn { flex: 1 1 100%; }
+  .skills-grid { grid-template-columns: 1fr; }
+  .feedback-container { padding: 0 8px; }
+  .feedback-form-card,
+  .contact-form-card { padding: 18px 12px; }
+  .cinfo-card { padding: 12px 10px; }
+  .cinfo-value { font-size: 12px; }
+}
+
 
 
