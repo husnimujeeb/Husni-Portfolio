@@ -483,14 +483,15 @@ if (q('#toc') && typeof ScrollTrigger !== 'undefined') {
 
       const titleEl = q('#toc-title');
       if (titleEl) {
-        const chars = splitChars(titleEl);
-        gsap.from(chars, {
-          opacity: 0, y: 50, rotateX: -70,
-          transformOrigin: '50% 100%',
-          stagger: 0.025,
-          duration: 0.4,
-          ease: 'power4.out',
-        });
+        let chars = titleEl.querySelectorAll('.char');
+        if (!chars.length) {
+          splitChars(titleEl);
+          chars = titleEl.querySelectorAll('.char');
+        }
+        gsap.fromTo(chars,
+          { opacity: 0, y: 50, rotateX: -70, transformOrigin: '50% 100%' },
+          { opacity: 1, y: 0, rotateX: 0, color: '#ffffff', stagger: 0.025, duration: 0.45, ease: 'power4.out' }
+        );
       }
 
       gsap.from(qa('.toc-item'), {
@@ -529,7 +530,11 @@ qa('.sec-intro').forEach(intro => {
       trigger: intro,
       start: 'top 72%',
       onEnter: () => {
-        const chars = splitChars(titleEl);
+        let chars = titleEl ? titleEl.querySelectorAll('.char') : [];
+        if (titleEl && !chars.length) {
+          splitChars(titleEl);
+          chars = titleEl.querySelectorAll('.char');
+        }
         if (chars.length) gsap.set(chars, { opacity: 0, y: 100, rotateX: -90, transformOrigin: '50% 100%' });
 
         const tl = gsap.timeline();
@@ -546,6 +551,7 @@ qa('.sec-intro').forEach(intro => {
         if (chars.length) {
           tl.to(chars, {
             opacity: 1, y: 0, rotateX: 0,
+            color: '#ffffff',
             stagger: 0.03,
             duration: 0.42,
             ease: 'power4.out',
@@ -572,6 +578,148 @@ qa('.sec-intro').forEach(intro => {
     });
   }
 });
+
+/* ================================================
+   DYNAMIC INTERACTIVE CURSOR ANIMATION ON HEADINGS
+   (MY WORKS, BRANDING, SOCIAL MEDIA, PRINTING, PHOTOGRAPHY, CLIENT FEEDBACK)
+================================================ */
+function initHeadingHoverEffects() {
+  const handleBoxes = qa('.handles-box');
+
+  handleBoxes.forEach(box => {
+    const titleEl = box.querySelector('.big-title');
+    if (!titleEl) return;
+
+    // Pre-split characters if not split yet
+    if (!titleEl.querySelectorAll('.char').length) {
+      splitChars(titleEl);
+    }
+    const chars   = titleEl.querySelectorAll('.char');
+    const handles = box.querySelectorAll('.h');
+    const border  = box.querySelector('.hb-border');
+
+    // Desktop Mouse Kinetic Interaction
+    box.addEventListener('mousemove', e => {
+      const boxRect = box.getBoundingClientRect();
+      const mouseX  = e.clientX;
+      const mouseY  = e.clientY;
+
+      chars.forEach(char => {
+        const charRect = char.getBoundingClientRect();
+        const charCenterX = charRect.left + charRect.width / 2;
+        const charCenterY = charRect.top + charRect.height / 2;
+
+        const dx = mouseX - charCenterX;
+        const dy = mouseY - charCenterY;
+        const dist = Math.hypot(dx, dy);
+        const radius = 135; // area of kinetic influence
+
+        if (dist < radius) {
+          const power = 1 - (dist / radius); // 0 to 1
+          const liftY = -14 * power;
+          const scale = 1 + 0.18 * power;
+          const tilt  = (dx / radius) * 12 * power;
+
+          gsap.to(char, {
+            y: liftY,
+            scale: scale,
+            rotate: tilt,
+            color: '#E8431A',
+            textShadow: `0 0 ${18 * power}px rgba(232, 67, 26, 0.9), 0 0 ${36 * power}px rgba(232, 67, 26, 0.5)`,
+            duration: 0.18,
+            ease: 'power2.out',
+            overwrite: 'auto',
+          });
+        } else {
+          gsap.to(char, {
+            y: 0,
+            scale: 1,
+            rotate: 0,
+            color: '#ffffff',
+            textShadow: 'none',
+            duration: 0.35,
+            ease: 'power2.out',
+            overwrite: 'auto',
+          });
+        }
+      });
+
+      // Subtle 3D tilt on the entire box container
+      const cx = boxRect.left + boxRect.width / 2;
+      const cy = boxRect.top + boxRect.height / 2;
+      const tiltX = ((mouseY - cy) / (boxRect.height / 2)) * -4;
+      const tiltY = ((mouseX - cx) / (boxRect.width / 2)) * 4;
+
+      gsap.to(box, {
+        rotateX: tiltX,
+        rotateY: tiltY,
+        transformPerspective: 800,
+        duration: 0.3,
+        ease: 'power2.out',
+      });
+
+      if (handles.length) {
+        gsap.to(handles, {
+          scale: 1.35,
+          duration: 0.25,
+          ease: 'power2.out',
+        });
+      }
+    });
+
+    // Reset when cursor leaves the heading box
+    box.addEventListener('mouseleave', () => {
+      chars.forEach(char => {
+        gsap.to(char, {
+          y: 0,
+          scale: 1,
+          rotate: 0,
+          color: '#ffffff',
+          textShadow: 'none',
+          duration: 0.5,
+          ease: 'elastic.out(1, 0.35)',
+          overwrite: 'auto',
+        });
+      });
+
+      gsap.to(box, {
+        rotateX: 0,
+        rotateY: 0,
+        duration: 0.6,
+        ease: 'elastic.out(1, 0.4)',
+      });
+
+      if (handles.length) {
+        gsap.to(handles, {
+          scale: 1,
+          duration: 0.4,
+          ease: 'power2.out',
+        });
+      }
+    });
+
+    // Touch Ripple wave for mobile devices
+    box.addEventListener('touchstart', () => {
+      chars.forEach((char, idx) => {
+        gsap.to(char, {
+          y: -12,
+          scale: 1.15,
+          color: '#E8431A',
+          textShadow: '0 0 18px rgba(232, 67, 26, 0.9)',
+          duration: 0.22,
+          delay: idx * 0.035,
+          yoyo: true,
+          repeat: 1,
+          ease: 'power2.out',
+        });
+      });
+    }, { passive: true });
+  });
+}
+
+// Initialize Interactive Heading Hover Effects
+initHeadingHoverEffects();
+
 
 /* ================================================
    WORK CARD GRID — stagger reveal

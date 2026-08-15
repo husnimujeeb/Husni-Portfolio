@@ -663,13 +663,21 @@ body.c-link  #c-ring { width: 70px; height: 70px; border-color: rgba(255,255,255
   padding: 28px 56px;
   width: max-content;
   max-width: 90vw;
+  cursor: pointer;
+  transition: transform 0.4s var(--ease-out);
 }
 .hb-border {
   position: absolute;
   inset: 0;
-  border: 1px solid rgba(255,255,255,0.22);
+  border: 1px solid rgba(255,255,255,0.25);
   pointer-events: none;
+  transition: border-color 0.35s ease, box-shadow 0.35s ease;
 }
+.handles-box:hover .hb-border {
+  border-color: rgba(232, 67, 26, 0.65);
+  box-shadow: 0 0 30px rgba(232, 67, 26, 0.22), inset 0 0 20px rgba(232, 67, 26, 0.1);
+}
+
 /* Handles (red corner squares) */
 .h {
   position: absolute;
@@ -678,6 +686,10 @@ body.c-link  #c-ring { width: 70px; height: 70px; border-color: rgba(255,255,255
   background: var(--acc);
   display: block;
   box-shadow: 0 0 8px var(--acc-glow);
+  transition: transform 0.3s var(--ease-out), box-shadow 0.3s ease;
+}
+.handles-box:hover .h {
+  box-shadow: 0 0 16px var(--acc), 0 0 26px rgba(232, 67, 26, 0.8);
 }
 .h-tl { top: -1px;    left: -1px;   }
 .h-tm { top: -1px;    left: 50%;    transform: translateX(-50%); }
@@ -688,20 +700,26 @@ body.c-link  #c-ring { width: 70px; height: 70px; border-color: rgba(255,255,255
 .h-bm { bottom: -1px; left: 50%;    transform: translateX(-50%); }
 .h-br { bottom: -1px; right: -1px;  }
 
-/* Big section title */
+/* Big section title - 100% Opacity Crisp White */
 .big-title {
   font-family: var(--display);
   font-size: clamp(48px, 8.5vw, 128px);
-  color: rgba(255,255,255,0.14);
+  color: #ffffff;
+  opacity: 1 !important;
   letter-spacing: 0.05em;
   line-height: 1;
   text-align: center;
   user-select: none;
   position: relative;
   z-index: 1;
+  cursor: default;
 }
 /* Individual chars (added by JS) */
-.char { display: inline-block; will-change: transform, opacity; }
+.char {
+  display: inline-block;
+  will-change: transform, color, text-shadow;
+  transition: color 0.15s ease, text-shadow 0.15s ease;
+}
 
 /* Cursor arrow accent */
 .sec-cursor {
@@ -711,6 +729,11 @@ body.c-link  #c-ring { width: 70px; height: 70px; border-color: rgba(255,255,255
   font-size: 18px;
   color: var(--acc);
   transform: rotate(45deg);
+  transition: transform 0.3s ease, color 0.3s ease;
+}
+.handles-box:hover .sec-cursor {
+  transform: rotate(45deg) scale(1.25) translate(2px, 2px);
+  color: #ff5e36;
 }
 
 /* ================================================
