@@ -49,20 +49,125 @@ lenis.on('scroll', ({ progress }) => {
 });
 
 /* ================================================
-   PRELOADER
+   PRELOADER & HERO ANIMATION FLOW
+   Workflow: Loading Page -> Seamless Animation -> Hero Page
 ================================================ */
+let heroTL = null;
+
+function initHeroAnimation() {
+  initParticles();
+
+  const openingLine = q('#opening-line');
+  const hwTop       = q('#hw-top');
+  const tag         = q('#hero-tag');
+  const titleFirst  = q('#hero-first');
+  const titleLast   = q('#hero-last');
+  const bio         = q('#hero-bio');
+  const actions     = q('#hero-actions');
+  const skillsCard  = q('#hero-skills');
+  const portrait    = q('#hero-portrait');
+  const ring        = q('#portrait-ring');
+  const statsCard   = q('#hero-stats');
+  const dnaCard     = q('#hero-dna');
+  const hint        = q('#scroll-hint');
+  const nav         = q('#nav');
+
+  /* Split background word chars */
+  const topChars = splitChars(hwTop);
+
+  /* Set initial hidden states immediately on page setup */
+  gsap.set(openingLine, { scaleX: 0, opacity: 1 });
+  gsap.set(topChars,    { opacity: 0, scale: 1.05 });
+  gsap.set([titleFirst, titleLast], { opacity: 0, y: 45, filter: 'blur(8px)' });
+  gsap.set(tag,         { opacity: 0, y: 15 });
+  gsap.set([bio, actions, skillsCard], { opacity: 0, y: 30 });
+  gsap.set([portrait, ring], { opacity: 0, y: 30, scale: 0.96 });
+  gsap.set([statsCard, dnaCard], { opacity: 0, y: 30 });
+  gsap.set([hint, nav], { opacity: 0 });
+
+  /* Build entrance animation timeline (starts paused) */
+  heroTL = gsap.timeline({ paused: true, defaults: { ease: 'power3.out' } });
+
+  /* STEP 1 & 2: Small Accent Line grows */
+  heroTL.to(openingLine, { scaleX: 1, duration: 0.45, ease: 'power2.inOut' })
+    .to(openingLine, { opacity: 0, duration: 0.25, ease: 'power2.out' }, '+=0.05')
+
+  /* STEP 3: Background Typography */
+    .to(topChars, { opacity: 1, scale: 1, stagger: 0.025, duration: 0.75, ease: 'power2.out' }, '-=0.15')
+
+  /* STEP 4 & 5: Main Name "HUSNI" and "MUJEEB" */
+    .to(titleFirst, { opacity: 1, y: 0, filter: 'blur(0px)', duration: 0.75 }, '-=0.5')
+    .to(titleLast,  { opacity: 1, y: 0, filter: 'blur(0px)', duration: 0.75 }, '-=0.6')
+
+  /* STEP 6: ART DIRECTOR Label */
+    .to(tag, { opacity: 1, y: 0, duration: 0.55 }, '-=0.5')
+
+  /* STEP 7: Portrait & Glowing Ring */
+    .to([portrait, ring], { opacity: 1, y: 0, scale: 1, duration: 0.9, ease: 'power3.out' }, '-=0.55')
+
+  /* STEP 8: Bio, Buttons, Skills, Stats, DNA Cards */
+    .to([bio, actions], { opacity: 1, y: 0, stagger: 0.08, duration: 0.65 }, '-=0.45')
+    .to(skillsCard, { opacity: 1, y: 0, duration: 0.65, ease: 'back.out(1.2)' }, '-=0.4')
+    .to([statsCard, dnaCard], { opacity: 1, y: 0, stagger: 0.12, duration: 0.65, ease: 'back.out(1.2)' }, '-=0.45')
+
+  /* STEP 9: Navigation & Scroll Hint */
+    .to([nav, hint], { opacity: 1, duration: 0.55 }, '-=0.3');
+
+  /* ── Mouse Parallax on Hero ──────────────────── */
+  if (!window.matchMedia('(hover: none)').matches) {
+    const heroSec = q('.hero-section');
+    heroSec.addEventListener('mousemove', e => {
+      const cx = window.innerWidth  / 2;
+      const cy = window.innerHeight / 2;
+      const dx = (e.clientX - cx) / cx;
+      const dy = (e.clientY - cy) / cy;
+
+      gsap.to(portrait, {
+        rotateX: dy * -4,
+        rotateY: dx *  4,
+        transformPerspective: 1000,
+        duration: 0.8,
+        ease: 'power2.out',
+      });
+      gsap.to(hwTop, { x: dx * -15, y: dy * -8, duration: 1, ease: 'power2.out' });
+      gsap.to(q('.float-1'), { x: dx * 10, y: dy * 10, duration: 1.2 });
+      gsap.to(q('.float-2'), { x: dx * -12, y: dy * -8, duration: 1.4 });
+      gsap.to(skillsCard, { x: dx * -6, y: dy * -4, duration: 0.9 });
+      gsap.to([statsCard, dnaCard], { x: dx * 6, y: dy * 4, duration: 0.9 });
+    });
+
+    heroSec.addEventListener('mouseleave', () => {
+      gsap.to([portrait, hwTop, skillsCard, statsCard, dnaCard, q('.float-1'), q('.float-2')], {
+        rotateX: 0, rotateY: 0, x: 0, y: 0,
+        duration: 1.2,
+        ease: 'elastic.out(1, 0.4)',
+      });
+    });
+  }
+}
+
+function startHeroReveal() {
+  if (heroTL) {
+    heroTL.play();
+  }
+  initNav();
+}
+
+// Prepare Hero upfront immediately
+initHeroAnimation();
+
 (function preloader() {
-  const fill    = q('#pre-fill');
-  const numEl   = q('#pre-num');
-  const loader  = q('#preloader');
+  const fill      = q('#pre-fill');
+  const numEl     = q('#pre-num');
+  const loader    = q('#preloader');
   const firstName = q('.pre-first');
   const lastName  = q('.pre-last');
 
-  // Initial state
+  // Initial state for preloader text
   gsap.set([firstName, lastName], { opacity: 0, y: 40 });
   gsap.set(q('.pre-role'),        { opacity: 0 });
 
-  // Stagger name reveal
+  // Stagger name reveal in preloader
   gsap.to([firstName, lastName], {
     opacity: 1, y: 0,
     duration: 0.45,
@@ -82,235 +187,27 @@ lenis.on('scroll', ({ progress }) => {
     fill.style.width  = rounded + '%';
     if (count >= 100) {
       clearInterval(tick);
-      setTimeout(exitPreloader, 300);
+      setTimeout(exitPreloader, 250);
     }
-  }, 28);
+  }, 25);
 
   function exitPreloader() {
     const tl = gsap.timeline();
     tl.to([firstName, lastName, q('.pre-role'), q('.pre-bar-row')], {
-      y: -50, opacity: 0, stagger: 0.035, duration: 0.3, ease: 'power3.in',
+      y: -40, opacity: 0, stagger: 0.03, duration: 0.28, ease: 'power3.in',
     })
     .to(loader, {
-      yPercent: -102, duration: 1, ease: 'power4.inOut',
+      yPercent: -102, duration: 0.85, ease: 'power4.inOut',
+      onStart: () => {
+        // Smoothly start hero entrance animation as curtain begins lifting
+        startHeroReveal();
+      },
       onComplete: () => {
         loader.style.display = 'none';
-        initHero();
-        initNav();
       }
-    }, '+=0.05');
+    }, '+=0.02');
   }
 })();
-
-/* ================================================
-   THREE.JS PARTICLE FIELD (Hero background)
-================================================ */
-function initParticles() {
-  const canvas   = q('#hero-canvas');
-  const scene    = new THREE.Scene();
-  const camera   = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
-  const renderer = new THREE.WebGLRenderer({ canvas, alpha: true, antialias: true });
-  renderer.setSize(window.innerWidth, window.innerHeight);
-  renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
-
-  /* Dot grid */
-  const count = 1800;
-  const pos   = new Float32Array(count * 3);
-  const col   = new Float32Array(count * 3);
-
-  for (let i = 0; i < count; i++) {
-    pos[i * 3]     = (Math.random() - 0.5) * 22;
-    pos[i * 3 + 1] = (Math.random() - 0.5) * 18;
-    pos[i * 3 + 2] = (Math.random() - 0.5) * 12;
-
-    const accent = Math.random() > 0.85;
-    col[i * 3]     = accent ? 0.91 : 0.25;
-    col[i * 3 + 1] = accent ? 0.26 : 0.25;
-    col[i * 3 + 2] = accent ? 0.10 : 0.25;
-  }
-
-  const geo = new THREE.BufferGeometry();
-  geo.setAttribute('position', new THREE.BufferAttribute(pos, 3));
-  geo.setAttribute('color',    new THREE.BufferAttribute(col, 3));
-
-  const mat = new THREE.PointsMaterial({
-    size: 0.035,
-    vertexColors: true,
-    transparent: true,
-    opacity: 0.7,
-  });
-
-  const points = new THREE.Points(geo, mat);
-  scene.add(points);
-  camera.position.z = 6;
-
-  let mX = 0, mY = 0;
-  document.addEventListener('mousemove', e => {
-    mX = (e.clientX / window.innerWidth  - 0.5) * 2;
-    mY = (e.clientY / window.innerHeight - 0.5) * 2;
-  });
-
-  let scrollY = 0;
-  lenis.on('scroll', ({ scroll }) => { scrollY = scroll; });
-
-  function animate() {
-    requestAnimationFrame(animate);
-    points.rotation.y += 0.0004;
-    points.rotation.x += 0.0001;
-    camera.position.x += (mX * 0.6 - camera.position.x) * 0.04;
-    camera.position.y += (-mY * 0.4 - camera.position.y) * 0.04;
-    points.position.y = -scrollY * 0.001;
-    renderer.render(scene, camera);
-  }
-  animate();
-
-  window.addEventListener('resize', () => {
-    camera.aspect = window.innerWidth / window.innerHeight;
-    camera.updateProjectionMatrix();
-    renderer.setSize(window.innerWidth, window.innerHeight);
-  });
-}
-
-/* ================================================
-   CUSTOM CURSOR
-================================================ */
-(function initCursor() {
-  const dot  = q('#c-dot');
-  const ring = q('#c-ring');
-  let mx = 0, my = 0, rx = 0, ry = 0;
-
-  document.addEventListener('mousemove', e => {
-    mx = e.clientX; my = e.clientY;
-    gsap.to(dot, { x: mx, y: my, duration: 0.08, ease: 'none' });
-  });
-
-  /* Ring lerp loop */
-  (function lerpRing() {
-    rx += (mx - rx) * 0.13;
-    ry += (my - ry) * 0.13;
-    gsap.set(ring, { x: rx, y: ry });
-    requestAnimationFrame(lerpRing);
-  })();
-
-  /* Hover states */
-  qa('a, button, .toc-item, .work-card, .photo-item, .social-card').forEach(el => {
-    el.addEventListener('mouseenter', () => {
-      document.body.classList.add('c-hover');
-      if (el.tagName === 'A') document.body.classList.add('c-link');
-    });
-    el.addEventListener('mouseleave', () => {
-      document.body.classList.remove('c-hover', 'c-link');
-    });
-  });
-
-  /* Hide when out of window */
-  document.addEventListener('mouseleave', () => gsap.to([dot, ring], { opacity: 0 }));
-  document.addEventListener('mouseenter', () => gsap.to([dot, ring], { opacity: 1 }));
-})();
-
-/* ================================================
-   HERO ANIMATIONS (called after preloader exits)
-================================================ */
-/* ================================================
-   HERO ANIMATIONS (called after preloader exits)
-================================================ */
-function initHero() {
-  initParticles();
-
-  const openingLine = q('#opening-line');
-  const hwTop       = q('#hw-top');
-  const tag         = q('#hero-tag');
-  const titleFirst  = q('#hero-first');
-  const titleLast   = q('#hero-last');
-  const bio         = q('#hero-bio');
-  const actions     = q('#hero-actions');
-  const skillsCard  = q('#hero-skills');
-  const portrait    = q('#hero-portrait');
-  const ring        = q('#portrait-ring');
-  const statsCard   = q('#hero-stats');
-  const dnaCard     = q('#hero-dna');
-  const hint        = q('#scroll-hint');
-  const nav         = q('#nav');
-
-  /* Split background word chars if needed */
-  const topChars = splitChars(hwTop);
-
-  /* Set initial hidden states */
-  gsap.set(openingLine, { scaleX: 0, opacity: 1 });
-  gsap.set(topChars,    { opacity: 0, scale: 1.05 });
-  gsap.set([titleFirst, titleLast], { opacity: 0, y: 50, filter: 'blur(8px)' });
-  gsap.set(tag,         { opacity: 0, y: 15 });
-  gsap.set([bio, actions, skillsCard], { opacity: 0, y: 30 });
-  gsap.set([portrait, ring], { opacity: 0, y: 30, scale: 0.96 });
-  gsap.set([statsCard, dnaCard], { opacity: 0, y: 30 });
-  gsap.set([hint, nav], { opacity: 0 });
-
-  const tl = gsap.timeline({ delay: 0.2, defaults: { ease: 'power3.out' } });
-
-  /* STEP 1 & 2: Small Accent Line grows */
-  tl.to(openingLine, { scaleX: 1, duration: 0.5, ease: 'power2.inOut' })
-    .to(openingLine, { opacity: 0, duration: 0.3, ease: 'power2.out' }, '+=0.1')
-
-  /* STEP 3: Background Typography */
-    .to(topChars, { opacity: 1, scale: 1, stagger: 0.03, duration: 0.8, ease: 'power2.out' }, '-=0.2')
-
-  /* STEP 4 & 5: Main Name "HUSNI" and "MUJEEB" */
-    .to(titleFirst, { opacity: 1, y: 0, filter: 'blur(0px)', duration: 0.8 }, '-=0.5')
-    .to(titleLast,  { opacity: 1, y: 0, filter: 'blur(0px)', duration: 0.8 }, '-=0.6')
-
-  /* STEP 6: ART DIRECTOR Label */
-    .to(tag, { opacity: 1, y: 0, duration: 0.6 }, '-=0.5')
-
-  /* STEP 7: Portrait & Glowing Ring */
-    .to([portrait, ring], { opacity: 1, y: 0, scale: 1, duration: 1, ease: 'power3.out' }, '-=0.6')
-
-  /* STEP 8: Bio, Buttons, Skills, Stats, DNA Cards */
-    .to([bio, actions], { opacity: 1, y: 0, stagger: 0.1, duration: 0.7 }, '-=0.5')
-    .to(skillsCard, { opacity: 1, y: 0, duration: 0.7, ease: 'back.out(1.2)' }, '-=0.4')
-    .to([statsCard, dnaCard], { opacity: 1, y: 0, stagger: 0.15, duration: 0.7, ease: 'back.out(1.2)' }, '-=0.5')
-
-  /* STEP 9: Navigation & Scroll Hint */
-    .to([nav, hint], { opacity: 1, duration: 0.6 }, '-=0.3');
-
-  /* ── Mouse Parallax on Hero ──────────────────── */
-  if (!window.matchMedia('(hover: none)').matches) {
-    const heroSec = q('.hero-section');
-    heroSec.addEventListener('mousemove', e => {
-      const cx = window.innerWidth  / 2;
-      const cy = window.innerHeight / 2;
-      const dx = (e.clientX - cx) / cx;
-      const dy = (e.clientY - cy) / cy;
-
-      /* Portrait tilts gently */
-      gsap.to(portrait, {
-        rotateX: dy * -4,
-        rotateY: dx *  4,
-        transformPerspective: 1000,
-        duration: 0.8,
-        ease: 'power2.out',
-      });
-
-      /* Background word drifts opposite */
-      gsap.to(hwTop, { x: dx * -15, y: dy * -8, duration: 1, ease: 'power2.out' });
-
-      /* Floating elements drift */
-      gsap.to(q('.float-1'), { x: dx * 10, y: dy * 10, duration: 1.2 });
-      gsap.to(q('.float-2'), { x: dx * -12, y: dy * -8, duration: 1.4 });
-
-      /* Cards drift slightly */
-      gsap.to(skillsCard, { x: dx * -6, y: dy * -4, duration: 0.9 });
-      gsap.to([statsCard, dnaCard], { x: dx * 6, y: dy * 4, duration: 0.9 });
-    });
-
-    heroSec.addEventListener('mouseleave', () => {
-      gsap.to([portrait, hwTop, skillsCard, statsCard, dnaCard, q('.float-1'), q('.float-2')], {
-        rotateX: 0, rotateY: 0, x: 0, y: 0,
-        duration: 1.2,
-        ease: 'elastic.out(1, 0.4)',
-      });
-    });
-  }
-}
 
 
 /* ================================================
