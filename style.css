@@ -262,77 +262,139 @@ body.c-link  #c-ring { width: 70px; height: 70px; border-color: rgba(255,255,255
 .section { position: relative; }
 
 /* ================================================
-   HERO SECTION — CINEMATIC 3-COLUMN LAYOUT
+   HERO SECTION — CINEMATIC 3-STAGE SCROLLING EXPERIENCE
 ================================================ */
-.hero-section {
+.cinematic-hero-section {
   position: relative;
-  min-height: 100vh;
+  width: 100%;
+  background: #010307;
+  overflow: visible;
+}
+
+.hero-scroll-track {
+  position: relative;
+  width: 100%;
+  height: 300vh; /* 3-stage scroll space */
+}
+
+.cinematic-stage {
+  position: sticky;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  overflow: hidden;
   display: flex;
   align-items: center;
   justify-content: center;
-  overflow: hidden;
-  background: var(--bg);
-  padding: 100px 40px 40px;
-}
-
-/* Three.js canvas */
-#hero-canvas {
-  position: absolute;
-  inset: 0;
-  width: 100%; height: 100%;
-  pointer-events: none;
-  opacity: 0.2;
-  z-index: 0;
-}
-
-/* Opening line */
-.hero-opening-line {
-  position: absolute;
-  top: 50%; left: 50%;
-  transform: translate(-50%, -50%) scaleX(0);
-  width: 100%; max-width: 600px;
-  height: 1.5px;
-  background: linear-gradient(90deg, transparent, var(--acc), transparent);
-  z-index: 100;
-  pointer-events: none;
-}
-
-/* Background CREATIVE DIRECTOR text */
-.hero-bg-text {
-  position: absolute;
-  inset: 0;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  pointer-events: none;
-  z-index: 1;
-  overflow: hidden;
-}
-.hero-bg-word {
-  font-family: var(--display);
-  font-size: clamp(100px, 16vw, 240px);
-  color: rgba(255,255,255,0.035);
-  letter-spacing: 0.08em;
-  white-space: nowrap;
-  user-select: none;
-}
-
-/* Floating Elements */
-.hero-float-elem {
-  position: absolute;
-  color: rgba(232,67,26,0.3);
-  font-family: var(--display);
-  pointer-events: none;
+  background: #020408;
   z-index: 2;
-  animation: float-ambient 6s ease-in-out infinite alternate;
 }
-.float-1 { top: 22%; left: 6%; font-size: 24px; }
-.float-2 { top: 78%; left: 44%; font-size: 18px; animation-delay: 1.5s; }
-.float-3 { top: 26%; right: 8%; width: 8px; height: 8px; border-radius: 50%; background: var(--acc); opacity: 0.4; animation-delay: 3s; }
 
-@keyframes float-ambient {
-  0%   { transform: translateY(-8px); }
-  100% { transform: translateY(8px); }
+/* Layer Base */
+.cinematic-layer {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+}
+
+/* Layer 1: Sky */
+.layer-sky {
+  z-index: 1;
+}
+.sky-bg-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center bottom;
+  transform: scale(1.08);
+  will-change: transform;
+  filter: brightness(0.92) contrast(1.06);
+}
+
+/* Layer 2: 3D PORTFOLIO Title */
+.layer-portfolio-title {
+  z-index: 2;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.portfolio-word {
+  font-family: var(--display);
+  font-size: clamp(80px, 17.5vw, 240px);
+  color: #8c97a5;
+  opacity: 0.88;
+  letter-spacing: 0.08em;
+  line-height: 0.85;
+  text-align: center;
+  user-select: none;
+  transform-origin: center center;
+  will-change: transform, opacity;
+  text-shadow: 0 8px 40px rgba(0, 0, 0, 0.9);
+  margin-top: -8vh;
+}
+
+/* Layer 3: Trees with Wind Sway */
+.layer-trees {
+  z-index: 3;
+}
+.trees-canvas {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  will-change: transform;
+}
+
+/* Layer 4: Fireflies */
+.layer-fireflies {
+  z-index: 4;
+}
+.fireflies-canvas {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+}
+
+/* Layer 5: Character */
+.layer-character {
+  z-index: 5;
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+}
+.character-wrapper {
+  position: relative;
+  width: 100%;
+  max-width: 960px;
+  height: 88vh;
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+  transform-origin: center bottom;
+  will-change: transform, opacity;
+  padding-bottom: 2vh;
+}
+.character-img {
+  max-height: 100%;
+  max-width: 100%;
+  object-fit: contain;
+  filter: drop-shadow(0 15px 35px rgba(0, 0, 0, 0.85));
+}
+
+/* Layer 6: Stage 3 Content Interface */
+.layer-stage3-content {
+  z-index: 10;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 100px 40px 40px;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.3s ease;
 }
 
 /* 3-Column Hero Stage Grid */
@@ -340,11 +402,18 @@ body.c-link  #c-ring { width: 70px; height: 70px; border-color: rgba(255,255,255
   position: relative;
   z-index: 10;
   width: 100%;
-  max-width: 1400px;
+  max-width: 1420px;
   display: grid;
   grid-template-columns: 1.15fr 1fr 0.95fr;
   align-items: center;
   gap: 30px;
+  pointer-events: auto;
+}
+
+.hero-col-center-dock {
+  width: 100%;
+  min-height: 380px;
+  pointer-events: none;
 }
 
 /* --- LEFT COLUMN --- */
@@ -429,13 +498,13 @@ body.c-link  #c-ring { width: 70px; height: 70px; border-color: rgba(255,255,255
   margin-top: 10px;
   width: 100%;
   max-width: 460px;
-  background: rgba(15, 15, 15, 0.75);
-  border: 1px solid rgba(255, 255, 255, 0.08);
+  background: rgba(12, 16, 24, 0.78);
+  border: 1px solid rgba(255, 255, 255, 0.1);
   border-radius: 18px;
   padding: 18px 20px;
-  backdrop-filter: blur(20px);
-  -webkit-backdrop-filter: blur(20px);
-  box-shadow: 0 20px 50px rgba(0,0,0,0.6);
+  backdrop-filter: blur(24px);
+  -webkit-backdrop-filter: blur(24px);
+  box-shadow: 0 20px 50px rgba(0,0,0,0.65);
 }
 .skills-card-header {
   font-size: 11px;
@@ -482,49 +551,6 @@ body.c-link  #c-ring { width: 70px; height: 70px; border-color: rgba(255,255,255
   font-weight: 500;
 }
 
-/* --- CENTER COLUMN (PORTRAIT & ORBITAL RING) --- */
-.hero-col-center {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  position: relative;
-}
-.portrait-wrapper {
-  position: relative;
-  width: 100%;
-  max-width: 440px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-.portrait-ring {
-  position: absolute;
-  width: 380px;
-  height: 380px;
-  border-radius: 50%;
-  border: 1.5px solid rgba(232, 67, 26, 0.45);
-  box-shadow: 0 0 40px rgba(232, 67, 26, 0.25), inset 0 0 30px rgba(232, 67, 26, 0.15);
-  top: 48%; left: 50%;
-  transform: translate(-50%, -50%);
-  pointer-events: none;
-}
-.portrait-ring::after {
-  content: '';
-  position: absolute;
-  inset: -6px;
-  border-radius: 50%;
-  border: 1px solid rgba(255,255,255,0.1);
-}
-.hero-portrait-img {
-  width: 100%;
-  max-height: 520px;
-  object-fit: contain;
-  mix-blend-mode: multiply;
-  filter: contrast(1.08) brightness(0.96);
-  position: relative;
-  z-index: 2;
-}
-
 /* --- RIGHT COLUMN --- */
 .hero-col-right {
   display: flex;
@@ -534,16 +560,16 @@ body.c-link  #c-ring { width: 70px; height: 70px; border-color: rgba(255,255,255
 
 /* Stats Glass Card */
 .hero-stats-card {
-  background: rgba(15, 15, 15, 0.75);
-  border: 1px solid rgba(255, 255, 255, 0.08);
+  background: rgba(12, 16, 24, 0.78);
+  border: 1px solid rgba(255, 255, 255, 0.1);
   border-radius: 18px;
   padding: 20px 24px;
   display: flex;
   align-items: center;
   justify-content: space-around;
-  backdrop-filter: blur(20px);
-  -webkit-backdrop-filter: blur(20px);
-  box-shadow: 0 20px 50px rgba(0,0,0,0.6);
+  backdrop-filter: blur(24px);
+  -webkit-backdrop-filter: blur(24px);
+  box-shadow: 0 20px 50px rgba(0,0,0,0.65);
 }
 .stat-box {
   display: flex;
@@ -571,23 +597,20 @@ body.c-link  #c-ring { width: 70px; height: 70px; border-color: rgba(255,255,255
 }
 .stat-divider {
   width: 1px;
-  height: 40px;
-  background: rgba(255,255,255,0.1);
+  height: 38px;
+  background: rgba(255,255,255,0.12);
 }
 
 /* Creative DNA Quote Card */
 .hero-dna-card {
-  background: rgba(15, 15, 15, 0.75);
-  border: 1px solid rgba(255, 255, 255, 0.08);
-  border-radius: 20px;
-  padding: 26px 24px;
-  display: flex;
-  flex-direction: column;
-  gap: 14px;
-  backdrop-filter: blur(20px);
-  -webkit-backdrop-filter: blur(20px);
-  box-shadow: 0 20px 50px rgba(0,0,0,0.6);
+  background: rgba(12, 16, 24, 0.78);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 18px;
+  padding: 24px;
   position: relative;
+  backdrop-filter: blur(24px);
+  -webkit-backdrop-filter: blur(24px);
+  box-shadow: 0 20px 50px rgba(0,0,0,0.65);
 }
 .quote-mark {
   font-size: 36px;
@@ -595,6 +618,7 @@ body.c-link  #c-ring { width: 70px; height: 70px; border-color: rgba(255,255,255
   line-height: 1;
   font-family: Georgia, serif;
   height: 18px;
+  margin-bottom: 8px;
 }
 .dna-quote-text {
   font-size: 12.5px;
@@ -604,7 +628,9 @@ body.c-link  #c-ring { width: 70px; height: 70px; border-color: rgba(255,255,255
 .dna-author {
   display: flex;
   flex-direction: column;
-  margin-top: 6px;
+  margin-top: 14px;
+  padding-top: 12px;
+  border-top: 1px solid rgba(255,255,255,0.08);
 }
 .signature-text {
   font-family: 'Caveat', cursive;
@@ -1589,32 +1615,74 @@ body.c-link  #c-ring { width: 70px; height: 70px; border-color: rgba(255,255,255
 @media (max-width: 1150px) {
   .hero-stage-grid {
     grid-template-columns: 1fr 1fr;
-    gap: 24px;
+    gap: 20px;
   }
-  .hero-col-center {
-    grid-column: 1 / -1;
-    grid-row: 1;
-    margin-bottom: 10px;
-  }
-  .hero-portrait-img {
-    max-height: 380px;
-  }
-  .portrait-ring {
-    width: 300px;
-    height: 300px;
+  .hero-col-center-dock {
+    display: none;
   }
   .hero-col-left {
     grid-column: 1;
-    grid-row: 2;
   }
   .hero-col-right {
     grid-column: 2;
-    grid-row: 2;
+  }
+  .layer-stage3-content {
+    padding: 85px 24px 30px;
   }
 }
 
 /* ── Tablet & Mobile (≤ 900px) ─────────────────── */
 @media (max-width: 900px) {
+  .hero-scroll-track {
+    height: 250vh;
+  }
+  .portfolio-word {
+    font-size: clamp(52px, 16vw, 130px);
+  }
+  .character-wrapper {
+    max-width: 600px;
+    height: 75vh;
+  }
+  .layer-stage3-content {
+    padding: 70px 18px 24px;
+    overflow-y: auto;
+    max-height: 100vh;
+    pointer-events: auto;
+  }
+  .hero-stage-grid {
+    grid-template-columns: 1fr;
+    gap: 20px;
+  }
+  .hero-col-left {
+    align-items: center;
+    text-align: center;
+  }
+  .hero-bio {
+    text-align: center;
+    font-size: 13px;
+  }
+  .hero-actions {
+    justify-content: center;
+    width: 100%;
+    flex-wrap: wrap;
+    gap: 10px;
+  }
+  .hero-actions .hero-btn {
+    flex: 1 1 130px;
+    justify-content: center;
+  }
+  .hero-skills-card {
+    max-width: 100%;
+    padding: 16px 14px;
+  }
+  .skills-grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 8px;
+  }
+  .hero-col-right {
+    width: 100%;
+  }
+
   #nav {
     padding: 16px 20px;
     display: flex;
@@ -1698,53 +1766,20 @@ body.c-link  #c-ring { width: 70px; height: 70px; border-color: rgba(255,255,255
 
 /* ── Mobile Portrait (≤ 767px) ─────────────────── */
 @media (max-width: 767px) {
-  .hero-section {
-    padding: 90px 16px 40px;
+  .hero-scroll-track {
+    height: 220vh;
   }
-  .hero-stage-grid {
-    grid-template-columns: 1fr;
-    gap: 24px;
+  .character-wrapper {
+    height: 65vh;
   }
-  .hero-col-center {
-    grid-column: 1;
-    grid-row: 1;
+  .portfolio-word {
+    font-size: clamp(44px, 14vw, 90px);
   }
-  .hero-col-left {
-    grid-column: 1;
-    grid-row: 2;
-    align-items: center;
-    text-align: center;
+  .hero-title .title-first {
+    font-size: 48px;
   }
-  .hero-bio {
-    text-align: center;
-    font-size: 13px;
-  }
-  .hero-actions {
-    justify-content: center;
-    width: 100%;
-    flex-wrap: wrap;
-    gap: 12px;
-  }
-  .hero-actions .hero-btn {
-    flex: 1 1 140px;
-    justify-content: center;
-  }
-  .hero-skills-card {
-    max-width: 100%;
-    padding: 16px 14px;
-  }
-  .skills-grid {
-    grid-template-columns: repeat(2, 1fr);
-    gap: 8px;
-  }
-  .hero-col-right {
-    grid-column: 1;
-    grid-row: 3;
-    width: 100%;
-  }
-  .hero-stats-card,
-  .hero-quote-card {
-    max-width: 100%;
+  .hero-title .title-last {
+    font-size: 28px;
   }
 
   /* Form & Contact Inputs */

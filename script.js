@@ -68,81 +68,161 @@ if (lenis) {
 }
 
 /* ================================================
-   THREE.JS PARTICLE FIELD (Hero background)
+   CINEMATIC 3-STAGE HERO — TREE WIND SWAY & FIREFLIES
 ================================================ */
-function initParticles() {
-  const canvas = q('#hero-canvas');
-  if (!canvas || typeof THREE === 'undefined') return;
 
-  try {
-    const scene    = new THREE.Scene();
-    const camera   = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
-    const renderer = new THREE.WebGLRenderer({ canvas, alpha: true, antialias: true });
-    renderer.setSize(window.innerWidth, window.innerHeight);
-    renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+/* ── 1. Realistic Pine Tree Wind Sway Canvas ──────── */
+function initTreesWind() {
+  const canvas = q('#trees-canvas');
+  if (!canvas) return;
+  const ctx = canvas.getContext('2d');
+  if (!ctx) return;
 
-    const count = 1800;
-    const pos   = new Float32Array(count * 3);
-    const col   = new Float32Array(count * 3);
+  const img = new Image();
+  img.src = 'assets/hero-trees.png';
 
-    for (let i = 0; i < count; i++) {
-      pos[i * 3]     = (Math.random() - 0.5) * 22;
-      pos[i * 3 + 1] = (Math.random() - 0.5) * 18;
-      pos[i * 3 + 2] = (Math.random() - 0.5) * 12;
-
-      const accent = Math.random() > 0.85;
-      col[i * 3]     = accent ? 0.91 : 0.25;
-      col[i * 3 + 1] = accent ? 0.26 : 0.25;
-      col[i * 3 + 2] = accent ? 0.10 : 0.25;
-    }
-
-    const geo = new THREE.BufferGeometry();
-    geo.setAttribute('position', new THREE.BufferAttribute(pos, 3));
-    geo.setAttribute('color',    new THREE.BufferAttribute(col, 3));
-
-    const mat = new THREE.PointsMaterial({
-      size: 0.035,
-      vertexColors: true,
-      transparent: true,
-      opacity: 0.7,
-    });
-
-    const points = new THREE.Points(geo, mat);
-    scene.add(points);
-    camera.position.z = 6;
-
-    let mX = 0, mY = 0;
-    document.addEventListener('mousemove', e => {
-      mX = (e.clientX / window.innerWidth  - 0.5) * 2;
-      mY = (e.clientY / window.innerHeight - 0.5) * 2;
-    });
-
-    let scrollY = 0;
-    if (lenis) {
-      lenis.on('scroll', ({ scroll }) => { scrollY = scroll; });
-    } else {
-      window.addEventListener('scroll', () => { scrollY = window.scrollY; });
-    }
-
-    function animate() {
-      requestAnimationFrame(animate);
-      points.rotation.y += 0.0004;
-      points.rotation.x += 0.0001;
-      camera.position.x += (mX * 0.6 - camera.position.x) * 0.04;
-      camera.position.y += (-mY * 0.4 - camera.position.y) * 0.04;
-      points.position.y = -scrollY * 0.001;
-      renderer.render(scene, camera);
-    }
-    animate();
-
-    window.addEventListener('resize', () => {
-      camera.aspect = window.innerWidth / window.innerHeight;
-      camera.updateProjectionMatrix();
-      renderer.setSize(window.innerWidth, window.innerHeight);
-    });
-  } catch (err) {
-    console.warn('Three.js initialization skipped:', err);
+  let width = 0, height = 0;
+  function resize() {
+    width  = canvas.width  = window.innerWidth;
+    height = canvas.height = window.innerHeight;
   }
+  resize();
+  window.addEventListener('resize', resize);
+
+  let isLoaded = false;
+  img.onload = () => { isLoaded = true; };
+
+  let time = 0;
+  const sliceCount = 80;
+
+  function renderWind() {
+    requestAnimationFrame(renderWind);
+    if (!isLoaded || !width || !height) return;
+
+    ctx.clearRect(0, 0, width, height);
+    time += 0.016;
+
+    // Draw tree canopy in vertical slices with organic horizontal sway
+    const sliceWidth = width / sliceCount;
+    const imgSliceWidth = img.naturalWidth / sliceCount;
+
+    for (let i = 0; i < sliceCount; i++) {
+      const xNorm = i / sliceCount;
+      // Multi-harmonic gentle breeze function
+      const windA = Math.sin(time * 1.1 + xNorm * 4.5) * 5;
+      const windB = Math.sin(time * 2.3 + xNorm * 8.0) * 2;
+      const totalSway = windA + windB;
+
+      const sx = i * imgSliceWidth;
+      const sy = 0;
+      const sWidth = imgSliceWidth;
+      const sHeight = img.naturalHeight;
+
+      const dx = i * sliceWidth + totalSway;
+      const dy = 0;
+      const dWidth = sliceWidth + 0.5; // avoid seams
+      const dHeight = height;
+
+      ctx.drawImage(img, sx, sy, sWidth, sHeight, dx, dy, dWidth, dHeight);
+    }
+  }
+  renderWind();
+}
+
+/* ── 2. 3D Warm Orange Fireflies Particle Field ─────── */
+function initFireflies() {
+  const canvas = q('#fireflies-canvas');
+  if (!canvas) return;
+  const ctx = canvas.getContext('2d');
+  if (!ctx) return;
+
+  let width = 0, height = 0;
+  function resize() {
+    width  = canvas.width  = window.innerWidth;
+    height = canvas.height = window.innerHeight;
+  }
+  resize();
+  window.addEventListener('resize', resize);
+
+  const count = 26;
+  const fireflies = [];
+
+  for (let i = 0; i < count; i++) {
+    fireflies.push({
+      x: Math.random() * (window.innerWidth || 1200),
+      y: Math.random() * (window.innerHeight || 800),
+      z: 0.4 + Math.random() * 1.2, // depth factor
+      vx: (Math.random() - 0.5) * 0.4,
+      vy: (Math.random() - 0.5) * 0.35,
+      radius: 1.2 + Math.random() * 2.0,
+      phase: Math.random() * Math.PI * 2,
+      pulseSpeed: 1.2 + Math.random() * 1.8,
+      baseAlpha: 0.45 + Math.random() * 0.45,
+      wanderTimer: Math.random() * 100,
+    });
+  }
+
+  let mouseX = 0, mouseY = 0;
+  document.addEventListener('mousemove', e => {
+    mouseX = (e.clientX - window.innerWidth / 2) * 0.03;
+    mouseY = (e.clientY - window.innerHeight / 2) * 0.03;
+  });
+
+  let lastTime = performance.now();
+
+  function animateFireflies(now) {
+    requestAnimationFrame(animateFireflies);
+    const dt = Math.min((now - lastTime) / 1000, 0.1);
+    lastTime = now;
+
+    ctx.clearRect(0, 0, width, height);
+
+    fireflies.forEach(f => {
+      // Natural organic Brownian motion
+      f.wanderTimer += dt;
+      f.vx += Math.sin(f.wanderTimer * 1.5 + f.phase) * 0.04;
+      f.vy += Math.cos(f.wanderTimer * 1.2 + f.phase) * 0.03;
+
+      // Friction
+      f.vx *= 0.98;
+      f.vy *= 0.98;
+
+      f.x += f.vx * f.z;
+      f.y += f.vy * f.z;
+
+      // Wrap around bounds with soft margin
+      if (f.x < -40) f.x = width + 40;
+      if (f.x > width + 40) f.x = -40;
+      if (f.y < -40) f.y = height + 40;
+      if (f.y > height + 40) f.y = -40;
+
+      // Bioluminescent pulsing glow (warm orange #E8431A)
+      const pulse = Math.pow(Math.sin(now * 0.001 * f.pulseSpeed + f.phase), 2);
+      const alpha = f.baseAlpha * (0.35 + 0.65 * pulse);
+
+      const renderX = f.x + mouseX * f.z;
+      const renderY = f.y + mouseY * f.z;
+      const r = f.radius * f.z;
+
+      // Soft outer orange glow
+      const grad = ctx.createRadialGradient(renderX, renderY, 0, renderX, renderY, r * 5.5);
+      grad.addColorStop(0, `rgba(255, 140, 60, ${alpha})`);
+      grad.addColorStop(0.3, `rgba(232, 67, 26, ${alpha * 0.7})`);
+      grad.addColorStop(1, 'rgba(232, 67, 26, 0)');
+
+      ctx.fillStyle = grad;
+      ctx.beginPath();
+      ctx.arc(renderX, renderY, r * 5.5, 0, Math.PI * 2);
+      ctx.fill();
+
+      // Sharp warm core
+      ctx.fillStyle = `rgba(255, 220, 180, ${alpha * 0.95})`;
+      ctx.beginPath();
+      ctx.arc(renderX, renderY, r * 0.9, 0, Math.PI * 2);
+      ctx.fill();
+    });
+  }
+  requestAnimationFrame(animateFireflies);
 }
 
 /* ================================================
@@ -185,142 +265,187 @@ function initParticles() {
 })();
 
 /* ================================================
-   PRELOADER & HERO ANIMATION FLOW
-   Workflow: Loading Page -> Animation Sequence -> Hero Page
+   CINEMATIC 3-STAGE HERO SCROLLING ENGINE
 ================================================ */
-let heroTL = null;
+let heroEntranceTL = null;
 
-function initHeroAnimation() {
-  initParticles();
+function initCinematicHero() {
+  initTreesWind();
+  initFireflies();
 
-  const openingLine = q('#opening-line');
-  const hwTop       = q('#hw-top');
-  const tag         = q('#hero-tag');
-  const titleFirst  = q('#hero-first');
-  const titleLast   = q('#hero-last');
-  const bio         = q('#hero-bio');
-  const actions     = q('#hero-actions');
-  const skillsCard  = q('#hero-skills');
-  const portrait    = q('#hero-portrait');
-  const ring        = q('#portrait-ring');
-  const statsCard   = q('#hero-stats');
-  const dnaCard     = q('#hero-dna');
-  const hint        = q('#scroll-hint');
-  const nav         = q('#nav');
+  const scrollTrack    = q('#hero-scroll-track');
+  const stage          = q('#cinematic-stage');
+  const sky            = q('#layer-sky');
+  const portfolioWord  = q('#portfolio-word');
+  const trees          = q('#layer-trees');
+  const charWrapper    = q('#character-wrapper');
+  const stage3Content  = q('#layer-stage3-content');
+  const scrollHint     = q('#scroll-hint');
+  const nav            = q('#nav');
 
-  /* Split background word chars */
-  const topChars = splitChars(hwTop);
+  const heroTag        = q('#hero-tag');
+  const heroTitle      = q('#hero-title');
+  const heroBio        = q('#hero-bio');
+  const heroActions    = q('#hero-actions');
+  const heroSkills     = q('#hero-skills');
+  const heroStats      = q('#hero-stats');
+  const heroDna        = q('#hero-dna');
 
-  /* Set initial hidden states immediately on page setup */
-  if (openingLine) gsap.set(openingLine, { scaleX: 0, opacity: 1 });
-  if (topChars.length) gsap.set(topChars, { opacity: 0, scale: 1.05 });
-  if (titleFirst && titleLast) gsap.set([titleFirst, titleLast], { opacity: 0, y: 45, filter: 'blur(8px)' });
-  if (tag) gsap.set(tag, { opacity: 0, y: 15 });
-  if (bio && actions && skillsCard) gsap.set([bio, actions, skillsCard], { opacity: 0, y: 30 });
-  if (portrait && ring) gsap.set([portrait, ring], { opacity: 0, y: 30, scale: 0.96 });
-  if (statsCard && dnaCard) gsap.set([statsCard, dnaCard], { opacity: 0, y: 30 });
-  if (hint && nav) gsap.set([hint, nav], { opacity: 0 });
+  // Initial State Setup (Stage 1)
+  if (portfolioWord) gsap.set(portfolioWord, { opacity: 0, y: 30, scale: 0.98 });
+  if (charWrapper)   gsap.set(charWrapper, { opacity: 0, y: 40, scale: 0.95 });
+  if (scrollHint)    gsap.set(scrollHint, { opacity: 0 });
+  if (nav)           gsap.set(nav, { opacity: 0 });
 
-  /* Build entrance animation timeline (starts paused) */
-  heroTL = gsap.timeline({ paused: true, defaults: { ease: 'power3.out' } });
+  if (stage3Content) gsap.set(stage3Content, { opacity: 0, pointerEvents: 'none' });
+  const leftElements  = [heroTag, heroTitle, heroBio, heroActions, heroSkills].filter(Boolean);
+  const rightElements = [heroStats, heroDna].filter(Boolean);
+  if (leftElements.length)  gsap.set(leftElements, { opacity: 0, x: -40 });
+  if (rightElements.length) gsap.set(rightElements, { opacity: 0, x: 40 });
 
-  /* STEP 1 & 2: Small Accent Line grows */
-  if (openingLine) {
-    heroTL.to(openingLine, { scaleX: 1, duration: 0.45, ease: 'power2.inOut' })
-          .to(openingLine, { opacity: 0, duration: 0.25, ease: 'power2.out' }, '+=0.05');
+  // Stage 1 Entrance Timeline (plays when preloader lifts)
+  heroEntranceTL = gsap.timeline({ paused: true, defaults: { ease: 'power3.out' } });
+
+  heroEntranceTL
+    .to(portfolioWord, { opacity: 0.88, y: 0, scale: 1, duration: 1.1 }, 0.1)
+    .to(charWrapper,   { opacity: 1, y: 0, scale: 1, duration: 1.2 }, 0.2)
+    .to([nav, scrollHint], { opacity: 1, duration: 0.8 }, 0.6);
+
+  // Multi-Stage ScrollTrigger Parallax
+  if (typeof ScrollTrigger !== 'undefined' && scrollTrack && stage) {
+    const isMobile = window.innerWidth <= 900;
+    const targetScale = isMobile ? 0.52 : 0.58;
+    const targetY     = isMobile ? 18 : 12;
+
+    const scrollTL = gsap.timeline({
+      scrollTrigger: {
+        trigger: scrollTrack,
+        start: 'top top',
+        end: 'bottom bottom',
+        scrub: 0.8,
+        pin: stage,
+        anticipatePin: 1,
+      }
+    });
+
+    // ── STAGE 1 -> STAGE 2 (0% to 50% scroll) ──
+    scrollTL
+      // "PORTFOLIO" moves downward and fades away
+      .to(portfolioWord, {
+        yPercent: 45,
+        opacity: 0,
+        scale: 0.92,
+        ease: 'power1.inOut',
+      }, 0)
+      // Character scales down smoothly and lowers into stage
+      .to(charWrapper, {
+        scale: 0.76,
+        yPercent: 6,
+        ease: 'power1.inOut',
+      }, 0)
+      // Sky deep parallax
+      .to(sky, {
+        yPercent: -10,
+        scale: 1.03,
+        ease: 'none',
+      }, 0)
+      // Trees midground shift
+      .to(trees, {
+        yPercent: 6,
+        ease: 'none',
+      }, 0)
+      // Scroll hint fades out immediately
+      .to(scrollHint, {
+        opacity: 0,
+        duration: 0.2,
+      }, 0)
+
+      // ── STAGE 2 -> STAGE 3 (50% to 90% scroll) ──
+      // Character settles into center dock position
+      .to(charWrapper, {
+        scale: targetScale,
+        yPercent: targetY,
+        ease: 'power2.out',
+      }, 0.5)
+      // Stage 3 content reveals
+      .to(stage3Content, {
+        opacity: 1,
+        pointerEvents: 'auto',
+        ease: 'power2.out',
+      }, 0.5)
+      .to(leftElements, {
+        opacity: 1,
+        x: 0,
+        stagger: 0.04,
+        ease: 'power2.out',
+      }, 0.55)
+      .to(rightElements, {
+        opacity: 1,
+        x: 0,
+        stagger: 0.06,
+        ease: 'power2.out',
+      }, 0.55)
+
+      // Hold Stage 3 in focus before passing to works
+      .to({}, { duration: 0.1 }, 0.9);
   }
 
-  /* STEP 3: Background Typography */
-  if (topChars.length) {
-    heroTL.to(topChars, { opacity: 1, scale: 1, stagger: 0.025, duration: 0.75, ease: 'power2.out' }, '-=0.15');
-  }
+  // Interactive mouse subtle 3D tilt
+  if (!window.matchMedia('(hover: none)').matches && stage) {
+    stage.addEventListener('mousemove', e => {
+      const cx = window.innerWidth / 2;
+      const cy = window.innerHeight / 2;
+      const dx = (e.clientX - cx) / cx;
+      const dy = (e.clientY - cy) / cy;
 
-  /* STEP 4 & 5: Main Name "HUSNI" and "MUJEEB" */
-  if (titleFirst && titleLast) {
-    heroTL.to(titleFirst, { opacity: 1, y: 0, filter: 'blur(0px)', duration: 0.75 }, '-=0.5')
-          .to(titleLast,  { opacity: 1, y: 0, filter: 'blur(0px)', duration: 0.75 }, '-=0.6');
-  }
-
-  /* STEP 6: ART DIRECTOR Label */
-  if (tag) {
-    heroTL.to(tag, { opacity: 1, y: 0, duration: 0.55 }, '-=0.5');
-  }
-
-  /* STEP 7: Portrait & Glowing Ring */
-  if (portrait && ring) {
-    heroTL.to([portrait, ring], { opacity: 1, y: 0, scale: 1, duration: 0.9, ease: 'power3.out' }, '-=0.55');
-  }
-
-  /* STEP 8: Bio, Buttons, Skills, Stats, DNA Cards */
-  if (bio && actions) {
-    heroTL.to([bio, actions], { opacity: 1, y: 0, stagger: 0.08, duration: 0.65 }, '-=0.45');
-  }
-  if (skillsCard) {
-    heroTL.to(skillsCard, { opacity: 1, y: 0, duration: 0.65, ease: 'back.out(1.2)' }, '-=0.4');
-  }
-  if (statsCard && dnaCard) {
-    heroTL.to([statsCard, dnaCard], { opacity: 1, y: 0, stagger: 0.12, duration: 0.65, ease: 'back.out(1.2)' }, '-=0.45');
-  }
-
-  /* STEP 9: Navigation & Scroll Hint */
-  if (nav && hint) {
-    heroTL.to([nav, hint], { opacity: 1, duration: 0.55 }, '-=0.3');
-  }
-
-  /* ── Mouse Parallax on Hero ──────────────────── */
-  if (!window.matchMedia('(hover: none)').matches) {
-    const heroSec = q('.hero-section');
-    if (heroSec) {
-      heroSec.addEventListener('mousemove', e => {
-        const cx = window.innerWidth  / 2;
-        const cy = window.innerHeight / 2;
-        const dx = (e.clientX - cx) / cx;
-        const dy = (e.clientY - cy) / cy;
-
-        if (portrait) {
-          gsap.to(portrait, {
-            rotateX: dy * -4,
-            rotateY: dx *  4,
-            transformPerspective: 1000,
-            duration: 0.8,
-            ease: 'power2.out',
-          });
-        }
-        if (hwTop) gsap.to(hwTop, { x: dx * -15, y: dy * -8, duration: 1, ease: 'power2.out' });
-        const f1 = q('.float-1');
-        const f2 = q('.float-2');
-        if (f1) gsap.to(f1, { x: dx * 10, y: dy * 10, duration: 1.2 });
-        if (f2) gsap.to(f2, { x: dx * -12, y: dy * -8, duration: 1.4 });
-        if (skillsCard) gsap.to(skillsCard, { x: dx * -6, y: dy * -4, duration: 0.9 });
-        if (statsCard && dnaCard) gsap.to([statsCard, dnaCard], { x: dx * 6, y: dy * 4, duration: 0.9 });
-      });
-
-      heroSec.addEventListener('mouseleave', () => {
-        const resetElems = [portrait, hwTop, skillsCard, statsCard, dnaCard, q('.float-1'), q('.float-2')].filter(Boolean);
-        gsap.to(resetElems, {
-          rotateX: 0, rotateY: 0, x: 0, y: 0,
-          duration: 1.2,
-          ease: 'elastic.out(1, 0.4)',
+      if (charWrapper) {
+        gsap.to(charWrapper, {
+          rotateY: dx * 3.5,
+          rotateX: dy * -3.0,
+          transformPerspective: 1000,
+          duration: 0.8,
+          ease: 'power2.out',
         });
-      });
-    }
+      }
+      if (portfolioWord) {
+        gsap.to(portfolioWord, {
+          x: dx * -15,
+          y: dy * -8,
+          duration: 1.0,
+          ease: 'power2.out',
+        });
+      }
+      if (sky) {
+        gsap.to(sky, {
+          x: dx * -8,
+          y: dy * -5,
+          duration: 1.2,
+          ease: 'power2.out',
+        });
+      }
+    });
+
+    stage.addEventListener('mouseleave', () => {
+      if (charWrapper) gsap.to(charWrapper, { rotateX: 0, rotateY: 0, duration: 1.0, ease: 'elastic.out(1, 0.4)' });
+      if (portfolioWord) gsap.to(portfolioWord, { x: 0, y: 0, duration: 1.0, ease: 'power2.out' });
+      if (sky) gsap.to(sky, { x: 0, y: 0, duration: 1.0, ease: 'power2.out' });
+    });
   }
 }
 
 function startHeroReveal() {
-  if (heroTL) {
-    heroTL.play();
+  if (heroEntranceTL) {
+    heroEntranceTL.play();
   } else {
-    // Fallback: make all elements visible if timeline wasn't created
-    gsap.set(['#nav', '#hero-tag', '#hero-title', '#hero-bio', '#hero-actions', '#hero-skills', '#hero-portrait', '#portrait-ring', '#hero-stats', '#hero-dna', '#scroll-hint'], {
-      opacity: 1, y: 0, scale: 1, filter: 'none'
+    gsap.set(['#nav', '#portfolio-word', '#character-wrapper', '#scroll-hint'], {
+      opacity: 1, y: 0, scale: 1
     });
   }
   initNav();
 }
 
 // Prepare Hero upfront immediately
-initHeroAnimation();
+initCinematicHero();
 
 /* Preloader Execution */
 (function preloader() {
@@ -375,7 +500,7 @@ initHeroAnimation();
     .to(loader, {
       yPercent: -102, duration: 0.85, ease: 'power4.inOut',
       onStart: () => {
-        // Smoothly trigger hero entrance animation as curtain begins lifting
+        // Smoothly trigger cinematic hero entrance as curtain lifts
         startHeroReveal();
       },
       onComplete: () => {

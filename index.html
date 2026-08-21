@@ -8,7 +8,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Caveat:wght@600;700&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
-  <link rel="stylesheet" href="style.css?v=3.1" />
+  <link rel="stylesheet" href="style.css?v=4.0" />
 </head>
 <body>
 
@@ -59,120 +59,135 @@
 </nav>
 
 <!-- ==================================== -->
-<!--   SECTION 1 — HERO / ABOUT ME        -->
+<!--   SECTION 1 — CINEMATIC 3-STAGE HERO -->
 <!-- ==================================== -->
-<section id="about" class="section hero-section" aria-label="About Husni Mujeeb">
-  <canvas id="hero-canvas" aria-hidden="true"></canvas>
-
-  <!-- Opening animation line -->
-  <div class="hero-opening-line" id="opening-line" aria-hidden="true"></div>
-
-  <!-- Giant background "CREATIVE DIRECTOR" text -->
-  <div class="hero-bg-text" aria-hidden="true">
-    <div class="hero-bg-word" id="hw-top">CREATIVE DIRECTOR</div>
-  </div>
-
-  <!-- Floating Ambient Decorative Elements -->
-  <div class="hero-float-elem float-1" aria-hidden="true">+</div>
-  <div class="hero-float-elem float-2" aria-hidden="true">◈</div>
-  <div class="hero-float-elem float-3" aria-hidden="true"></div>
-
-  <!-- 3-Column Interactive Stage -->
-  <div class="hero-stage-grid">
-    
-    <!-- LEFT COLUMN -->
-    <div class="hero-col-left">
-      <div class="hero-tag" id="hero-tag">ART DIRECTOR</div>
+<section id="about" class="section cinematic-hero-section" aria-label="About Husni Mujeeb">
+  <div class="hero-scroll-track" id="hero-scroll-track">
+    <div class="cinematic-stage" id="cinematic-stage">
       
-      <h1 class="hero-title" id="hero-title">
-        <span class="title-first" id="hero-first">HUSNI</span>
-        <span class="title-last" id="hero-last">M U J E E B</span>
-      </h1>
-
-      <p class="hero-bio" id="hero-bio">
-        I craft powerful visual identities and digital experiences that help brands stand out and connect with their audience.
-      </p>
-
-      <div class="hero-actions" id="hero-actions">
-        <a href="#toc" class="hero-btn primary-btn magnetic-btn">
-          View My Work <span class="btn-arrow">↗</span>
-        </a>
-        <a href="#contact" class="hero-btn secondary-btn magnetic-btn">
-          Download CV <span class="btn-icon">↓</span>
-        </a>
+      <!-- Layer 1: Night Sky Background -->
+      <div class="cinematic-layer layer-sky" id="layer-sky">
+        <img src="assets/hero-sky.jpg" alt="Night sky" class="sky-bg-img" />
       </div>
 
-      <!-- Skills & Expertise Glass Card -->
-      <div class="hero-skills-card panel" id="hero-skills">
-        <div class="panel-glow"></div>
-        <div class="skills-card-header">SKILLS & EXPERTISE</div>
-        <div class="skills-grid">
-          <div class="skill-item"><span class="sk-ico">🎨</span> Graphic Design</div>
-          <div class="skill-item"><span class="sk-ico">👁️</span> Visual Storytelling</div>
-          <div class="skill-item vibe-coding-item"><span class="sk-ico sk-code">&lt;/&gt;</span> Vibe Coding</div>
+      <!-- Layer 2: 3D PORTFOLIO Typography (behind character) -->
+      <div class="cinematic-layer layer-portfolio-title" id="layer-portfolio-title" aria-hidden="true">
+        <div class="portfolio-word" id="portfolio-word">PORTFOLIO</div>
+      </div>
 
-          <div class="skill-item"><span class="sk-ico">💎</span> Brand Identity</div>
-          <div class="skill-item"><span class="sk-ico">✨</span> AI Content Creation</div>
-          <div class="skill-item"><span class="sk-ico sk-badge">C</span> Canva</div>
+      <!-- Layer 3: Tree Silhouettes with Wind Sway -->
+      <div class="cinematic-layer layer-trees" id="layer-trees" aria-hidden="true">
+        <canvas id="trees-canvas" class="trees-canvas"></canvas>
+      </div>
 
-          <div class="skill-item"><span class="sk-ico">🖥️</span> UI/UX Design</div>
-          <div class="skill-item"><span class="sk-ico">💬</span> Prompt Engineering</div>
-          <div class="skill-item"><span class="sk-ico sk-badge ps-badge">Ps</span> Adobe Photoshop</div>
+      <!-- Layer 4: 3D Warm Orange Fireflies Particle Field -->
+      <div class="cinematic-layer layer-fireflies" id="layer-fireflies" aria-hidden="true">
+        <canvas id="fireflies-canvas" class="fireflies-canvas"></canvas>
+      </div>
 
-          <div class="skill-item"><span class="sk-ico">📷</span> Photography</div>
-          <div class="skill-item"><span class="sk-ico">📈</span> Digital Marketing</div>
-          <div class="skill-item"><span class="sk-ico sk-badge ai-badge">Ai</span> Adobe Illustrator</div>
-
-          <div class="skill-item"><span class="sk-ico">📹</span> Videography</div>
-          <div class="skill-item"><span class="sk-ico">✏️</span> Content Creation</div>
+      <!-- Layer 5: Foreground Character on Mossy Rock with Laptop & Globe -->
+      <div class="cinematic-layer layer-character" id="layer-character">
+        <div class="character-wrapper" id="character-wrapper">
+          <img src="assets/hero-subject.png" alt="Husni Mujeeb — Art Director" class="character-img" id="hero-character" />
         </div>
       </div>
+
+      <!-- Layer 6: Stage 3 Interactive Portfolio Interface (reveals upon scrolling) -->
+      <div class="cinematic-layer layer-stage3-content" id="layer-stage3-content">
+        <div class="hero-stage-grid">
+          
+          <!-- LEFT COLUMN -->
+          <div class="hero-col-left">
+            <div class="hero-tag" id="hero-tag">ART DIRECTOR</div>
+            
+            <h1 class="hero-title" id="hero-title">
+              <span class="title-first" id="hero-first">HUSNI</span>
+              <span class="title-last" id="hero-last">M U J E E B</span>
+            </h1>
+
+            <p class="hero-bio" id="hero-bio">
+              I craft powerful visual identities and digital experiences that help brands stand out and connect with their audience.
+            </p>
+
+            <div class="hero-actions" id="hero-actions">
+              <a href="#toc" class="hero-btn primary-btn magnetic-btn">
+                View My Work <span class="btn-arrow">↗</span>
+              </a>
+              <a href="#contact" class="hero-btn secondary-btn magnetic-btn">
+                Download CV <span class="btn-icon">↓</span>
+              </a>
+            </div>
+
+            <!-- Skills & Expertise Glass Card -->
+            <div class="hero-skills-card panel" id="hero-skills">
+              <div class="panel-glow"></div>
+              <div class="skills-card-header">SKILLS & EXPERTISE</div>
+              <div class="skills-grid">
+                <div class="skill-item"><span class="sk-ico">🎨</span> Graphic Design</div>
+                <div class="skill-item"><span class="sk-ico">👁️</span> Visual Storytelling</div>
+                <div class="skill-item vibe-coding-item"><span class="sk-ico sk-code">&lt;/&gt;</span> Vibe Coding</div>
+
+                <div class="skill-item"><span class="sk-ico">💎</span> Brand Identity</div>
+                <div class="skill-item"><span class="sk-ico">✨</span> AI Content Creation</div>
+                <div class="skill-item"><span class="sk-ico sk-badge">C</span> Canva</div>
+
+                <div class="skill-item"><span class="sk-ico">🖥️</span> UI/UX Design</div>
+                <div class="skill-item"><span class="sk-ico">💬</span> Prompt Engineering</div>
+                <div class="skill-item"><span class="sk-ico sk-badge ps-badge">Ps</span> Adobe Photoshop</div>
+
+                <div class="skill-item"><span class="sk-ico">📷</span> Photography</div>
+                <div class="skill-item"><span class="sk-ico">📈</span> Digital Marketing</div>
+                <div class="skill-item"><span class="sk-ico sk-badge ai-badge">Ai</span> Adobe Illustrator</div>
+
+                <div class="skill-item"><span class="sk-ico">📹</span> Videography</div>
+                <div class="skill-item"><span class="sk-ico">✏️</span> Content Creation</div>
+              </div>
+            </div>
+          </div>
+
+          <!-- CENTER DOCK SPACER -->
+          <div class="hero-col-center-dock" id="hero-dock-spacer"></div>
+
+          <!-- RIGHT COLUMN -->
+          <div class="hero-col-right">
+            <!-- Stats Glass Card -->
+            <div class="hero-stats-card panel" id="hero-stats">
+              <div class="panel-glow"></div>
+              <div class="stat-box">
+                <div class="stat-num">100+</div>
+                <div class="stat-lbl">Clients</div>
+              </div>
+              <div class="stat-divider"></div>
+              <div class="stat-box">
+                <div class="stat-num">4+</div>
+                <div class="stat-lbl">Years<br/>Experience</div>
+              </div>
+            </div>
+
+            <!-- Creative DNA / Quote Card -->
+            <div class="hero-dna-card panel" id="hero-dna">
+              <div class="panel-glow"></div>
+              <div class="quote-mark">“</div>
+              <p class="dna-quote-text">
+                I create meaningful brand identities, engaging digital experiences, and impactful visual content through graphic design, UI/UX, photography, videography, marketing, and AI-powered creativity.
+              </p>
+              <div class="dna-author">
+                <span class="signature-text">Husni Mujeeb</span>
+                <span class="signature-role">ART DIRECTOR</span>
+              </div>
+            </div>
+          </div>
+
+        </div>
+      </div>
+
+      <!-- Scroll Hint -->
+      <div class="scroll-hint" id="scroll-hint">
+        <span class="scroll-hint-line"></span>
+        <span class="scroll-hint-text">SCROLL TO EXPLORE</span>
+      </div>
+
     </div>
-
-    <!-- CENTER COLUMN (PORTRAIT & ORBITAL RING) -->
-    <div class="hero-col-center">
-      <div class="portrait-wrapper" id="portrait-wrapper">
-        <div class="portrait-ring" id="portrait-ring" aria-hidden="true"></div>
-        <img src="assets/husni-photo.png" alt="Husni Mujeeb — Art Director" class="hero-portrait-img" id="hero-portrait" />
-      </div>
-    </div>
-
-    <!-- RIGHT COLUMN -->
-    <div class="hero-col-right">
-      <!-- Stats Glass Card -->
-      <div class="hero-stats-card panel" id="hero-stats">
-        <div class="panel-glow"></div>
-        <div class="stat-box">
-          <div class="stat-num">100+</div>
-          <div class="stat-lbl">Clients</div>
-        </div>
-        <div class="stat-divider"></div>
-        <div class="stat-box">
-          <div class="stat-num">4+</div>
-          <div class="stat-lbl">Years<br/>Experience</div>
-        </div>
-      </div>
-
-      <!-- Creative DNA / Quote Card -->
-      <div class="hero-dna-card panel" id="hero-dna">
-        <div class="panel-glow"></div>
-        <div class="quote-mark">“</div>
-        <p class="dna-quote-text">
-          I create meaningful brand identities, engaging digital experiences, and impactful visual content through graphic design, UI/UX, photography, videography, marketing, and AI-powered creativity.
-        </p>
-        <div class="dna-author">
-          <span class="signature-text">Husni Mujeeb</span>
-          <span class="signature-role">ART DIRECTOR</span>
-        </div>
-      </div>
-    </div>
-
-  </div>
-
-  <!-- Scroll Hint -->
-  <div class="scroll-hint" id="scroll-hint">
-    <span class="scroll-hint-line"></span>
-    <span class="scroll-hint-text">SCROLL</span>
   </div>
 </section>
 
@@ -546,6 +561,6 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/@studio-freight/lenis@1.0.42/dist/lenis.min.js"></script>
-<script src="script.js?v=3.1"></script>
+<script src="script.js?v=4.0"></script>
 </body>
 </html>
