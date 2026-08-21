@@ -330,14 +330,18 @@ function initCinematicHero() {
 
     // ── STAGE 1 -> STAGE 2 (0% to 50% scroll) ──
     scrollTL
-      // "PORTFOLIO" moves downward and fades away
-      .to(portfolioWord, {
-        yPercent: 45,
+      // "PORTFOLIO" stays fully visible at first, then moves down and fades (starts at 15% scroll)
+      .fromTo(portfolioWord, {
+        yPercent: 0,
+        opacity: 0.88,
+        scale: 1,
+      }, {
+        yPercent: 50,
         opacity: 0,
-        scale: 0.92,
+        scale: 0.9,
         ease: 'power1.inOut',
-      }, 0)
-      // Character scales down smoothly and lowers into stage
+      }, 0.15)
+      // Character scales down smoothly
       .to(charWrapper, {
         scale: 0.76,
         yPercent: 6,
@@ -361,13 +365,11 @@ function initCinematicHero() {
       }, 0)
 
       // ── STAGE 2 -> STAGE 3 (50% to 90% scroll) ──
-      // Character settles into center dock position
       .to(charWrapper, {
         scale: targetScale,
         yPercent: targetY,
         ease: 'power2.out',
       }, 0.5)
-      // Stage 3 content reveals
       .to(stage3Content, {
         opacity: 1,
         pointerEvents: 'auto',
@@ -388,6 +390,7 @@ function initCinematicHero() {
 
       // Hold Stage 3 in focus before passing to works
       .to({}, { duration: 0.1 }, 0.9);
+
   }
 
   // Interactive mouse subtle 3D tilt

@@ -324,15 +324,18 @@ body.c-link  #c-ring { width: 70px; height: 70px; border-color: rgba(255,255,255
 .portfolio-word {
   font-family: var(--display);
   font-size: clamp(80px, 17.5vw, 240px);
-  color: #8c97a5;
-  opacity: 0.88;
+  color: #ffffff;
+  opacity: 0.9;
   letter-spacing: 0.08em;
   line-height: 0.85;
   text-align: center;
   user-select: none;
   transform-origin: center center;
   will-change: transform, opacity;
-  text-shadow: 0 8px 40px rgba(0, 0, 0, 0.9);
+  text-shadow:
+    0 0 60px rgba(255, 255, 255, 0.15),
+    0 8px 40px rgba(0, 0, 0, 0.95),
+    0 2px 8px rgba(0, 0, 0, 0.8);
   margin-top: -8vh;
 }
 
