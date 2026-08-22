@@ -1774,120 +1774,149 @@ body.c-link  #c-ring { width: 70px; height: 70px; border-color: rgba(255,255,255
 
 /* ── Mobile Portrait (≤ 767px) ─────────────────── */
 @media (max-width: 767px) {
-  .hero-scroll-track {
-    height: 220vh;
+
+  /* ── Hero scroll track — more room for 3 stages ── */
+  .hero-scroll-track { height: 280vh; }
+
+  /* PORTFOLIO word — smaller so it fits above character */
+  .portfolio-word {
+    font-size: clamp(36px, 11vw, 64px);
+    margin-top: 0;
+    letter-spacing: 0.05em;
   }
+
+  /* Character — shorter so sky + PORTFOLIO show above it */
   .character-wrapper {
-    height: 65vh;
+    height: 52vh;
+    max-width: 100vw;
+    padding-bottom: 0;
+    align-items: flex-end;
+    justify-content: center;
   }
   .character-img {
-    height: 65vh;
-  }
-  .portfolio-word {
-    font-size: clamp(44px, 14vw, 90px);
-  }
-  .hero-title .title-first {
-    font-size: 48px;
-  }
-  .hero-title .title-last {
-    font-size: 28px;
+    height: 50vh;
+    width: auto;
+    max-width: 88vw;
+    object-fit: contain;
   }
 
-  /* Form & Contact Inputs */
-  .feedback-form-card,
-  .contact-form-card {
-    padding: 24px 18px;
-    border-radius: 18px;
-  }
-  .form-title,
-  .cform-title {
-    font-size: 26px;
-    margin-bottom: 20px;
-    text-align: center;
-  }
-  .form-input {
-    font-size: 13.5px;
-    padding: 12px 14px;
-  }
-  .star-rating-picker {
-    justify-content: space-around;
-    padding: 0 12px;
-  }
-  .submit-btn {
-    width: 100%;
-    justify-content: center;
-    padding: 14px 20px;
-    font-size: 14px;
-  }
-  .contact-info-col {
-    width: 100%;
-    gap: 12px;
-  }
-  .cinfo-card {
-    padding: 16px 18px;
-    gap: 14px;
-    border-radius: 16px;
-  }
-  .cinfo-icon {
-    width: 44px;
-    height: 44px;
-    font-size: 20px;
-  }
-  .contact-links { flex-direction: column; gap: 20px; }
-  .clink-sep { display: none; }
-  .clink-value { font-size: clamp(14px, 4vw, 20px); }
-  .socials-row {
-    flex-direction: column;
-    gap: 10px;
-    width: 100%;
-    margin-top: 30px;
-  }
-  .social-card {
-    width: 100%;
-    justify-content: center;
-    padding: 13px 20px;
+  /* Push character to bottom-half so sky is visible above */
+  .layer-character {
+    align-items: flex-end;
+    padding-bottom: 3vh;
   }
 
-  /* Feedback Marquee */
-  .fb-card {
-    width: 290px;
-    padding: 18px 18px;
-  }
-  .marquee-wrapper {
-    margin: 25px 0 35px;
-  }
-
-  /* Modal Popup */
-  .modal-card {
-    padding: 24px 18px;
-    border-radius: 18px;
-    max-height: 88vh;
+  /* Stage 3 full-screen overlay, scrollable */
+  .layer-stage3-content {
+    padding: 14px 14px 20px;
+    align-items: flex-start;
+    justify-content: flex-start;
     overflow-y: auto;
-    width: 94%;
+    max-height: 100vh;
+    pointer-events: auto;
   }
-  .modal-client-name {
-    font-size: 20px;
+
+  /* Single column, no center spacer */
+  .hero-stage-grid {
+    grid-template-columns: 1fr;
+    gap: 12px;
+    width: 100%;
+    max-width: 100%;
+    padding-top: 0;
   }
-  .modal-avatar-img {
-    width: 48px;
-    height: 48px;
-  }
-  .modal-full-text {
-    font-size: 13px;
-    line-height: 1.6;
-  }
-  .modal-attached-img {
-    max-height: 220px;
-  }
-  
-  .site-footer {
-    flex-direction: column;
-    gap: 8px;
+  .hero-col-center-dock { display: none; }
+
+  /* Left col: center everything */
+  .hero-col-left {
+    align-items: center;
     text-align: center;
-    margin-top: 24px;
+    gap: 10px;
   }
-  .footer-dot { display: none; }
+  .hero-title { align-items: center; }
+  .title-first { font-size: clamp(40px, 10.5vw, 64px); }
+  .title-last  { font-size: clamp(20px, 5.5vw, 34px); letter-spacing: 0.16em; }
+
+  .hero-bio {
+    font-size: 12px;
+    text-align: center;
+    max-width: 100%;
+    line-height: 1.6;
+    color: rgba(255,255,255,0.65);
+    margin-top: 0;
+  }
+
+  /* Buttons — side by side, full width */
+  .hero-actions {
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 8px;
+    width: 100%;
+    margin-top: 2px;
+  }
+  .hero-actions .hero-btn {
+    flex: 1 1 120px;
+    justify-content: center;
+    padding: 10px 16px;
+    font-size: 12px;
+  }
+
+  /* Skills card — compact 2-col */
+  .hero-skills-card {
+    max-width: 100%;
+    padding: 12px 12px;
+    border-radius: 12px;
+    margin-top: 2px;
+  }
+  .skills-card-header { font-size: 10px; margin-bottom: 8px; }
+  .skills-grid { grid-template-columns: repeat(2, 1fr); gap: 6px; }
+  .skill-item { font-size: 10px; gap: 4px; }
+
+  /* Right col: full width */
+  .hero-col-right { width: 100%; gap: 10px; }
+
+  /* Stats card */
+  .hero-stats-card { padding: 12px 16px; border-radius: 12px; }
+  .stat-num  { font-size: 28px; }
+  .stat-lbl  { font-size: 9.5px; }
+
+  /* DNA quote card */
+  .hero-dna-card  { padding: 12px 14px; border-radius: 12px; }
+  .dna-quote-text { font-size: 11px; line-height: 1.55; }
+  .quote-mark     { font-size: 36px; margin-bottom: 2px; }
+
+  /* Scroll hint */
+  .scroll-hint { bottom: 14px; }
+
+  /* ─ Form & Contact ─ */
+  .feedback-form-card,
+  .contact-form-card  { padding: 24px 18px; border-radius: 18px; }
+  .form-title,
+  .cform-title        { font-size: 26px; margin-bottom: 20px; text-align: center; }
+  .form-input         { font-size: 13.5px; padding: 12px 14px; }
+  .star-rating-picker { justify-content: space-around; padding: 0 12px; }
+  .submit-btn         { width: 100%; justify-content: center; padding: 14px 20px; font-size: 14px; }
+  .contact-info-col   { width: 100%; gap: 12px; }
+  .cinfo-card         { padding: 16px 18px; gap: 14px; border-radius: 16px; }
+  .cinfo-icon         { width: 44px; height: 44px; font-size: 20px; }
+  .contact-links      { flex-direction: column; gap: 20px; }
+  .clink-sep          { display: none; }
+  .clink-value        { font-size: clamp(14px, 4vw, 20px); }
+  .socials-row        { flex-direction: column; gap: 10px; width: 100%; margin-top: 30px; }
+  .social-card        { width: 100%; justify-content: center; padding: 13px 20px; }
+  .fb-card            { width: 290px; padding: 18px; }
+  .marquee-wrapper    { margin: 25px 0 35px; }
+
+  /* Modal */
+  .modal-card         { padding: 24px 18px; border-radius: 18px; max-height: 88vh; overflow-y: auto; width: 94%; }
+  .modal-client-name  { font-size: 20px; }
+  .modal-avatar-img   { width: 48px; height: 48px; }
+  .modal-full-text    { font-size: 13px; line-height: 1.6; }
+  .modal-attached-img { max-height: 220px; }
+
+  .site-footer        { flex-direction: column; gap: 8px; text-align: center; margin-top: 24px; }
+  .footer-dot         { display: none; }
 }
+
 
 /* ── Mobile Small (≤ 580px) ─────────────────── */
 @media (max-width: 580px) {

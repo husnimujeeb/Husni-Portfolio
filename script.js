@@ -313,9 +313,10 @@ function initCinematicHero() {
 
   // Multi-Stage ScrollTrigger Parallax
   if (typeof ScrollTrigger !== 'undefined' && scrollTrack && stage) {
-    const isMobile = window.innerWidth <= 900;
-    const targetScale = isMobile ? 0.52 : 0.58;
-    const targetY     = isMobile ? 18 : 12;
+    const isMobile    = window.innerWidth <= 767;
+    const isTablet    = window.innerWidth <= 900 && !isMobile;
+    const targetScale = isMobile ? 0.42 : isTablet ? 0.52 : 0.58;
+    const targetY     = isMobile ? 8    : isTablet ? 16   : 12;
 
     const scrollTL = gsap.timeline({
       scrollTrigger: {
