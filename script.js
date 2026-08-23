@@ -550,13 +550,34 @@ function initNav() {
     entries.forEach(e => {
       if (e.isIntersecting) {
         navLinks.forEach(l => l.classList.remove('active'));
-        const active = q(`[data-nav="${e.target.id}"]`);
+        let navKey = e.target.id;
+        if (['works', 'branding', 'social', 'printing', 'photography'].includes(navKey)) {
+          navKey = 'works';
+        }
+        const active = q(`[data-nav="${navKey}"]`);
         if (active) active.classList.add('active');
       }
     });
   }, { threshold: 0.35 });
 
   sections.forEach(s => observer.observe(s));
+
+  /* Smooth scroll for all internal anchor links */
+  qa('a[href^="#"]').forEach(anchor => {
+    anchor.addEventListener('click', e => {
+      const targetId = anchor.getAttribute('href');
+      if (!targetId || targetId === '#') return;
+      const targetEl = q(targetId);
+      if (targetEl) {
+        e.preventDefault();
+        if (lenis) {
+          lenis.scrollTo(targetEl, { offset: 0, duration: 1.2 });
+        } else {
+          targetEl.scrollIntoView({ behavior: 'smooth' });
+        }
+      }
+    });
+  });
 
   /* Mobile menu toggle */
   if (toggle && linksContainer) {
@@ -596,9 +617,9 @@ function initNav() {
 /* ================================================
    TABLE OF CONTENTS — animations
 ================================================ */
-if (q('#toc') && typeof ScrollTrigger !== 'undefined') {
+if (q('#works') && typeof ScrollTrigger !== 'undefined') {
   ScrollTrigger.create({
-    trigger: '#toc',
+    trigger: '#works',
     start: 'top 70%',
     onEnter: () => {
       const box = q('#toc-box');
