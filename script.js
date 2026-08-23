@@ -618,6 +618,17 @@ initCinematicHero();
 /* ================================================
    THEME TOGGLE (DARK / LIGHT MODE)
 ================================================ */
+function getHeadingRestColor() {
+  return document.documentElement.getAttribute('data-theme') === 'light' ? '#0f172a' : '#ffffff';
+}
+
+function updateAllHeadingColors() {
+  const c = getHeadingRestColor();
+  qa('.big-title .char').forEach(char => {
+    gsap.to(char, { color: c, textShadow: 'none', duration: 0.25, overwrite: 'auto' });
+  });
+}
+
 function initThemeToggle() {
   const toggleBtn = q('#theme-toggle');
   if (!toggleBtn) return;
@@ -633,6 +644,7 @@ function initThemeToggle() {
     const current = document.documentElement.getAttribute('data-theme') || 'dark';
     const next = current === 'light' ? 'dark' : 'light';
     applyTheme(next, true);
+    updateAllHeadingColors();
   });
 }
 initThemeToggle();
@@ -785,7 +797,7 @@ if (q('#works') && typeof ScrollTrigger !== 'undefined') {
         }
         gsap.fromTo(chars,
           { opacity: 0, y: 50, rotateX: -70, transformOrigin: '50% 100%' },
-          { opacity: 1, y: 0, rotateX: 0, color: '#ffffff', stagger: 0.025, duration: 0.45, ease: 'power4.out' }
+          { opacity: 1, y: 0, rotateX: 0, color: getHeadingRestColor(), stagger: 0.025, duration: 0.45, ease: 'power4.out' }
         );
       }
 
@@ -846,7 +858,7 @@ qa('.sec-intro').forEach(intro => {
         if (chars.length) {
           tl.to(chars, {
             opacity: 1, y: 0, rotateX: 0,
-            color: '#ffffff',
+            color: getHeadingRestColor(),
             stagger: 0.03,
             duration: 0.42,
             ease: 'power4.out',
@@ -930,7 +942,7 @@ function initHeadingHoverEffects() {
             y: 0,
             scale: 1,
             rotate: 0,
-            color: '#ffffff',
+            color: getHeadingRestColor(),
             textShadow: 'none',
             duration: 0.35,
             ease: 'power2.out',
@@ -969,7 +981,7 @@ function initHeadingHoverEffects() {
           y: 0,
           scale: 1,
           rotate: 0,
-          color: '#ffffff',
+          color: getHeadingRestColor(),
           textShadow: 'none',
           duration: 0.5,
           ease: 'elastic.out(1, 0.35)',
