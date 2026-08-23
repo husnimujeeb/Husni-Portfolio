@@ -8,7 +8,17 @@
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Caveat:wght@600;700&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
-  <link rel="stylesheet" href="style.css?v=4.6" />
+  <script>
+    (function() {
+      const t = localStorage.getItem('portfolio-theme');
+      if (t === 'light') {
+        document.documentElement.setAttribute('data-theme', 'light');
+      } else {
+        document.documentElement.setAttribute('data-theme', 'dark');
+      }
+    })();
+  </script>
+  <link rel="stylesheet" href="style.css?v=5.0" />
 </head>
 <body>
 
@@ -44,16 +54,22 @@
     <span class="brand-first">HUSNI</span>
     <span class="brand-last">MUJEEB</span>
   </div>
-  <button id="nav-toggle" class="nav-toggle" aria-label="Toggle menu" aria-expanded="false">
-    <span class="bar"></span>
-    <span class="bar"></span>
-    <span class="bar"></span>
-  </button>
   <div class="nav-links">
     <a href="#about"       id="nav-about"       class="nav-link active" data-nav="about">About me</a>
     <a href="#works"       id="nav-works"       class="nav-link"        data-nav="works">My works</a>
     <a href="#feedback"    id="nav-feedback"    class="nav-link"        data-nav="feedback">Feedback</a>
     <a href="#contact"     id="nav-contact"     class="nav-link"        data-nav="contact">Contact me</a>
+  </div>
+  <div class="nav-actions">
+    <button id="theme-toggle" class="theme-toggle-btn" aria-label="Toggle light and dark mode" title="Toggle Light/Dark Theme">
+      <span class="theme-icon icon-moon" aria-hidden="true">🌙</span>
+      <span class="theme-icon icon-sun" aria-hidden="true">☀️</span>
+    </button>
+    <button id="nav-toggle" class="nav-toggle" aria-label="Toggle menu" aria-expanded="false">
+      <span class="bar"></span>
+      <span class="bar"></span>
+      <span class="bar"></span>
+    </button>
   </div>
   <div class="nav-rule"></div>
 </nav>
@@ -65,9 +81,10 @@
   <div class="hero-scroll-track" id="hero-scroll-track">
     <div class="cinematic-stage" id="cinematic-stage">
       
-      <!-- Layer 1: Night Sky Background -->
+      <!-- Layer 1: Sky Background (Night & Day) -->
       <div class="cinematic-layer layer-sky" id="layer-sky">
-        <img src="assets/hero-sky.jpg" alt="Night sky" class="sky-bg-img" />
+        <img src="assets/hero-sky.jpg" alt="Night sky" class="sky-bg-img sky-dark" id="sky-dark" />
+        <img src="assets/hero-sky-day.jpg" alt="Day sky" class="sky-bg-img sky-day" id="sky-day" />
       </div>
 
       <!-- Layer 2: 3D PORTFOLIO Typography (behind character) -->
@@ -561,6 +578,6 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/@studio-freight/lenis@1.0.42/dist/lenis.min.js"></script>
-<script src="script.js?v=4.6"></script>
+<script src="script.js?v=5.0"></script>
 </body>
 </html>

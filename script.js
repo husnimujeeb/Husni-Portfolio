@@ -71,15 +71,18 @@ if (lenis) {
    CINEMATIC 3-STAGE HERO — TREE WIND SWAY & FIREFLIES
 ================================================ */
 
-/* ── 1. Realistic Pine Tree Wind Sway Canvas ──────── */
+/* ── 1. Realistic Pine Tree Wind Sway Canvas (Dark & Day) ── */
 function initTreesWind() {
   const canvas = q('#trees-canvas');
   if (!canvas) return;
   const ctx = canvas.getContext('2d');
   if (!ctx) return;
 
-  const img = new Image();
-  img.src = 'assets/hero-trees.png';
+  const darkImg = new Image();
+  darkImg.src = 'assets/hero-trees.png';
+
+  const dayImg = new Image();
+  dayImg.src = 'assets/hero-trees-day.png';
 
   let width = 0, height = 0;
   function resize() {
@@ -89,22 +92,31 @@ function initTreesWind() {
   resize();
   window.addEventListener('resize', resize);
 
-  let isLoaded = false;
-  img.onload = () => { isLoaded = true; };
+  let darkLoaded = false;
+  darkImg.onload = () => { darkLoaded = true; };
+
+  let dayLoaded = false;
+  dayImg.onload = () => { dayLoaded = true; };
 
   let time = 0;
   const sliceCount = 80;
 
   function renderWind() {
     requestAnimationFrame(renderWind);
-    if (!isLoaded || !width || !height) return;
+    if (!width || !height) return;
+
+    const isLight = document.documentElement.getAttribute('data-theme') === 'light';
+    const activeImg = isLight ? dayImg : darkImg;
+    const isLoaded  = isLight ? dayLoaded : darkLoaded;
+
+    if (!isLoaded) return;
 
     ctx.clearRect(0, 0, width, height);
     time += 0.016;
 
     // Draw tree canopy in vertical slices with organic horizontal sway
     const sliceWidth = width / sliceCount;
-    const imgSliceWidth = img.naturalWidth / sliceCount;
+    const imgSliceWidth = activeImg.naturalWidth / sliceCount;
 
     for (let i = 0; i < sliceCount; i++) {
       const xNorm = i / sliceCount;
@@ -116,20 +128,20 @@ function initTreesWind() {
       const sx = i * imgSliceWidth;
       const sy = 0;
       const sWidth = imgSliceWidth;
-      const sHeight = img.naturalHeight;
+      const sHeight = activeImg.naturalHeight;
 
       const dx = i * sliceWidth + totalSway;
       const dy = 0;
       const dWidth = sliceWidth + 0.5; // avoid seams
       const dHeight = height;
 
-      ctx.drawImage(img, sx, sy, sWidth, sHeight, dx, dy, dWidth, dHeight);
+      ctx.drawImage(activeImg, sx, sy, sWidth, sHeight, dx, dy, dWidth, dHeight);
     }
   }
   renderWind();
 }
 
-/* ── 2. 3D Warm Orange Fireflies Particle Field ─────── */
+/* ── 2. Dual-Mode Particle Field: Fireflies (Dark) & Butterflies (Light) ── */
 function initFireflies() {
   const canvas = q('#fireflies-canvas');
   if (!canvas) return;
@@ -144,14 +156,14 @@ function initFireflies() {
   resize();
   window.addEventListener('resize', resize);
 
-  const count = 26;
+  // 1. Dark Mode Firefly Particles
+  const fireflyCount = 26;
   const fireflies = [];
-
-  for (let i = 0; i < count; i++) {
+  for (let i = 0; i < fireflyCount; i++) {
     fireflies.push({
       x: Math.random() * (window.innerWidth || 1200),
       y: Math.random() * (window.innerHeight || 800),
-      z: 0.4 + Math.random() * 1.2, // depth factor
+      z: 0.4 + Math.random() * 1.2,
       vx: (Math.random() - 0.5) * 0.4,
       vy: (Math.random() - 0.5) * 0.35,
       radius: 1.2 + Math.random() * 2.0,
@@ -159,6 +171,32 @@ function initFireflies() {
       pulseSpeed: 1.2 + Math.random() * 1.8,
       baseAlpha: 0.45 + Math.random() * 0.45,
       wanderTimer: Math.random() * 100,
+    });
+  }
+
+  // 2. Light Mode Fluttering Butterflies
+  const butterflyCount = 22;
+  const butterflies = [];
+  const butterflyPalettes = [
+    { wing1: '#E8431A', wing2: '#FF7A00', body: '#1e293b' }, // Monarch Orange
+    { wing1: '#0EA5E9', wing2: '#38BDF8', body: '#0f172a' }, // Azure Blue
+    { wing1: '#FBBF24', wing2: '#FEF08A', body: '#334155' }, // Amber / Lemon
+    { wing1: '#F43F5E', wing2: '#FB7185', body: '#1e293b' }, // Rose Pink
+  ];
+
+  for (let i = 0; i < butterflyCount; i++) {
+    const pal = butterflyPalettes[i % butterflyPalettes.length];
+    butterflies.push({
+      x: Math.random() * (window.innerWidth || 1200),
+      y: Math.random() * (window.innerHeight || 800),
+      z: 0.5 + Math.random() * 0.8,
+      vx: (Math.random() - 0.5) * 0.5 + 0.1,
+      vy: (Math.random() - 0.5) * 0.35 - 0.08,
+      size: 5.0 + Math.random() * 4.5,
+      flapPhase: Math.random() * Math.PI * 2,
+      flapSpeed: 14.0 + Math.random() * 8.0,
+      wanderTimer: Math.random() * 100,
+      pal: pal,
     });
   }
 
@@ -170,59 +208,114 @@ function initFireflies() {
 
   let lastTime = performance.now();
 
-  function animateFireflies(now) {
-    requestAnimationFrame(animateFireflies);
+  function animateParticles(now) {
+    requestAnimationFrame(animateParticles);
     const dt = Math.min((now - lastTime) / 1000, 0.1);
     lastTime = now;
 
+    if (!width || !height) return;
     ctx.clearRect(0, 0, width, height);
 
-    fireflies.forEach(f => {
-      // Natural organic Brownian motion
-      f.wanderTimer += dt;
-      f.vx += Math.sin(f.wanderTimer * 1.5 + f.phase) * 0.04;
-      f.vy += Math.cos(f.wanderTimer * 1.2 + f.phase) * 0.03;
+    const isLight = document.documentElement.getAttribute('data-theme') === 'light';
 
-      // Friction
-      f.vx *= 0.98;
-      f.vy *= 0.98;
+    if (!isLight) {
+      // ── DARK MODE: Bioluminescent Fireflies ──
+      fireflies.forEach(f => {
+        f.wanderTimer += dt;
+        f.vx += Math.sin(f.wanderTimer * 1.5 + f.phase) * 0.04;
+        f.vy += Math.cos(f.wanderTimer * 1.2 + f.phase) * 0.03;
+        f.vx *= 0.98;
+        f.vy *= 0.98;
 
-      f.x += f.vx * f.z;
-      f.y += f.vy * f.z;
+        f.x += f.vx * f.z;
+        f.y += f.vy * f.z;
 
-      // Wrap around bounds with soft margin
-      if (f.x < -40) f.x = width + 40;
-      if (f.x > width + 40) f.x = -40;
-      if (f.y < -40) f.y = height + 40;
-      if (f.y > height + 40) f.y = -40;
+        if (f.x < -40) f.x = width + 40;
+        if (f.x > width + 40) f.x = -40;
+        if (f.y < -40) f.y = height + 40;
+        if (f.y > height + 40) f.y = -40;
 
-      // Bioluminescent pulsing glow (warm orange #E8431A)
-      const pulse = Math.pow(Math.sin(now * 0.001 * f.pulseSpeed + f.phase), 2);
-      const alpha = f.baseAlpha * (0.35 + 0.65 * pulse);
+        const pulse = Math.pow(Math.sin(now * 0.001 * f.pulseSpeed + f.phase), 2);
+        const alpha = f.baseAlpha * (0.35 + 0.65 * pulse);
 
-      const renderX = f.x + mouseX * f.z;
-      const renderY = f.y + mouseY * f.z;
-      const r = f.radius * f.z;
+        const renderX = f.x + mouseX * f.z;
+        const renderY = f.y + mouseY * f.z;
+        const r = f.radius * f.z;
 
-      // Soft outer orange glow
-      const grad = ctx.createRadialGradient(renderX, renderY, 0, renderX, renderY, r * 5.5);
-      grad.addColorStop(0, `rgba(255, 140, 60, ${alpha})`);
-      grad.addColorStop(0.3, `rgba(232, 67, 26, ${alpha * 0.7})`);
-      grad.addColorStop(1, 'rgba(232, 67, 26, 0)');
+        const grad = ctx.createRadialGradient(renderX, renderY, 0, renderX, renderY, r * 5.5);
+        grad.addColorStop(0, `rgba(255, 140, 60, ${alpha})`);
+        grad.addColorStop(0.3, `rgba(232, 67, 26, ${alpha * 0.7})`);
+        grad.addColorStop(1, 'rgba(232, 67, 26, 0)');
 
-      ctx.fillStyle = grad;
-      ctx.beginPath();
-      ctx.arc(renderX, renderY, r * 5.5, 0, Math.PI * 2);
-      ctx.fill();
+        ctx.fillStyle = grad;
+        ctx.beginPath();
+        ctx.arc(renderX, renderY, r * 5.5, 0, Math.PI * 2);
+        ctx.fill();
 
-      // Sharp warm core
-      ctx.fillStyle = `rgba(255, 220, 180, ${alpha * 0.95})`;
-      ctx.beginPath();
-      ctx.arc(renderX, renderY, r * 0.9, 0, Math.PI * 2);
-      ctx.fill();
-    });
+        ctx.fillStyle = `rgba(255, 220, 180, ${alpha * 0.95})`;
+        ctx.beginPath();
+        ctx.arc(renderX, renderY, r * 0.9, 0, Math.PI * 2);
+        ctx.fill();
+      });
+    } else {
+      // ── LIGHT MODE: Fluttering Butterflies ──
+      butterflies.forEach(b => {
+        b.wanderTimer += dt;
+        b.flapPhase += dt * b.flapSpeed;
+
+        const flapCos = Math.cos(b.flapPhase);
+        b.vx += Math.sin(b.wanderTimer * 1.8) * 0.05;
+        b.vy += (Math.cos(b.wanderTimer * 1.4) * 0.04) + (flapCos * -0.015);
+        b.vx *= 0.985;
+        b.vy *= 0.985;
+
+        b.x += b.vx * b.z * 1.2;
+        b.y += b.vy * b.z * 1.2;
+
+        if (b.x < -50) b.x = width + 50;
+        if (b.x > width + 50) b.x = -50;
+        if (b.y < -50) b.y = height + 50;
+        if (b.y > height + 50) b.y = -50;
+
+        const renderX = b.x + mouseX * b.z * 0.6;
+        const renderY = b.y + mouseY * b.z * 0.6;
+        const baseSz  = b.size * b.z;
+        const wingScale = Math.abs(flapCos);
+
+        ctx.save();
+        ctx.translate(renderX, renderY);
+
+        const angle = Math.atan2(b.vy, b.vx) + (flapCos * 0.15);
+        ctx.rotate(angle);
+
+        const wingW = baseSz * Math.max(0.12, wingScale);
+        const wingH = baseSz * 1.15;
+
+        // Top Wings
+        ctx.fillStyle = b.pal.wing1;
+        ctx.beginPath();
+        ctx.ellipse(-wingW * 0.6, -wingH * 0.45, Math.max(0.5, wingW * 0.65), wingH * 0.55, -0.3, 0, Math.PI * 2);
+        ctx.ellipse(wingW * 0.6, -wingH * 0.45, Math.max(0.5, wingW * 0.65), wingH * 0.55, 0.3, 0, Math.PI * 2);
+        ctx.fill();
+
+        // Bottom Wings
+        ctx.fillStyle = b.pal.wing2;
+        ctx.beginPath();
+        ctx.ellipse(-wingW * 0.45, wingH * 0.25, Math.max(0.5, wingW * 0.45), wingH * 0.45, 0.2, 0, Math.PI * 2);
+        ctx.ellipse(wingW * 0.45, wingH * 0.25, Math.max(0.5, wingW * 0.45), wingH * 0.45, -0.2, 0, Math.PI * 2);
+        ctx.fill();
+
+        // Slender Butterfly Body
+        ctx.fillStyle = b.pal.body;
+        ctx.beginPath();
+        ctx.ellipse(0, 0, Math.max(0.8, baseSz * 0.16), baseSz * 0.85, 0, 0, Math.PI * 2);
+        ctx.fill();
+
+        ctx.restore();
+      });
+    }
   }
-  requestAnimationFrame(animateFireflies);
+  requestAnimationFrame(animateParticles);
 }
 
 /* ================================================
@@ -521,6 +614,28 @@ initCinematicHero();
     }
   }, 4000);
 })();
+
+/* ================================================
+   THEME TOGGLE (DARK / LIGHT MODE)
+================================================ */
+function initThemeToggle() {
+  const toggleBtn = q('#theme-toggle');
+  if (!toggleBtn) return;
+
+  function applyTheme(theme, save = true) {
+    document.documentElement.setAttribute('data-theme', theme);
+    if (save) {
+      localStorage.setItem('portfolio-theme', theme);
+    }
+  }
+
+  toggleBtn.addEventListener('click', () => {
+    const current = document.documentElement.getAttribute('data-theme') || 'dark';
+    const next = current === 'light' ? 'dark' : 'light';
+    applyTheme(next, true);
+  });
+}
+initThemeToggle();
 
 /* ================================================
    NAV — active state tracker & mobile menu
