@@ -534,33 +534,55 @@ function initNav() {
 
   if (!nav) return;
 
-  /* Scrolled class */
+  /* Active Nav Link Tracker */
+  function updateActiveNav() {
+    const scrollY = window.scrollY;
+    const viewMid = window.innerHeight * 0.45;
+    const docHeight = document.documentElement.scrollHeight;
+    const isBottom = (window.innerHeight + scrollY) >= (docHeight - 60);
+
+    let activeNavKey = 'about';
+
+    const worksEl    = q('#works');
+    const feedbackEl = q('#feedback');
+    const contactEl  = q('#contact');
+
+    if (isBottom) {
+      activeNavKey = 'contact';
+    } else if (contactEl && contactEl.getBoundingClientRect().top <= viewMid) {
+      activeNavKey = 'contact';
+    } else if (feedbackEl && feedbackEl.getBoundingClientRect().top <= viewMid) {
+      activeNavKey = 'feedback';
+    } else if (worksEl && worksEl.getBoundingClientRect().top <= viewMid) {
+      activeNavKey = 'works';
+    } else {
+      activeNavKey = 'about';
+    }
+
+    navLinks.forEach(link => {
+      if (link.getAttribute('data-nav') === activeNavKey) {
+        link.classList.add('active');
+      } else {
+        link.classList.remove('active');
+      }
+    });
+  }
+
+  /* Scrolled class & active tracking */
   if (lenis) {
     lenis.on('scroll', ({ scroll }) => {
       nav.classList.toggle('nav-scrolled', scroll > 60);
+      updateActiveNav();
     });
   } else {
     window.addEventListener('scroll', () => {
       nav.classList.toggle('nav-scrolled', window.scrollY > 60);
+      updateActiveNav();
     });
   }
 
-  /* IntersectionObserver for active link */
-  const observer = new IntersectionObserver(entries => {
-    entries.forEach(e => {
-      if (e.isIntersecting) {
-        navLinks.forEach(l => l.classList.remove('active'));
-        let navKey = e.target.id;
-        if (['works', 'branding', 'social', 'printing', 'photography'].includes(navKey)) {
-          navKey = 'works';
-        }
-        const active = q(`[data-nav="${navKey}"]`);
-        if (active) active.classList.add('active');
-      }
-    });
-  }, { threshold: 0.35 });
-
-  sections.forEach(s => observer.observe(s));
+  // Initial call
+  updateActiveNav();
 
   /* Smooth scroll for all internal anchor links */
   qa('a[href^="#"]').forEach(anchor => {
@@ -570,6 +592,14 @@ function initNav() {
       const targetEl = q(targetId);
       if (targetEl) {
         e.preventDefault();
+
+        // Immediate active feedback if nav link
+        const navKey = anchor.getAttribute('data-nav');
+        if (navKey) {
+          navLinks.forEach(l => l.classList.remove('active'));
+          anchor.classList.add('active');
+        }
+
         if (lenis) {
           lenis.scrollTo(targetEl, { offset: 0, duration: 1.2 });
         } else {
