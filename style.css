@@ -385,8 +385,8 @@ body.c-link  #c-ring { width: 70px; height: 70px; border-color: rgba(255,255,255
   opacity: 0;
   filter: brightness(1.02) contrast(1.04);
 }
-[data-theme="light"] .sky-dark { opacity: 0; }
-[data-theme="light"] .sky-day  { opacity: 1; }
+[data-theme="light"] .sky-dark { opacity: 0 !important; }
+[data-theme="light"] .sky-day  { opacity: 1 !important; }
 
 /* Layer 2: 3D PORTFOLIO Title */
 .layer-portfolio-title {

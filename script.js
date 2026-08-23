@@ -79,10 +79,16 @@ function initTreesWind() {
   if (!ctx) return;
 
   const darkImg = new Image();
+  let darkLoaded = false;
+  darkImg.onload = () => { darkLoaded = true; };
   darkImg.src = 'assets/hero-trees.png';
+  if (darkImg.complete) darkLoaded = true;
 
   const dayImg = new Image();
-  dayImg.src = 'assets/hero-trees-day.png';
+  let dayLoaded = false;
+  dayImg.onload = () => { dayLoaded = true; };
+  dayImg.src = 'assets/hero-trees-day.png?v=6.0';
+  if (dayImg.complete) dayLoaded = true;
 
   let width = 0, height = 0;
   function resize() {
@@ -91,12 +97,6 @@ function initTreesWind() {
   }
   resize();
   window.addEventListener('resize', resize);
-
-  let darkLoaded = false;
-  darkImg.onload = () => { darkLoaded = true; };
-
-  let dayLoaded = false;
-  dayImg.onload = () => { dayLoaded = true; };
 
   let time = 0;
   const sliceCount = 80;
