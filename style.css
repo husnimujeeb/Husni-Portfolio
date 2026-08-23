@@ -462,6 +462,28 @@ body.c-link  #c-ring { width: 70px; height: 70px; border-color: rgba(255,255,255
   object-fit: contain;
   filter: drop-shadow(0 15px 45px rgba(0, 0, 0, 0.9));
   display: block;
+  transition: opacity 0.5s var(--ease-out);
+}
+.char-dark {
+  opacity: 1;
+  pointer-events: auto;
+}
+.char-day {
+  position: absolute;
+  bottom: 2vh;
+  left: 50%;
+  transform: translateX(-50%);
+  opacity: 0;
+  pointer-events: none;
+}
+[data-theme="light"] .char-dark {
+  opacity: 0;
+  pointer-events: none;
+}
+[data-theme="light"] .char-day {
+  opacity: 1;
+  pointer-events: auto;
+  filter: drop-shadow(0 15px 35px rgba(15, 23, 42, 0.22));
 }
 
 /* Layer 6: Stage 3 Content Interface */
