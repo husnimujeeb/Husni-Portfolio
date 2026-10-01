@@ -213,37 +213,41 @@ function initFireflies() {
 }
 
 /* ================================================
-   CUSTOM 3D TRANSLUCENT GLASS CURSOR
+   3D TRANSLUCENT GLASS CURSOR — AURA RING ENGINE
 ================================================ */
 (function initCursor() {
-  const glass = q('#c-glass-cursor');
-  const ring  = q('#c-ring');
-  if (!glass || window.matchMedia('(hover: none)').matches) return;
+  const ring = q('#c-ring');
+  if (!ring) return;
 
-  let mx = -100, my = -100, rx = -100, ry = -100;
+  let mx = -200, my = -200, rx = -200, ry = -200;
+  let hasMoved = false;
 
   document.addEventListener('mousemove', e => {
     mx = e.clientX;
     my = e.clientY;
-    // Align glass arrow tip (hotspot: 1px from left, 0px from top) with mouse
-    gsap.to(glass, { x: mx - 1, y: my, duration: 0.04, ease: 'none' });
+    if (!hasMoved) {
+      hasMoved = true;
+      rx = mx;
+      ry = my;
+      gsap.set(ring, { x: rx, y: ry, opacity: 1 });
+    }
   });
 
-  /* Ring lerp loop (smooth trailing aura) */
+  /* Ring lerp loop (smooth trailing glass aura) */
   (function lerpRing() {
-    if (ring) {
-      rx += (mx - rx) * 0.13;
-      ry += (my - ry) * 0.13;
+    if (hasMoved && ring) {
+      rx += (mx - rx) * 0.16;
+      ry += (my - ry) * 0.16;
       gsap.set(ring, { x: rx, y: ry });
     }
     requestAnimationFrame(lerpRing);
   })();
 
-  /* Hover states */
-  qa('a, button, .toc-item, .work-card, .photo-item, .social-card, .fb-card, .magnetic-btn').forEach(el => {
+  /* Hover states for interactive elements */
+  qa('a, button, [role="button"], .toc-item, .work-card, .photo-item, .social-card, .fb-card, .magnetic-btn, .handles-box, .pill').forEach(el => {
     el.addEventListener('mouseenter', () => {
       document.body.classList.add('c-hover');
-      if (el.tagName === 'A') document.body.classList.add('c-link');
+      if (el.tagName === 'A' || el.closest('a')) document.body.classList.add('c-link');
     });
     el.addEventListener('mouseleave', () => {
       document.body.classList.remove('c-hover', 'c-link');
@@ -254,9 +258,11 @@ function initFireflies() {
   document.addEventListener('mousedown', () => document.body.classList.add('c-active'));
   document.addEventListener('mouseup',   () => document.body.classList.remove('c-active'));
 
-  /* Hide when out of window */
-  document.addEventListener('mouseleave', () => gsap.to([glass, ring], { opacity: 0, duration: 0.2 }));
-  document.addEventListener('mouseenter', () => gsap.to([glass, ring], { opacity: 1, duration: 0.2 }));
+  /* Hide when mouse leaves window */
+  document.addEventListener('mouseleave', () => gsap.to(ring, { opacity: 0, duration: 0.2 }));
+  document.addEventListener('mouseenter', () => {
+    if (hasMoved) gsap.to(ring, { opacity: 1, duration: 0.2 });
+  });
 })();
 
 /* ================================================
