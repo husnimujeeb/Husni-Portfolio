@@ -317,7 +317,7 @@ body.c-link  #c-ring { width: 70px; height: 70px; border-color: rgba(255,255,255
 .layer-sky {
   z-index: 1;
   transform-origin: 50% 50%;
-  will-change: transform;
+  will-change: transform, filter, opacity;
 }
 .sky-bg-img {
   position: absolute;
@@ -360,7 +360,7 @@ body.c-link  #c-ring { width: 70px; height: 70px; border-color: rgba(255,255,255
 .layer-trees {
   z-index: 3;
   transform-origin: 50% 80%;
-  will-change: transform;
+  will-change: transform, filter, opacity;
 }
 .trees-canvas {
   position: absolute;
@@ -527,103 +527,7 @@ body.c-link  #c-ring { width: 70px; height: 70px; border-color: rgba(255,255,255
   background: #000000;
   opacity: 0;
   pointer-events: none;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-
-.cinematic-headings-showcase {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  text-align: center;
-  width: 100%;
-  max-width: 900px;
-  padding: 0 24px;
-  pointer-events: auto;
-}
-
-.ch-badge {
-  font-size: 12px;
-  letter-spacing: 0.35em;
-  color: var(--acc);
-  font-weight: 700;
-  text-transform: uppercase;
-  margin-bottom: 14px;
-  opacity: 0;
-  transform: translateY(20px);
-}
-
-.ch-main-title {
-  font-family: var(--display);
-  font-size: clamp(56px, 8.5vw, 115px);
-  color: #ffffff;
-  letter-spacing: 0.06em;
-  line-height: 0.95;
-  margin-bottom: 36px;
-  opacity: 0;
-  transform: translateY(25px);
-  text-shadow: 0 0 40px rgba(255, 255, 255, 0.15), 0 0 80px rgba(232, 67, 26, 0.25);
-}
-
-.ch-list {
-  display: flex;
-  flex-wrap: wrap;
-  align-items: center;
-  justify-content: center;
-  gap: 16px 22px;
-  width: 100%;
-}
-
-.ch-item {
-  display: inline-flex;
-  align-items: center;
-  gap: 12px;
-  padding: 14px 28px;
-  background: rgba(18, 24, 34, 0.85);
-  border: 1px solid rgba(255, 255, 255, 0.12);
-  border-radius: 100px;
-  opacity: 0;
-  transform: translateY(22px);
-  backdrop-filter: blur(20px);
-  -webkit-backdrop-filter: blur(20px);
-  box-shadow: 0 10px 32px rgba(0, 0, 0, 0.6);
-  transition: all 0.3s var(--ease-out);
-  cursor: pointer;
-  text-decoration: none;
-}
-
-.ch-item:hover {
-  border-color: var(--acc);
-  background: rgba(232, 67, 26, 0.16);
-  transform: translateY(-3px) scale(1.04);
-  box-shadow: 0 14px 38px rgba(232, 67, 26, 0.38);
-}
-
-.ch-num {
-  font-family: var(--display);
-  font-size: 20px;
-  color: var(--acc);
-  line-height: 1;
-  letter-spacing: 0.05em;
-}
-
-.ch-label {
-  font-size: 13.5px;
-  font-weight: 600;
-  letter-spacing: 0.18em;
-  color: #ffffff;
-  white-space: nowrap;
-}
-
-.ch-arrow {
-  font-size: 13px;
-  color: var(--acc);
-  transition: transform 0.25s ease;
-}
-.ch-item:hover .ch-arrow {
-  transform: translate(2px, -2px);
+  will-change: opacity;
 }
 
 /* Stats Glass Card */
@@ -835,13 +739,16 @@ body.c-link  #c-ring { width: 70px; height: 70px; border-color: rgba(255,255,255
    TOC SECTION
 ================================================ */
 .toc-section {
-  min-height: 70vh;
+  min-height: 80vh;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
   gap: 60px;
-  padding: 80px 60px;
+  padding: 100px 60px 80px;
+  background: #000000;
+  position: relative;
+  z-index: 10;
 }
 .toc-grid {
   display: flex;

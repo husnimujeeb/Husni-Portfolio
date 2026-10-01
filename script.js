@@ -270,9 +270,7 @@ function initCinematicHero() {
   const scrollHint     = q('#scroll-hint');
   const nav            = q('#nav');
   const blackout       = q('#hero-blackout');
-  const chBadge        = q('#ch-badge');
-  const chMainTitle    = q('#ch-main-title');
-  const chItems        = qa('.ch-item');
+  const firefliesCanvas = q('#fireflies-canvas');
 
   // Initial State Setup (Stage 1)
   if (portfolioWord) gsap.set(portfolioWord, { opacity: 0, y: 30, scale: 0.98 });
@@ -282,9 +280,8 @@ function initCinematicHero() {
 
   if (stage3Content) gsap.set(stage3Content, { opacity: 0, pointerEvents: 'none' });
   if (blackout)      gsap.set(blackout, { opacity: 0, pointerEvents: 'none' });
-  if (chBadge)       gsap.set(chBadge, { opacity: 0, y: 20 });
-  if (chMainTitle)   gsap.set(chMainTitle, { opacity: 0, y: 30 });
-  if (chItems.length) gsap.set(chItems, { opacity: 0, y: 25 });
+  if (sky)           gsap.set(sky, { filter: 'brightness(1) blur(0px)', opacity: 1 });
+  if (trees)         gsap.set(trees, { filter: 'brightness(1) blur(0px)', opacity: 1 });
 
   // Stage 1 Entrance Timeline (plays when preloader lifts)
   heroEntranceTL = gsap.timeline({ paused: true, defaults: { ease: 'power3.out' } });
@@ -307,33 +304,41 @@ function initCinematicHero() {
       }
     });
 
-    // ── PHASE 1: Character slowly shrinks and completely disappears (0.00 to 0.22) ──
+    // ── PHASE 1: Smooth gradual shrink & disappearance of photo & word (0.05 to 0.28) ──
     scrollTL
+      .to(scrollHint, {
+        opacity: 0,
+        duration: 0.05,
+        ease: 'power1.out',
+      }, 0)
       .fromTo(portfolioWord, {
         yPercent: 0,
         opacity: 0.88,
         scale: 1,
       }, {
-        yPercent: 45,
+        yPercent: 35,
         opacity: 0,
-        scale: 0.9,
-        duration: 0.16,
-        ease: 'power1.inOut',
-      }, 0)
-      .to(scrollHint, {
-        opacity: 0,
-        duration: 0.06,
-        ease: 'power1.out',
-      }, 0)
-      .to(charWrapper, {
-        scale: 0.44,
-        opacity: 0,
-        yPercent: 12,
+        scale: 0.92,
         duration: 0.20,
-        ease: 'power1.inOut',
-      }, 0)
+        ease: 'power1.out',
+      }, 0.05)
+      // Character holds briefly at top, then slowly shrinks and smoothly fades out
+      .fromTo(charWrapper, {
+        opacity: 1,
+        scale: 1,
+        yPercent: 0,
+        autoAlpha: 1,
+      }, {
+        opacity: 0,
+        scale: 0.62,
+        yPercent: 8,
+        autoAlpha: 0,
+        duration: 0.22,
+        ease: 'power1.out',
+      }, 0.06)
 
-      // ── PHASE 2: Details appear after character disappears (0.24 to 0.46) ──
+      // ── PHASE 2: About Me details appear + Background Dims and Blurs (0.28 to 0.50) ──
+      // Highlight details in focus
       .fromTo(stage3Content, {
         opacity: 0,
         y: 35,
@@ -343,106 +348,99 @@ function initCinematicHero() {
         y: 0,
         scale: 1,
         pointerEvents: 'auto',
-        duration: 0.16,
+        duration: 0.14,
         ease: 'power2.out',
-      }, 0.24)
+      }, 0.28)
+      // Decrease brightness of background and add subtle blur (spotlighting details)
+      .to([sky, trees], {
+        filter: 'brightness(0.24) blur(6px)',
+        duration: 0.14,
+        ease: 'power2.out',
+      }, 0.28)
 
-      // Hold details in view so user can comfortably read and interact (0.40 to 0.48)
-      .to({}, { duration: 0.08 }, 0.40)
+      // Hold details in spotlight so user can comfortably read bio and view stats (0.42 to 0.50)
+      .to({}, { duration: 0.08 }, 0.42)
 
-      // ── PHASE 3: Details disappear when scrolling again (0.48 to 0.58) ──
+      // ── PHASE 3: Details disappear + Background unblurs and brightens (0.50 to 0.60) ──
       .to(stage3Content, {
         opacity: 0,
-        y: -35,
+        y: -30,
         scale: 0.96,
         pointerEvents: 'none',
         duration: 0.10,
         ease: 'power2.in',
-      }, 0.48)
+      }, 0.50)
+      // Restore background brightness and crystal sharpness for the 3D zoom
+      .to([sky, trees], {
+        filter: 'brightness(1) blur(0px)',
+        duration: 0.10,
+        ease: 'power2.inOut',
+      }, 0.50)
 
-      // ── PHASE 4: Forward zoom into the 3D realistic forest / trees (0.58 to 0.84) ──
-      // Realistic pine trees expand dramatically as camera plunges into the canopy
+      // ── PHASE 4: Forward zoom into the realistic 3D forest / trees (0.60 to 0.84) ──
+      // Dynamic realistic tree scale-up and camera plunge
       .to(trees, {
         scale: 3.5,
         yPercent: 24,
         transformOrigin: '50% 80%',
-        duration: 0.26,
+        duration: 0.24,
         ease: 'power1.inOut',
-      }, 0.58)
-      // Sky deep celestial forward zoom
+      }, 0.60)
+      // Sky celestial forward zoom
       .to(sky, {
         scale: 1.5,
         yPercent: -12,
         transformOrigin: '50% 50%',
-        duration: 0.26,
+        duration: 0.24,
         ease: 'power1.inOut',
-      }, 0.58)
+      }, 0.60)
       // Fireflies rush past camera and fade
-      .to(q('#fireflies-canvas'), {
+      .to(firefliesCanvas, {
         scale: 2.2,
         opacity: 0,
-        duration: 0.20,
+        duration: 0.18,
         ease: 'power1.inOut',
-      }, 0.58)
+      }, 0.60)
 
-      // ── PHASE 5: Fade to fully dark / pitch black (0.78 to 0.88) ──
+      // ── PHASE 5: Fade to fully dark / pitch black with ZERO tree glitches (0.80 to 0.94) ──
       .fromTo(blackout, {
         opacity: 0,
-        pointerEvents: 'none',
       }, {
         opacity: 1,
-        pointerEvents: 'auto',
-        duration: 0.10,
+        duration: 0.12,
         ease: 'power2.inOut',
-      }, 0.78)
+      }, 0.80)
+      // Crucial: also fade trees, sky, fireflies to opacity 0 so no glitch/bleed occurs!
+      .to([trees, sky, firefliesCanvas], {
+        opacity: 0,
+        duration: 0.08,
+        ease: 'power2.inOut',
+      }, 0.84)
 
-      // ── PHASE 6: Headings appear one by one in premium cinematic style (0.86 to 1.00) ──
-      .fromTo(chBadge, {
-        opacity: 0,
-        y: 20,
-      }, {
-        opacity: 1,
-        y: 0,
-        duration: 0.03,
-        ease: 'back.out(1.8)',
-      }, 0.86)
-      .fromTo(chMainTitle, {
-        opacity: 0,
-        y: 30,
-      }, {
-        opacity: 1,
-        y: 0,
-        duration: 0.04,
-        ease: 'power3.out',
-      }, 0.87)
-      .fromTo(chItems, {
-        opacity: 0,
-        y: 25,
-      }, {
-        opacity: 1,
-        y: 0,
-        stagger: 0.02,
-        duration: 0.05,
-        ease: 'power3.out',
-      }, 0.89)
-
-      // Hold in focus at bottom of hero pin
-      .to({}, { duration: 0.05 }, 0.95);
+      // Hold on pure black before passing to works
+      .to({}, { duration: 0.06 }, 0.94);
   }
 }
 
 function startHeroReveal() {
   if (heroEntranceTL) {
+    heroEntranceTL.eventCallback('onComplete', () => {
+      if (typeof ScrollTrigger !== 'undefined') {
+        ScrollTrigger.refresh();
+      }
+    });
     heroEntranceTL.play();
   } else {
     gsap.set(['#nav', '#portfolio-word', '#character-wrapper', '#scroll-hint'], {
       opacity: 1, y: 0, scale: 1
     });
+    if (typeof ScrollTrigger !== 'undefined') {
+      ScrollTrigger.refresh();
+    }
   }
   initNav();
 }
 
-// Prepare Hero upfront immediately
 initCinematicHero();
 
 /* Preloader Execution */
@@ -639,20 +637,20 @@ function initNav() {
 }
 
 /* ================================================
-   TABLE OF CONTENTS — animations
+   TABLE OF CONTENTS — animations (Original Iconic Effect)
 ================================================ */
 if (q('#works') && typeof ScrollTrigger !== 'undefined') {
   ScrollTrigger.create({
     trigger: '#works',
-    start: 'top 70%',
+    start: 'top 75%',
     onEnter: () => {
       const box = q('#toc-box');
       if (box) {
         const handles = box.querySelectorAll('.h');
-        gsap.from(handles, {
-          scale: 0, opacity: 0, stagger: 0.03,
-          duration: 0.4, ease: 'back.out(2)',
-        });
+        gsap.fromTo(handles, 
+          { scale: 0, opacity: 0 },
+          { scale: 1, opacity: 1, stagger: 0.03, duration: 0.45, ease: 'back.out(2)', overwrite: 'auto' }
+        );
       }
 
       const titleEl = q('#toc-title');
@@ -664,20 +662,16 @@ if (q('#works') && typeof ScrollTrigger !== 'undefined') {
         }
         gsap.fromTo(chars,
           { opacity: 0, y: 50, rotateX: -70, transformOrigin: '50% 100%' },
-          { opacity: 1, y: 0, rotateX: 0, color: '#ffffff', stagger: 0.025, duration: 0.45, ease: 'power4.out' }
+          { opacity: 1, y: 0, rotateX: 0, color: '#ffffff', stagger: 0.025, duration: 0.45, ease: 'power4.out', overwrite: 'auto' }
         );
       }
 
-      gsap.from(qa('.toc-item'), {
-        opacity: 0, y: 60, rotateY: -30,
-        transformOrigin: 'left center',
-        stagger: 0.03,
-        duration: 0.45,
-        ease: 'power4.out',
-        delay: 0.3,
-      });
+      gsap.fromTo(qa('.toc-item'), 
+        { opacity: 0, y: 60, rotateY: -30, transformOrigin: 'left center' },
+        { opacity: 1, y: 0, rotateY: 0, stagger: 0.035, duration: 0.5, ease: 'power4.out', delay: 0.25, overwrite: 'auto' }
+      );
     },
-    once: true,
+    once: false,
   });
 }
 
