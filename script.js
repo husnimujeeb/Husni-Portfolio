@@ -71,7 +71,7 @@ if (lenis) {
    CINEMATIC 3-STAGE HERO — TREE WIND SWAY & FIREFLIES
 ================================================ */
 
-/* ── 1. Realistic Pine Tree Wind Sway Canvas (Dark & Day) ── */
+/* ── 1. Realistic 3D Pine Tree Wind Sway Canvas ── */
 function initTreesWind() {
   const canvas = q('#trees-canvas');
   if (!canvas) return;
@@ -81,14 +81,8 @@ function initTreesWind() {
   const darkImg = new Image();
   let darkLoaded = false;
   darkImg.onload = () => { darkLoaded = true; };
-  darkImg.src = 'assets/hero-trees.png';
+  darkImg.src = 'assets/hero-trees.png?v=7.0';
   if (darkImg.complete) darkLoaded = true;
-
-  const dayImg = new Image();
-  let dayLoaded = false;
-  dayImg.onload = () => { dayLoaded = true; };
-  dayImg.src = 'assets/hero-trees-day.png?v=6.0';
-  if (dayImg.complete) dayLoaded = true;
 
   let width = 0, height = 0;
   function resize() {
@@ -103,20 +97,14 @@ function initTreesWind() {
 
   function renderWind() {
     requestAnimationFrame(renderWind);
-    if (!width || !height) return;
-
-    const isLight = document.documentElement.getAttribute('data-theme') === 'light';
-    const activeImg = isLight ? dayImg : darkImg;
-    const isLoaded  = isLight ? dayLoaded : darkLoaded;
-
-    if (!isLoaded) return;
+    if (!width || !height || !darkLoaded) return;
 
     ctx.clearRect(0, 0, width, height);
     time += 0.016;
 
     // Draw tree canopy in vertical slices with organic horizontal sway
     const sliceWidth = width / sliceCount;
-    const imgSliceWidth = activeImg.naturalWidth / sliceCount;
+    const imgSliceWidth = darkImg.naturalWidth / sliceCount;
 
     for (let i = 0; i < sliceCount; i++) {
       const xNorm = i / sliceCount;
@@ -128,20 +116,20 @@ function initTreesWind() {
       const sx = i * imgSliceWidth;
       const sy = 0;
       const sWidth = imgSliceWidth;
-      const sHeight = activeImg.naturalHeight;
+      const sHeight = darkImg.naturalHeight;
 
       const dx = i * sliceWidth + totalSway;
       const dy = 0;
       const dWidth = sliceWidth + 0.5; // avoid seams
       const dHeight = height;
 
-      ctx.drawImage(activeImg, sx, sy, sWidth, sHeight, dx, dy, dWidth, dHeight);
+      ctx.drawImage(darkImg, sx, sy, sWidth, sHeight, dx, dy, dWidth, dHeight);
     }
   }
   renderWind();
 }
 
-/* ── 2. Dual-Mode Particle Field: Fireflies (Dark) & Butterflies (Light) ── */
+/* ── 2. Atmospheric 3D Warm Orange Fireflies ── */
 function initFireflies() {
   const canvas = q('#fireflies-canvas');
   if (!canvas) return;
@@ -156,16 +144,15 @@ function initFireflies() {
   resize();
   window.addEventListener('resize', resize);
 
-  // 1. Dark Mode Firefly Particles
-  const fireflyCount = 26;
+  const fireflyCount = 28;
   const fireflies = [];
   for (let i = 0; i < fireflyCount; i++) {
     fireflies.push({
       x: Math.random() * (window.innerWidth || 1200),
       y: Math.random() * (window.innerHeight || 800),
       z: 0.4 + Math.random() * 1.2,
-      vx: (Math.random() - 0.5) * 0.4,
-      vy: (Math.random() - 0.5) * 0.35,
+      vx: (Math.random() - 0.5) * 0.35,
+      vy: (Math.random() - 0.5) * 0.3,
       radius: 1.2 + Math.random() * 2.0,
       phase: Math.random() * Math.PI * 2,
       pulseSpeed: 1.2 + Math.random() * 1.8,
@@ -173,38 +160,6 @@ function initFireflies() {
       wanderTimer: Math.random() * 100,
     });
   }
-
-  // 2. Light Mode Fluttering Butterflies
-  const butterflyCount = 22;
-  const butterflies = [];
-  const butterflyPalettes = [
-    { wing1: '#E8431A', wing2: '#FF7A00', body: '#1e293b' }, // Monarch Orange
-    { wing1: '#0EA5E9', wing2: '#38BDF8', body: '#0f172a' }, // Azure Blue
-    { wing1: '#FBBF24', wing2: '#FEF08A', body: '#334155' }, // Amber / Lemon
-    { wing1: '#F43F5E', wing2: '#FB7185', body: '#1e293b' }, // Rose Pink
-  ];
-
-  for (let i = 0; i < butterflyCount; i++) {
-    const pal = butterflyPalettes[i % butterflyPalettes.length];
-    butterflies.push({
-      x: Math.random() * (window.innerWidth || 1200),
-      y: Math.random() * (window.innerHeight || 800),
-      z: 0.5 + Math.random() * 0.8,
-      vx: (Math.random() - 0.5) * 0.5 + 0.1,
-      vy: (Math.random() - 0.5) * 0.35 - 0.08,
-      size: 5.0 + Math.random() * 4.5,
-      flapPhase: Math.random() * Math.PI * 2,
-      flapSpeed: 14.0 + Math.random() * 8.0,
-      wanderTimer: Math.random() * 100,
-      pal: pal,
-    });
-  }
-
-  let mouseX = 0, mouseY = 0;
-  document.addEventListener('mousemove', e => {
-    mouseX = (e.clientX - window.innerWidth / 2) * 0.03;
-    mouseY = (e.clientY - window.innerHeight / 2) * 0.03;
-  });
 
   let lastTime = performance.now();
 
@@ -216,104 +171,43 @@ function initFireflies() {
     if (!width || !height) return;
     ctx.clearRect(0, 0, width, height);
 
-    const isLight = document.documentElement.getAttribute('data-theme') === 'light';
+    fireflies.forEach(f => {
+      f.wanderTimer += dt;
+      f.vx += Math.sin(f.wanderTimer * 1.5 + f.phase) * 0.035;
+      f.vy += Math.cos(f.wanderTimer * 1.2 + f.phase) * 0.025;
+      f.vx *= 0.985;
+      f.vy *= 0.985;
 
-    if (!isLight) {
-      // ── DARK MODE: Bioluminescent Fireflies ──
-      fireflies.forEach(f => {
-        f.wanderTimer += dt;
-        f.vx += Math.sin(f.wanderTimer * 1.5 + f.phase) * 0.04;
-        f.vy += Math.cos(f.wanderTimer * 1.2 + f.phase) * 0.03;
-        f.vx *= 0.98;
-        f.vy *= 0.98;
+      f.x += f.vx * f.z;
+      f.y += f.vy * f.z;
 
-        f.x += f.vx * f.z;
-        f.y += f.vy * f.z;
+      if (f.x < -40) f.x = width + 40;
+      if (f.x > width + 40) f.x = -40;
+      if (f.y < -40) f.y = height + 40;
+      if (f.y > height + 40) f.y = -40;
 
-        if (f.x < -40) f.x = width + 40;
-        if (f.x > width + 40) f.x = -40;
-        if (f.y < -40) f.y = height + 40;
-        if (f.y > height + 40) f.y = -40;
+      const pulse = Math.pow(Math.sin(now * 0.001 * f.pulseSpeed + f.phase), 2);
+      const alpha = f.baseAlpha * (0.35 + 0.65 * pulse);
 
-        const pulse = Math.pow(Math.sin(now * 0.001 * f.pulseSpeed + f.phase), 2);
-        const alpha = f.baseAlpha * (0.35 + 0.65 * pulse);
+      const renderX = f.x;
+      const renderY = f.y;
+      const r = f.radius * f.z;
 
-        const renderX = f.x + mouseX * f.z;
-        const renderY = f.y + mouseY * f.z;
-        const r = f.radius * f.z;
+      const grad = ctx.createRadialGradient(renderX, renderY, 0, renderX, renderY, r * 5.5);
+      grad.addColorStop(0, `rgba(255, 140, 60, ${alpha})`);
+      grad.addColorStop(0.3, `rgba(232, 67, 26, ${alpha * 0.7})`);
+      grad.addColorStop(1, 'rgba(232, 67, 26, 0)');
 
-        const grad = ctx.createRadialGradient(renderX, renderY, 0, renderX, renderY, r * 5.5);
-        grad.addColorStop(0, `rgba(255, 140, 60, ${alpha})`);
-        grad.addColorStop(0.3, `rgba(232, 67, 26, ${alpha * 0.7})`);
-        grad.addColorStop(1, 'rgba(232, 67, 26, 0)');
+      ctx.fillStyle = grad;
+      ctx.beginPath();
+      ctx.arc(renderX, renderY, r * 5.5, 0, Math.PI * 2);
+      ctx.fill();
 
-        ctx.fillStyle = grad;
-        ctx.beginPath();
-        ctx.arc(renderX, renderY, r * 5.5, 0, Math.PI * 2);
-        ctx.fill();
-
-        ctx.fillStyle = `rgba(255, 220, 180, ${alpha * 0.95})`;
-        ctx.beginPath();
-        ctx.arc(renderX, renderY, r * 0.9, 0, Math.PI * 2);
-        ctx.fill();
-      });
-    } else {
-      // ── LIGHT MODE: Fluttering Butterflies ──
-      butterflies.forEach(b => {
-        b.wanderTimer += dt;
-        b.flapPhase += dt * b.flapSpeed;
-
-        const flapCos = Math.cos(b.flapPhase);
-        b.vx += Math.sin(b.wanderTimer * 1.8) * 0.05;
-        b.vy += (Math.cos(b.wanderTimer * 1.4) * 0.04) + (flapCos * -0.015);
-        b.vx *= 0.985;
-        b.vy *= 0.985;
-
-        b.x += b.vx * b.z * 1.2;
-        b.y += b.vy * b.z * 1.2;
-
-        if (b.x < -50) b.x = width + 50;
-        if (b.x > width + 50) b.x = -50;
-        if (b.y < -50) b.y = height + 50;
-        if (b.y > height + 50) b.y = -50;
-
-        const renderX = b.x + mouseX * b.z * 0.6;
-        const renderY = b.y + mouseY * b.z * 0.6;
-        const baseSz  = b.size * b.z;
-        const wingScale = Math.abs(flapCos);
-
-        ctx.save();
-        ctx.translate(renderX, renderY);
-
-        const angle = Math.atan2(b.vy, b.vx) + (flapCos * 0.15);
-        ctx.rotate(angle);
-
-        const wingW = baseSz * Math.max(0.12, wingScale);
-        const wingH = baseSz * 1.15;
-
-        // Top Wings
-        ctx.fillStyle = b.pal.wing1;
-        ctx.beginPath();
-        ctx.ellipse(-wingW * 0.6, -wingH * 0.45, Math.max(0.5, wingW * 0.65), wingH * 0.55, -0.3, 0, Math.PI * 2);
-        ctx.ellipse(wingW * 0.6, -wingH * 0.45, Math.max(0.5, wingW * 0.65), wingH * 0.55, 0.3, 0, Math.PI * 2);
-        ctx.fill();
-
-        // Bottom Wings
-        ctx.fillStyle = b.pal.wing2;
-        ctx.beginPath();
-        ctx.ellipse(-wingW * 0.45, wingH * 0.25, Math.max(0.5, wingW * 0.45), wingH * 0.45, 0.2, 0, Math.PI * 2);
-        ctx.ellipse(wingW * 0.45, wingH * 0.25, Math.max(0.5, wingW * 0.45), wingH * 0.45, -0.2, 0, Math.PI * 2);
-        ctx.fill();
-
-        // Slender Butterfly Body
-        ctx.fillStyle = b.pal.body;
-        ctx.beginPath();
-        ctx.ellipse(0, 0, Math.max(0.8, baseSz * 0.16), baseSz * 0.85, 0, 0, Math.PI * 2);
-        ctx.fill();
-
-        ctx.restore();
-      });
-    }
+      ctx.fillStyle = `rgba(255, 220, 180, ${alpha * 0.95})`;
+      ctx.beginPath();
+      ctx.arc(renderX, renderY, r * 0.9, 0, Math.PI * 2);
+      ctx.fill();
+    });
   }
   requestAnimationFrame(animateParticles);
 }
@@ -375,14 +269,10 @@ function initCinematicHero() {
   const stage3Content  = q('#layer-stage3-content');
   const scrollHint     = q('#scroll-hint');
   const nav            = q('#nav');
-
-  const heroTag        = q('#hero-tag');
-  const heroTitle      = q('#hero-title');
-  const heroBio        = q('#hero-bio');
-  const heroActions    = q('#hero-actions');
-  const heroSkills     = q('#hero-skills');
-  const heroStats      = q('#hero-stats');
-  const heroDna        = q('#hero-dna');
+  const blackout       = q('#hero-blackout');
+  const chBadge        = q('#ch-badge');
+  const chMainTitle    = q('#ch-main-title');
+  const chItems        = qa('.ch-item');
 
   // Initial State Setup (Stage 1)
   if (portfolioWord) gsap.set(portfolioWord, { opacity: 0, y: 30, scale: 0.98 });
@@ -391,10 +281,10 @@ function initCinematicHero() {
   if (nav)           gsap.set(nav, { opacity: 0 });
 
   if (stage3Content) gsap.set(stage3Content, { opacity: 0, pointerEvents: 'none' });
-  const leftElements  = [heroTag, heroTitle, heroBio, heroActions, heroSkills].filter(Boolean);
-  const rightElements = [heroStats, heroDna].filter(Boolean);
-  if (leftElements.length)  gsap.set(leftElements, { opacity: 0, x: -40 });
-  if (rightElements.length) gsap.set(rightElements, { opacity: 0, x: 40 });
+  if (blackout)      gsap.set(blackout, { opacity: 0, pointerEvents: 'none' });
+  if (chBadge)       gsap.set(chBadge, { opacity: 0, y: 20 });
+  if (chMainTitle)   gsap.set(chMainTitle, { opacity: 0, y: 30 });
+  if (chItems.length) gsap.set(chItems, { opacity: 0, y: 25 });
 
   // Stage 1 Entrance Timeline (plays when preloader lifts)
   heroEntranceTL = gsap.timeline({ paused: true, defaults: { ease: 'power3.out' } });
@@ -404,13 +294,8 @@ function initCinematicHero() {
     .to(charWrapper,   { opacity: 1, y: 0, scale: 1, duration: 1.2 }, 0.2)
     .to([nav, scrollHint], { opacity: 1, duration: 0.8 }, 0.6);
 
-  // Multi-Stage ScrollTrigger Parallax
+  // Multi-Stage Cinematic ScrollTrigger Parallax
   if (typeof ScrollTrigger !== 'undefined' && scrollTrack && stage) {
-    const isMobile    = window.innerWidth <= 767;
-    const isTablet    = window.innerWidth <= 900 && !isMobile;
-    const targetScale = isMobile ? 0.42 : isTablet ? 0.52 : 0.58;
-    const targetY     = isMobile ? 8    : isTablet ? 16   : 12;
-
     const scrollTL = gsap.timeline({
       scrollTrigger: {
         trigger: scrollTrack,
@@ -422,111 +307,127 @@ function initCinematicHero() {
       }
     });
 
-    // ── STAGE 1 -> STAGE 2 (0% to 50% scroll) ──
+    // ── PHASE 1: Character slowly shrinks and completely disappears (0.00 to 0.22) ──
     scrollTL
-      // "PORTFOLIO" stays fully visible at first, then moves down and fades (starts at 15% scroll)
       .fromTo(portfolioWord, {
         yPercent: 0,
         opacity: 0.88,
         scale: 1,
       }, {
-        yPercent: 50,
+        yPercent: 45,
         opacity: 0,
         scale: 0.9,
-        ease: 'power1.inOut',
-      }, 0.15)
-      // Character scales down smoothly
-      .to(charWrapper, {
-        scale: 0.76,
-        yPercent: 6,
+        duration: 0.16,
         ease: 'power1.inOut',
       }, 0)
-      // Sky deep parallax
-      .to(sky, {
-        yPercent: -10,
-        scale: 1.03,
-        ease: 'none',
-      }, 0)
-      // Trees midground shift
-      .to(trees, {
-        yPercent: 6,
-        ease: 'none',
-      }, 0)
-      // Scroll hint fades out immediately
       .to(scrollHint, {
         opacity: 0,
-        duration: 0.2,
+        duration: 0.06,
+        ease: 'power1.out',
+      }, 0)
+      .to(charWrapper, {
+        scale: 0.44,
+        opacity: 0,
+        yPercent: 12,
+        duration: 0.20,
+        ease: 'power1.inOut',
       }, 0)
 
-      // ── STAGE 2 -> STAGE 3 (50% to 90% scroll) ──
-      .to(charWrapper, {
-        scale: targetScale,
-        yPercent: targetY,
+      // ── PHASE 2: Details appear after character disappears (0.24 to 0.46) ──
+      .fromTo(stage3Content, {
+        opacity: 0,
+        y: 35,
+        scale: 0.96,
+      }, {
+        opacity: 1,
+        y: 0,
+        scale: 1,
+        pointerEvents: 'auto',
+        duration: 0.16,
         ease: 'power2.out',
-      }, 0.5)
+      }, 0.24)
+
+      // Hold details in view so user can comfortably read and interact (0.40 to 0.48)
+      .to({}, { duration: 0.08 }, 0.40)
+
+      // ── PHASE 3: Details disappear when scrolling again (0.48 to 0.58) ──
       .to(stage3Content, {
+        opacity: 0,
+        y: -35,
+        scale: 0.96,
+        pointerEvents: 'none',
+        duration: 0.10,
+        ease: 'power2.in',
+      }, 0.48)
+
+      // ── PHASE 4: Forward zoom into the 3D realistic forest / trees (0.58 to 0.84) ──
+      // Realistic pine trees expand dramatically as camera plunges into the canopy
+      .to(trees, {
+        scale: 3.5,
+        yPercent: 24,
+        transformOrigin: '50% 80%',
+        duration: 0.26,
+        ease: 'power1.inOut',
+      }, 0.58)
+      // Sky deep celestial forward zoom
+      .to(sky, {
+        scale: 1.5,
+        yPercent: -12,
+        transformOrigin: '50% 50%',
+        duration: 0.26,
+        ease: 'power1.inOut',
+      }, 0.58)
+      // Fireflies rush past camera and fade
+      .to(q('#fireflies-canvas'), {
+        scale: 2.2,
+        opacity: 0,
+        duration: 0.20,
+        ease: 'power1.inOut',
+      }, 0.58)
+
+      // ── PHASE 5: Fade to fully dark / pitch black (0.78 to 0.88) ──
+      .fromTo(blackout, {
+        opacity: 0,
+        pointerEvents: 'none',
+      }, {
         opacity: 1,
         pointerEvents: 'auto',
-        ease: 'power2.out',
-      }, 0.5)
-      .to(leftElements, {
+        duration: 0.10,
+        ease: 'power2.inOut',
+      }, 0.78)
+
+      // ── PHASE 6: Headings appear one by one in premium cinematic style (0.86 to 1.00) ──
+      .fromTo(chBadge, {
+        opacity: 0,
+        y: 20,
+      }, {
         opacity: 1,
-        x: 0,
-        stagger: 0.04,
-        ease: 'power2.out',
-      }, 0.55)
-      .to(rightElements, {
+        y: 0,
+        duration: 0.03,
+        ease: 'back.out(1.8)',
+      }, 0.86)
+      .fromTo(chMainTitle, {
+        opacity: 0,
+        y: 30,
+      }, {
         opacity: 1,
-        x: 0,
-        stagger: 0.06,
-        ease: 'power2.out',
-      }, 0.55)
+        y: 0,
+        duration: 0.04,
+        ease: 'power3.out',
+      }, 0.87)
+      .fromTo(chItems, {
+        opacity: 0,
+        y: 25,
+      }, {
+        opacity: 1,
+        y: 0,
+        stagger: 0.02,
+        duration: 0.05,
+        ease: 'power3.out',
+      }, 0.89)
 
-      // Hold Stage 3 in focus before passing to works
-      .to({}, { duration: 0.1 }, 0.9);
-
-  }
-
-  // Interactive mouse subtle 3D tilt
-  if (!window.matchMedia('(hover: none)').matches && stage) {
-    stage.addEventListener('mousemove', e => {
-      const cx = window.innerWidth / 2;
-      const cy = window.innerHeight / 2;
-      const dx = (e.clientX - cx) / cx;
-      const dy = (e.clientY - cy) / cy;
-
-      if (charWrapper) {
-        gsap.to(charWrapper, {
-          rotateY: dx * 3.5,
-          rotateX: dy * -3.0,
-          transformPerspective: 1000,
-          duration: 0.8,
-          ease: 'power2.out',
-        });
-      }
-      if (portfolioWord) {
-        gsap.to(portfolioWord, {
-          x: dx * -15,
-          y: dy * -8,
-          duration: 1.0,
-          ease: 'power2.out',
-        });
-      }
-      if (sky) {
-        gsap.to(sky, {
-          x: dx * -8,
-          y: dy * -5,
-          duration: 1.2,
-          ease: 'power2.out',
-        });
-      }
-    });
-
-    stage.addEventListener('mouseleave', () => {
-      if (charWrapper) gsap.to(charWrapper, { rotateX: 0, rotateY: 0, duration: 1.0, ease: 'elastic.out(1, 0.4)' });
-      if (portfolioWord) gsap.to(portfolioWord, { x: 0, y: 0, duration: 1.0, ease: 'power2.out' });
-      if (sky) gsap.to(sky, { x: 0, y: 0, duration: 1.0, ease: 'power2.out' });
-    });
+      // Hold in focus at bottom of hero pin
+      .to({}, { duration: 0.05 }, 0.95);
   }
 }
 
@@ -614,40 +515,6 @@ initCinematicHero();
     }
   }, 4000);
 })();
-
-/* ================================================
-   THEME TOGGLE (DARK / LIGHT MODE)
-================================================ */
-function getHeadingRestColor() {
-  return document.documentElement.getAttribute('data-theme') === 'light' ? '#0f172a' : '#ffffff';
-}
-
-function updateAllHeadingColors() {
-  const c = getHeadingRestColor();
-  qa('.big-title .char').forEach(char => {
-    gsap.to(char, { color: c, textShadow: 'none', duration: 0.25, overwrite: 'auto' });
-  });
-}
-
-function initThemeToggle() {
-  const toggleBtn = q('#theme-toggle');
-  if (!toggleBtn) return;
-
-  function applyTheme(theme, save = true) {
-    document.documentElement.setAttribute('data-theme', theme);
-    if (save) {
-      localStorage.setItem('portfolio-theme', theme);
-    }
-  }
-
-  toggleBtn.addEventListener('click', () => {
-    const current = document.documentElement.getAttribute('data-theme') || 'dark';
-    const next = current === 'light' ? 'dark' : 'light';
-    applyTheme(next, true);
-    updateAllHeadingColors();
-  });
-}
-initThemeToggle();
 
 /* ================================================
    NAV — active state tracker & mobile menu
@@ -797,7 +664,7 @@ if (q('#works') && typeof ScrollTrigger !== 'undefined') {
         }
         gsap.fromTo(chars,
           { opacity: 0, y: 50, rotateX: -70, transformOrigin: '50% 100%' },
-          { opacity: 1, y: 0, rotateX: 0, color: getHeadingRestColor(), stagger: 0.025, duration: 0.45, ease: 'power4.out' }
+          { opacity: 1, y: 0, rotateX: 0, color: '#ffffff', stagger: 0.025, duration: 0.45, ease: 'power4.out' }
         );
       }
 
@@ -858,7 +725,7 @@ qa('.sec-intro').forEach(intro => {
         if (chars.length) {
           tl.to(chars, {
             opacity: 1, y: 0, rotateX: 0,
-            color: getHeadingRestColor(),
+            color: '#ffffff',
             stagger: 0.03,
             duration: 0.42,
             ease: 'power4.out',
@@ -942,7 +809,7 @@ function initHeadingHoverEffects() {
             y: 0,
             scale: 1,
             rotate: 0,
-            color: getHeadingRestColor(),
+            color: '#ffffff',
             textShadow: 'none',
             duration: 0.35,
             ease: 'power2.out',
@@ -981,7 +848,7 @@ function initHeadingHoverEffects() {
           y: 0,
           scale: 1,
           rotate: 0,
-          color: getHeadingRestColor(),
+          color: '#ffffff',
           textShadow: 'none',
           duration: 0.5,
           ease: 'elastic.out(1, 0.35)',

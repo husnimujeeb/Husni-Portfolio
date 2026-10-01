@@ -8,17 +8,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Caveat:wght@600;700&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
-  <script>
-    (function() {
-      const t = localStorage.getItem('portfolio-theme');
-      if (t === 'light') {
-        document.documentElement.setAttribute('data-theme', 'light');
-      } else {
-        document.documentElement.setAttribute('data-theme', 'dark');
-      }
-    })();
-  </script>
-  <link rel="stylesheet" href="style.css?v=6.0" />
+  <link rel="stylesheet" href="style.css?v=7.0" />
 </head>
 <body>
 
@@ -61,10 +51,6 @@
     <a href="#contact"     id="nav-contact"     class="nav-link"        data-nav="contact">Contact me</a>
   </div>
   <div class="nav-actions">
-    <button id="theme-toggle" class="theme-toggle-btn" aria-label="Toggle light and dark mode" title="Toggle Light/Dark Theme">
-      <span class="theme-icon icon-moon" aria-hidden="true">🌙</span>
-      <span class="theme-icon icon-sun" aria-hidden="true">☀️</span>
-    </button>
     <button id="nav-toggle" class="nav-toggle" aria-label="Toggle menu" aria-expanded="false">
       <span class="bar"></span>
       <span class="bar"></span>
@@ -81,10 +67,9 @@
   <div class="hero-scroll-track" id="hero-scroll-track">
     <div class="cinematic-stage" id="cinematic-stage">
       
-      <!-- Layer 1: Sky Background (Night & Day) -->
+      <!-- Layer 1: Sky Background -->
       <div class="cinematic-layer layer-sky" id="layer-sky">
-        <img src="assets/hero-sky.jpg?v=6.0" alt="Night sky" class="sky-bg-img sky-dark" id="sky-dark" />
-        <img src="assets/hero-sky-day.jpg?v=6.0" alt="Day sky" class="sky-bg-img sky-day" id="sky-day" />
+        <img src="assets/hero-sky.jpg?v=7.0" alt="Night sky" class="sky-bg-img" id="hero-sky" />
       </div>
 
       <!-- Layer 2: 3D PORTFOLIO Typography (behind character) -->
@@ -102,15 +87,14 @@
         <canvas id="fireflies-canvas" class="fireflies-canvas"></canvas>
       </div>
 
-      <!-- Layer 5: Foreground Character on Mossy Rock with Laptop & Globe (Dark & Day) -->
+      <!-- Layer 5: Foreground Character on Mossy Rock with Laptop & Globe -->
       <div class="cinematic-layer layer-character" id="layer-character">
         <div class="character-wrapper" id="character-wrapper">
-          <img src="assets/hero-subject.png?v=6.0" alt="Husni Mujeeb — Art Director" class="character-img char-dark" id="hero-character-dark" />
-          <img src="assets/hero-subject-day.png?v=6.0" alt="Husni Mujeeb — Art Director" class="character-img char-day" id="hero-character-day" />
+          <img src="assets/hero-subject.png?v=7.0" alt="Husni Mujeeb — Art Director" class="character-img" id="hero-character" />
         </div>
       </div>
 
-      <!-- Layer 6: Stage 3 Interactive Portfolio Interface (reveals upon scrolling) -->
+      <!-- Layer 6: Details Area (appears after character shrinks & disappears) -->
       <div class="cinematic-layer layer-stage3-content" id="layer-stage3-content">
         <div class="hero-stage-grid">
           
@@ -124,7 +108,7 @@
             </h1>
 
             <p class="hero-bio" id="hero-bio">
-              I craft powerful visual identities and digital experiences that help brands stand out and connect with their audience.
+              I craft powerful visual identities and digital experiences that help brands stand out and connect with their audience through graphic design, UI/UX, and creative direction.
             </p>
 
             <div class="hero-actions" id="hero-actions">
@@ -135,36 +119,7 @@
                 Download CV <span class="btn-icon">↓</span>
               </a>
             </div>
-
-            <!-- Skills & Expertise Glass Card -->
-            <div class="hero-skills-card panel" id="hero-skills">
-              <div class="panel-glow"></div>
-              <div class="skills-card-header">SKILLS & EXPERTISE</div>
-              <div class="skills-grid">
-                <div class="skill-item"><span class="sk-ico">🎨</span> Graphic Design</div>
-                <div class="skill-item"><span class="sk-ico">👁️</span> Visual Storytelling</div>
-                <div class="skill-item vibe-coding-item"><span class="sk-ico sk-code">&lt;/&gt;</span> Vibe Coding</div>
-
-                <div class="skill-item"><span class="sk-ico">💎</span> Brand Identity</div>
-                <div class="skill-item"><span class="sk-ico">✨</span> AI Content Creation</div>
-                <div class="skill-item"><span class="sk-ico sk-badge">C</span> Canva</div>
-
-                <div class="skill-item"><span class="sk-ico">🖥️</span> UI/UX Design</div>
-                <div class="skill-item"><span class="sk-ico">💬</span> Prompt Engineering</div>
-                <div class="skill-item"><span class="sk-ico sk-badge ps-badge">Ps</span> Adobe Photoshop</div>
-
-                <div class="skill-item"><span class="sk-ico">📷</span> Photography</div>
-                <div class="skill-item"><span class="sk-ico">📈</span> Digital Marketing</div>
-                <div class="skill-item"><span class="sk-ico sk-badge ai-badge">Ai</span> Adobe Illustrator</div>
-
-                <div class="skill-item"><span class="sk-ico">📹</span> Videography</div>
-                <div class="skill-item"><span class="sk-ico">✏️</span> Content Creation</div>
-              </div>
-            </div>
           </div>
-
-          <!-- CENTER DOCK SPACER -->
-          <div class="hero-col-center-dock" id="hero-dock-spacer"></div>
 
           <!-- RIGHT COLUMN -->
           <div class="hero-col-right">
@@ -196,6 +151,21 @@
             </div>
           </div>
 
+        </div>
+      </div>
+
+      <!-- Layer 7: Cinematic Forward Zoom Blackout & Sequential Headings Reveal -->
+      <div class="cinematic-layer layer-blackout" id="hero-blackout" aria-hidden="true">
+        <div class="cinematic-headings-showcase" id="cinematic-headings">
+          <div class="ch-badge" id="ch-badge">EXPLORE PORTFOLIO</div>
+          <h2 class="ch-main-title" id="ch-main-title">MY WORKS</h2>
+          <div class="ch-list" id="ch-list">
+            <a href="#branding"    class="ch-item" id="ch-item-1"><span class="ch-num">01</span><span class="ch-label">BRANDING</span><span class="ch-arrow">↗</span></a>
+            <a href="#social"      class="ch-item" id="ch-item-2"><span class="ch-num">02</span><span class="ch-label">SOCIAL MEDIA</span><span class="ch-arrow">↗</span></a>
+            <a href="#printing"    class="ch-item" id="ch-item-3"><span class="ch-num">03</span><span class="ch-label">DIGITAL PRINTING</span><span class="ch-arrow">↗</span></a>
+            <a href="#photography" class="ch-item" id="ch-item-4"><span class="ch-num">04</span><span class="ch-label">PHOTOGRAPHY</span><span class="ch-arrow">↗</span></a>
+            <a href="#contact"     class="ch-item" id="ch-item-5"><span class="ch-num">05</span><span class="ch-label">CONTACT ME</span><span class="ch-arrow">↗</span></a>
+          </div>
         </div>
       </div>
 
@@ -579,6 +549,6 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/@studio-freight/lenis@1.0.42/dist/lenis.min.js"></script>
-<script src="script.js?v=6.0"></script>
+<script src="script.js?v=7.0"></script>
 </body>
 </html>
