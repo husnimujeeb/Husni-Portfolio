@@ -213,30 +213,34 @@ function initFireflies() {
 }
 
 /* ================================================
-   CUSTOM CURSOR
+   CUSTOM 3D TRANSLUCENT GLASS CURSOR
 ================================================ */
 (function initCursor() {
-  const dot  = q('#c-dot');
-  const ring = q('#c-ring');
-  if (!dot || !ring || window.matchMedia('(hover: none)').matches) return;
+  const glass = q('#c-glass-cursor');
+  const ring  = q('#c-ring');
+  if (!glass || window.matchMedia('(hover: none)').matches) return;
 
-  let mx = 0, my = 0, rx = 0, ry = 0;
+  let mx = -100, my = -100, rx = -100, ry = -100;
 
   document.addEventListener('mousemove', e => {
-    mx = e.clientX; my = e.clientY;
-    gsap.to(dot, { x: mx, y: my, duration: 0.08, ease: 'none' });
+    mx = e.clientX;
+    my = e.clientY;
+    // Align glass arrow tip (hotspot: 1px from left, 0px from top) with mouse
+    gsap.to(glass, { x: mx - 1, y: my, duration: 0.04, ease: 'none' });
   });
 
-  /* Ring lerp loop */
+  /* Ring lerp loop (smooth trailing aura) */
   (function lerpRing() {
-    rx += (mx - rx) * 0.13;
-    ry += (my - ry) * 0.13;
-    gsap.set(ring, { x: rx, y: ry });
+    if (ring) {
+      rx += (mx - rx) * 0.13;
+      ry += (my - ry) * 0.13;
+      gsap.set(ring, { x: rx, y: ry });
+    }
     requestAnimationFrame(lerpRing);
   })();
 
   /* Hover states */
-  qa('a, button, .toc-item, .work-card, .photo-item, .social-card, .fb-card').forEach(el => {
+  qa('a, button, .toc-item, .work-card, .photo-item, .social-card, .fb-card, .magnetic-btn').forEach(el => {
     el.addEventListener('mouseenter', () => {
       document.body.classList.add('c-hover');
       if (el.tagName === 'A') document.body.classList.add('c-link');
@@ -246,9 +250,13 @@ function initFireflies() {
     });
   });
 
+  /* Physical Click Down feedback */
+  document.addEventListener('mousedown', () => document.body.classList.add('c-active'));
+  document.addEventListener('mouseup',   () => document.body.classList.remove('c-active'));
+
   /* Hide when out of window */
-  document.addEventListener('mouseleave', () => gsap.to([dot, ring], { opacity: 0 }));
-  document.addEventListener('mouseenter', () => gsap.to([dot, ring], { opacity: 1 }));
+  document.addEventListener('mouseleave', () => gsap.to([glass, ring], { opacity: 0, duration: 0.2 }));
+  document.addEventListener('mouseenter', () => gsap.to([glass, ring], { opacity: 1, duration: 0.2 }));
 })();
 
 /* ================================================

@@ -150,36 +150,74 @@ img { display: block; max-width: 100%; }
 #pre-num { color: var(--white); }
 
 /* ================================================
-   CUSTOM CURSOR
+   CUSTOM 3D TRANSLUCENT GLASS CURSOR
 ================================================ */
-#c-dot, #c-ring {
+#c-glass-cursor {
   position: fixed;
   top: 0; left: 0;
-  border-radius: 50%;
+  width: 32px;
+  height: 30px;
   pointer-events: none;
-  z-index: 9500;
-  transform: translate(-50%, -50%);
+  z-index: 9999;
+  transform: translate(-1px, 0);
   will-change: transform;
 }
-#c-dot {
-  width: 8px; height: 8px;
-  background: var(--acc);
-  box-shadow: 0 0 10px var(--acc);
-  z-index: 9501;
-  transition: width 0.25s, height 0.25s, background 0.2s;
+
+.c-glass-img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  filter: drop-shadow(0 6px 14px rgba(0, 0, 0, 0.85)) drop-shadow(0 0 8px rgba(139, 92, 246, 0.4));
+  transition: transform 0.22s var(--ease-out), filter 0.22s ease;
+  transform-origin: 2px 2px;
+  display: block;
 }
+
 #c-ring {
-  width: 38px; height: 38px;
-  border: 1.5px solid rgba(232,67,26,0.5);
+  position: fixed;
+  top: 0; left: 0;
+  width: 38px;
+  height: 38px;
+  border-radius: 50%;
+  border: 1px solid rgba(232, 67, 26, 0.35);
+  box-shadow: 0 0 16px rgba(139, 92, 246, 0.2);
+  pointer-events: none;
+  z-index: 9998;
+  transform: translate(-50%, -50%);
+  will-change: transform;
+  backdrop-filter: blur(1.5px);
+  -webkit-backdrop-filter: blur(1.5px);
   transition: width 0.35s var(--ease-out), height 0.35s var(--ease-out), border-color 0.3s, opacity 0.3s;
 }
-body.c-hover #c-dot  { width: 14px; height: 14px; }
-body.c-hover #c-ring { width: 56px; height: 56px; border-color: var(--acc); }
-body.c-link  #c-dot  { width: 6px; height: 6px; mix-blend-mode: difference; }
-body.c-link  #c-ring { width: 70px; height: 70px; border-color: rgba(255,255,255,0.4); }
 
-/* ================================================
-   NAVIGATION
+/* Hover on interactive elements */
+body.c-hover .c-glass-img {
+  transform: scale(1.18) rotate(-4deg);
+  filter: drop-shadow(0 8px 20px rgba(0, 0, 0, 0.95)) drop-shadow(0 0 14px rgba(232, 67, 26, 0.75));
+}
+body.c-hover #c-ring {
+  width: 52px;
+  height: 52px;
+  border-color: var(--acc);
+  box-shadow: 0 0 20px rgba(232, 67, 26, 0.45);
+}
+
+body.c-link .c-glass-img {
+  transform: scale(1.22) rotate(-6deg);
+  filter: drop-shadow(0 8px 22px rgba(0, 0, 0, 0.95)) drop-shadow(0 0 16px rgba(168, 85, 247, 0.85));
+}
+body.c-link #c-ring {
+  width: 62px;
+  height: 62px;
+  border-color: rgba(168, 85, 247, 0.6);
+  box-shadow: 0 0 24px rgba(168, 85, 247, 0.35);
+}
+
+/* Click Active State */
+body.c-active .c-glass-img {
+  transform: scale(0.92) rotate(-2deg);
+}
+
 /* ================================================
    NAVIGATION
 ================================================ */
@@ -1584,7 +1622,7 @@ body.c-link  #c-ring { width: 70px; height: 70px; border-color: rgba(255,255,255
 /* ── Hover-None Touch Devices (any resolution) ───── */
 @media (hover: none) {
   body { cursor: auto; }
-  #c-dot, #c-ring { display: none !important; }
+  #c-glass-cursor, #c-ring { display: none !important; }
 }
 
 /* ── Desktop & Tablet Medium (≤ 1150px) ────────── */
