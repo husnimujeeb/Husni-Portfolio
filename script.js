@@ -283,6 +283,26 @@ function initCinematicHero() {
   if (sky)           gsap.set(sky, { filter: 'brightness(1) blur(0px)', opacity: 1 });
   if (trees)         gsap.set(trees, { filter: 'brightness(1) blur(0px)', opacity: 1 });
 
+  // Rapid Counter Animation for Stats Card
+  let countersAnimated = false;
+  function animateStatCounters() {
+    const elClients = q('#stat-clients');
+    const elYears   = q('#stat-years');
+    if (!elClients || !elYears) return;
+
+    const obj = { clients: 0, years: 0 };
+    gsap.to(obj, {
+      clients: 100,
+      years: 4,
+      duration: 0.75,
+      ease: 'power2.out',
+      onUpdate: () => {
+        elClients.textContent = Math.round(obj.clients) + '+';
+        elYears.textContent   = Math.round(obj.years) + '+';
+      }
+    });
+  }
+
   // Stage 1 Entrance Timeline (plays when preloader lifts)
   heroEntranceTL = gsap.timeline({ paused: true, defaults: { ease: 'power3.out' } });
 
@@ -301,14 +321,23 @@ function initCinematicHero() {
         scrub: 0.8,
         pin: stage,
         anticipatePin: 1,
+        onUpdate: (self) => {
+          // Trigger counter roll-up when details are in view
+          if (self.progress >= 0.22 && self.progress <= 0.60 && !countersAnimated) {
+            countersAnimated = true;
+            animateStatCounters();
+          } else if (self.progress < 0.15 || self.progress > 0.68) {
+            countersAnimated = false;
+          }
+        }
       }
     });
 
-    // ── PHASE 1: Smooth gradual shrink & disappearance of photo & word (0.05 to 0.28) ──
+    // ── PHASE 1: Smooth gradual shrink & disappearance of photo & word (0.04 to 0.24) ──
     scrollTL
       .to(scrollHint, {
         opacity: 0,
-        duration: 0.05,
+        duration: 0.04,
         ease: 'power1.out',
       }, 0)
       .fromTo(portfolioWord, {
@@ -316,12 +345,12 @@ function initCinematicHero() {
         opacity: 0.88,
         scale: 1,
       }, {
-        yPercent: 35,
+        yPercent: 32,
         opacity: 0,
         scale: 0.92,
-        duration: 0.20,
+        duration: 0.18,
         ease: 'power1.out',
-      }, 0.05)
+      }, 0.04)
       // Character holds briefly at top, then slowly shrinks and smoothly fades out
       .fromTo(charWrapper, {
         opacity: 1,
@@ -330,14 +359,14 @@ function initCinematicHero() {
         autoAlpha: 1,
       }, {
         opacity: 0,
-        scale: 0.62,
+        scale: 0.64,
         yPercent: 8,
         autoAlpha: 0,
-        duration: 0.22,
+        duration: 0.20,
         ease: 'power1.out',
-      }, 0.06)
+      }, 0.04)
 
-      // ── PHASE 2: About Me details appear + Background Dims and Blurs (0.28 to 0.50) ──
+      // ── PHASE 2: About Me details appear + Background softly dimmed (0.24 to 0.58) ──
       // Highlight details in focus
       .fromTo(stage3Content, {
         opacity: 0,
@@ -348,77 +377,73 @@ function initCinematicHero() {
         y: 0,
         scale: 1,
         pointerEvents: 'auto',
-        duration: 0.14,
+        duration: 0.10,
         ease: 'power2.out',
-      }, 0.28)
-      // Decrease brightness of background and add subtle blur (spotlighting details)
+      }, 0.24)
+      // Background brightness slightly dimmed (0.48 - bright enough to see sky & trees, but softly blurred)
       .to([sky, trees], {
-        filter: 'brightness(0.24) blur(6px)',
-        duration: 0.14,
+        filter: 'brightness(0.48) blur(3.5px)',
+        duration: 0.10,
         ease: 'power2.out',
-      }, 0.28)
+      }, 0.24)
 
-      // Hold details in spotlight so user can comfortably read bio and view stats (0.42 to 0.50)
-      .to({}, { duration: 0.08 }, 0.42)
+      // ── EXTENDED HOLD: Details comfortably held for 2+ scrolls (0.34 to 0.58) ──
+      .to({}, { duration: 0.24 }, 0.34)
 
-      // ── PHASE 3: Details disappear + Background unblurs and brightens (0.50 to 0.60) ──
+      // ── PHASE 3: Details slowly & gently disappear (0.58 to 0.70) ──
       .to(stage3Content, {
         opacity: 0,
-        y: -30,
-        scale: 0.96,
+        y: -22,
+        scale: 0.98,
         pointerEvents: 'none',
-        duration: 0.10,
-        ease: 'power2.in',
-      }, 0.50)
+        duration: 0.12,
+        ease: 'power1.out',
+      }, 0.58)
       // Restore background brightness and crystal sharpness for the 3D zoom
       .to([sky, trees], {
         filter: 'brightness(1) blur(0px)',
         duration: 0.10,
-        ease: 'power2.inOut',
-      }, 0.50)
+        ease: 'power1.inOut',
+      }, 0.60)
 
-      // ── PHASE 4: Forward zoom into the realistic 3D forest / trees (0.60 to 0.84) ──
-      // Dynamic realistic tree scale-up and camera plunge
+      // ── PHASE 4: Forward zoom into the realistic 3D forest / trees (0.70 to 0.88) ──
       .to(trees, {
         scale: 3.5,
         yPercent: 24,
         transformOrigin: '50% 80%',
-        duration: 0.24,
+        duration: 0.18,
         ease: 'power1.inOut',
-      }, 0.60)
-      // Sky celestial forward zoom
+      }, 0.70)
       .to(sky, {
         scale: 1.5,
         yPercent: -12,
         transformOrigin: '50% 50%',
-        duration: 0.24,
+        duration: 0.18,
         ease: 'power1.inOut',
-      }, 0.60)
-      // Fireflies rush past camera and fade
+      }, 0.70)
       .to(firefliesCanvas, {
         scale: 2.2,
         opacity: 0,
-        duration: 0.18,
+        duration: 0.14,
         ease: 'power1.inOut',
-      }, 0.60)
+      }, 0.70)
 
-      // ── PHASE 5: Fade to fully dark / pitch black with ZERO tree glitches (0.80 to 0.94) ──
+      // ── PHASE 5: Fade to fully dark / pitch black (0.86 to 0.96) ──
       .fromTo(blackout, {
         opacity: 0,
       }, {
         opacity: 1,
-        duration: 0.12,
+        duration: 0.10,
         ease: 'power2.inOut',
-      }, 0.80)
-      // Crucial: also fade trees, sky, fireflies to opacity 0 so no glitch/bleed occurs!
+      }, 0.86)
       .to([trees, sky, firefliesCanvas], {
         opacity: 0,
         duration: 0.08,
         ease: 'power2.inOut',
-      }, 0.84)
+      }, 0.88)
 
-      // Hold on pure black before passing to works
-      .to({}, { duration: 0.06 }, 0.94);
+      // Hold on pure black before passing into works
+      .to({}, { duration: 0.04 }, 0.96);
   }
 }
 
