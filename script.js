@@ -212,58 +212,7 @@ function initFireflies() {
   requestAnimationFrame(animateParticles);
 }
 
-/* ================================================
-   3D TRANSLUCENT GLASS CURSOR — AURA RING ENGINE
-================================================ */
-(function initCursor() {
-  const ring = q('#c-ring');
-  if (!ring) return;
 
-  let mx = -200, my = -200, rx = -200, ry = -200;
-  let hasMoved = false;
-
-  document.addEventListener('mousemove', e => {
-    mx = e.clientX;
-    my = e.clientY;
-    if (!hasMoved) {
-      hasMoved = true;
-      rx = mx;
-      ry = my;
-      gsap.set(ring, { x: rx, y: ry, opacity: 1 });
-    }
-  });
-
-  /* Ring lerp loop (smooth trailing glass aura) */
-  (function lerpRing() {
-    if (hasMoved && ring) {
-      rx += (mx - rx) * 0.16;
-      ry += (my - ry) * 0.16;
-      gsap.set(ring, { x: rx, y: ry });
-    }
-    requestAnimationFrame(lerpRing);
-  })();
-
-  /* Hover states for interactive elements */
-  qa('a, button, [role="button"], .toc-item, .work-card, .photo-item, .social-card, .fb-card, .magnetic-btn, .handles-box, .pill').forEach(el => {
-    el.addEventListener('mouseenter', () => {
-      document.body.classList.add('c-hover');
-      if (el.tagName === 'A' || el.closest('a')) document.body.classList.add('c-link');
-    });
-    el.addEventListener('mouseleave', () => {
-      document.body.classList.remove('c-hover', 'c-link');
-    });
-  });
-
-  /* Physical Click Down feedback */
-  document.addEventListener('mousedown', () => document.body.classList.add('c-active'));
-  document.addEventListener('mouseup',   () => document.body.classList.remove('c-active'));
-
-  /* Hide when mouse leaves window */
-  document.addEventListener('mouseleave', () => gsap.to(ring, { opacity: 0, duration: 0.2 }));
-  document.addEventListener('mouseenter', () => {
-    if (hasMoved) gsap.to(ring, { opacity: 1, duration: 0.2 });
-  });
-})();
 
 /* ================================================
    CINEMATIC 3-STAGE HERO SCROLLING ENGINE
