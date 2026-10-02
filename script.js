@@ -1034,6 +1034,7 @@ function renderMarqueeTrack() {
     const avatarSrc = fb.avatar || 'https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?w=150&auto=format&fit=crop&q=80';
     return `
       <div class="fb-card panel" data-index="${idx % feedbacks.length}">
+        <div class="fb-liquid-shine" aria-hidden="true"></div>
         <div class="panel-glow"></div>
         <div class="fb-header">
           <img src="${avatarSrc}" alt="${fb.name}" class="fb-avatar" loading="lazy" />
@@ -1054,6 +1055,16 @@ function renderMarqueeTrack() {
       const idx = card.getAttribute('data-index');
       const item = feedbacks[idx];
       if (item) openFeedbackModal(item);
+    });
+
+    card.addEventListener('mousemove', e => {
+      const rect = card.getBoundingClientRect();
+      const x = e.clientX - rect.left;
+      const y = e.clientY - rect.top;
+      const px = ((x / rect.width) * 100).toFixed(1) + '%';
+      const py = ((y / rect.height) * 100).toFixed(1) + '%';
+      card.style.setProperty('--mx', px);
+      card.style.setProperty('--my', py);
     });
   });
 }
