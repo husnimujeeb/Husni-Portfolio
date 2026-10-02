@@ -878,28 +878,25 @@ initHeadingHoverEffects();
 
 
 /* ================================================
-   WORK CARD GRID — stagger reveal
+   WORK CARD GRID — smooth Apple-style reveal
 ================================================ */
 qa('.work-grid').forEach(grid => {
   const cards = grid.querySelectorAll('.work-card');
   if (cards.length && typeof ScrollTrigger !== 'undefined') {
     gsap.from(cards, {
-      scrollTrigger: { trigger: grid, start: 'top 80%', once: true },
+      scrollTrigger: { trigger: grid, start: 'top 82%', once: true },
       opacity: 0,
-      y: 70,
-      scale: 0.94,
-      rotateX: 18,
-      transformPerspective: 900,
-      transformOrigin: '50% bottom',
-      stagger: 0.0255,
-      duration: 0.45,
-      ease: 'power3.out',
+      y: 36,
+      scale: 0.97,
+      stagger: 0.04,
+      duration: 0.55,
+      ease: 'power2.out',
     });
   }
 });
 
 /* ================================================
-   WORK CARD 3D TILT (on mousemove)
+   WORK CARD MINIMALISTIC APPLE-STYLE HOVER
 ================================================ */
 qa('.tilt-card').forEach(card => {
   if (window.matchMedia('(hover: none)').matches) return;
@@ -907,40 +904,38 @@ qa('.tilt-card').forEach(card => {
   const shine = card.querySelector('.card-shine');
   let animFrame;
 
+  card.addEventListener('mouseenter', () => {
+    gsap.to(card, {
+      y: -6,
+      scale: 1.016,
+      duration: 0.35,
+      ease: 'power2.out',
+      overwrite: 'auto',
+    });
+  });
+
   card.addEventListener('mousemove', e => {
+    if (!shine) return;
     cancelAnimationFrame(animFrame);
     animFrame = requestAnimationFrame(() => {
       const rect = card.getBoundingClientRect();
-      const x    = e.clientX - rect.left;
-      const y    = e.clientY - rect.top;
-      const cx   = rect.width  / 2;
-      const cy   = rect.height / 2;
-      const rx   = clamp(((y - cy) / cy) * -16, -16, 16);
-      const ry   = clamp(((x - cx) / cx) *  16, -16, 16);
-
-      gsap.to(card, {
-        rotateX: rx, rotateY: ry,
-        scale: 1.035,
-        transformPerspective: 900,
-        duration: 0.25,
-        ease: 'power2.out',
-      });
-
-      if (shine) {
-        const px = (x / rect.width  * 100).toFixed(1) + '%';
-        const py = (y / rect.height * 100).toFixed(1) + '%';
-        shine.style.setProperty('--mx', px);
-        shine.style.setProperty('--my', py);
-      }
+      const x = e.clientX - rect.left;
+      const y = e.clientY - rect.top;
+      const px = ((x / rect.width) * 100).toFixed(1) + '%';
+      const py = ((y / rect.height) * 100).toFixed(1) + '%';
+      card.style.setProperty('--mx', px);
+      card.style.setProperty('--my', py);
     });
   });
 
   card.addEventListener('mouseleave', () => {
     cancelAnimationFrame(animFrame);
     gsap.to(card, {
-      rotateX: 0, rotateY: 0, scale: 1,
+      y: 0,
+      scale: 1,
       duration: 0.45,
-      ease: 'elastic.out(1, 0.4)',
+      ease: 'power2.out',
+      overwrite: 'auto',
     });
   });
 });

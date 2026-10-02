@@ -832,17 +832,27 @@ img { display: block; max-width: 100%; }
 }
 .work-card {
   position: relative;
-  border-radius: 14px;
+  border-radius: 18px;
   overflow: hidden;
   aspect-ratio: 4/3;
-  cursor: none;
-  transform-style: preserve-3d;
-  will-change: transform;
-  background: #0a0a0a;
-  box-shadow: 0 4px 30px rgba(0,0,0,0.6);
-  transition: box-shadow 0.4s;
+  background: #0b0d14;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  box-shadow:
+    0 4px 24px rgba(0, 0, 0, 0.45),
+    0 1px 3px rgba(0, 0, 0, 0.35);
+  transition:
+    transform 0.4s cubic-bezier(0.16, 1, 0.3, 1),
+    box-shadow 0.4s cubic-bezier(0.16, 1, 0.3, 1),
+    border-color 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+  will-change: transform, box-shadow;
 }
-.work-card:hover { box-shadow: 0 12px 60px rgba(232,67,26,0.15), 0 4px 30px rgba(0,0,0,0.8); }
+.work-card:hover {
+  border-color: rgba(255, 255, 255, 0.22);
+  box-shadow:
+    0 22px 50px -12px rgba(0, 0, 0, 0.75),
+    0 0 0 1px rgba(255, 255, 255, 0.14),
+    0 8px 30px rgba(232, 67, 26, 0.12);
+}
 
 /* Card face (gradient BG) */
 .card-face {
@@ -852,56 +862,62 @@ img { display: block; max-width: 100%; }
   display: flex;
   align-items: center;
   justify-content: center;
-  transition: transform 0.5s var(--ease-out);
+  transition: transform 0.45s cubic-bezier(0.16, 1, 0.3, 1);
 }
-.work-card:hover .card-face { transform: scale(1.04); }
+.work-card:hover .card-face { transform: scale(1.025); }
 .cf-icon {
   font-size: clamp(40px, 5vw, 72px);
-  color: rgba(255,255,255,0.08);
-  transition: color 0.4s, transform 0.5s;
+  color: rgba(255, 255, 255, 0.10);
+  transition: color 0.4s cubic-bezier(0.16, 1, 0.3, 1), transform 0.45s cubic-bezier(0.16, 1, 0.3, 1);
   display: block;
   text-align: center;
 }
-.work-card:hover .cf-icon { color: rgba(232,67,26,0.15); transform: scale(1.1) rotate(5deg); }
+.work-card:hover .cf-icon {
+  color: rgba(255, 255, 255, 0.22);
+  transform: scale(1.06);
+}
 
 /* Card info overlay */
 .card-info {
   position: absolute;
   bottom: 0; left: 0; right: 0;
-  padding: 20px 18px 16px;
-  background: linear-gradient(to top, rgba(0,0,0,0.92) 0%, transparent 100%);
-  transform: translateY(8px);
+  padding: 24px 22px 18px;
+  background: linear-gradient(to top, rgba(7, 9, 15, 0.96) 0%, rgba(7, 9, 15, 0.65) 60%, transparent 100%);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+  transform: translateY(6px);
   opacity: 0;
-  transition: opacity 0.35s, transform 0.35s;
+  transition: opacity 0.35s cubic-bezier(0.16, 1, 0.3, 1), transform 0.35s cubic-bezier(0.16, 1, 0.3, 1);
 }
 .work-card:hover .card-info { opacity: 1; transform: translateY(0); }
 .card-cat {
   display: block;
   font-size: 10px;
-  letter-spacing: 0.2em;
+  letter-spacing: 0.22em;
   text-transform: uppercase;
   color: var(--acc);
-  margin-bottom: 3px;
+  margin-bottom: 4px;
 }
 .card-title {
   font-family: var(--display);
-  font-size: 22px;
+  font-size: 23px;
   letter-spacing: 0.05em;
   color: var(--white);
 }
 
-/* Card shine (mouse follow) */
+/* Card shine (Apple-style soft cursor spotlight) */
 .card-shine {
   position: absolute;
   inset: 0;
   pointer-events: none;
   opacity: 0;
-  transition: opacity 0.3s;
-  border-radius: 14px;
+  transition: opacity 0.35s ease;
+  border-radius: 18px;
   background: radial-gradient(
-    circle at var(--mx, 50%) var(--my, 50%),
-    rgba(255,255,255,0.08) 0%,
-    transparent 65%
+    550px circle at var(--mx, 50%) var(--my, 50%),
+    rgba(255, 255, 255, 0.09) 0%,
+    rgba(255, 255, 255, 0.02) 40%,
+    transparent 70%
   );
 }
 .work-card:hover .card-shine { opacity: 1; }
