@@ -891,28 +891,19 @@ qa('.work-grid').forEach(grid => {
       stagger: 0.04,
       duration: 0.55,
       ease: 'power2.out',
+      clearProps: 'all',
     });
   }
 });
 
 /* ================================================
-   WORK CARD MINIMALISTIC APPLE-STYLE HOVER
+   WORK CARD APPLE-STYLE SOFT SPOTLIGHT SHEEN
 ================================================ */
 qa('.tilt-card').forEach(card => {
   if (window.matchMedia('(hover: none)').matches) return;
 
   const shine = card.querySelector('.card-shine');
   let animFrame;
-
-  card.addEventListener('mouseenter', () => {
-    gsap.to(card, {
-      y: -6,
-      scale: 1.016,
-      duration: 0.35,
-      ease: 'power2.out',
-      overwrite: 'auto',
-    });
-  });
 
   card.addEventListener('mousemove', e => {
     if (!shine) return;
@@ -925,17 +916,6 @@ qa('.tilt-card').forEach(card => {
       const py = ((y / rect.height) * 100).toFixed(1) + '%';
       card.style.setProperty('--mx', px);
       card.style.setProperty('--my', py);
-    });
-  });
-
-  card.addEventListener('mouseleave', () => {
-    cancelAnimationFrame(animFrame);
-    gsap.to(card, {
-      y: 0,
-      scale: 1,
-      duration: 0.45,
-      ease: 'power2.out',
-      overwrite: 'auto',
     });
   });
 });

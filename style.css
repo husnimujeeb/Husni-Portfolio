@@ -832,13 +832,14 @@ img { display: block; max-width: 100%; }
 }
 .work-card {
   position: relative;
-  border-radius: 18px;
+  border-radius: 20px;
   overflow: hidden;
   aspect-ratio: 4/3;
   background: #0b0d14;
-  border: 1px solid rgba(255, 255, 255, 0.08);
+  border: 1px solid rgba(255, 255, 255, 0.09);
   box-shadow:
-    0 4px 24px rgba(0, 0, 0, 0.45),
+    inset 0 1px 1px 0 rgba(255, 255, 255, 0.20),
+    0 4px 24px rgba(0, 0, 0, 0.5),
     0 1px 3px rgba(0, 0, 0, 0.35);
   transition:
     transform 0.4s cubic-bezier(0.16, 1, 0.3, 1),
@@ -846,12 +847,33 @@ img { display: block; max-width: 100%; }
     border-color 0.4s cubic-bezier(0.16, 1, 0.3, 1);
   will-change: transform, box-shadow;
 }
+
+/* Apple top-lit glass specular edge */
+.work-card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 8%;
+  right: 8%;
+  height: 1px;
+  background: linear-gradient(90deg, transparent 0%, rgba(255, 255, 255, 0.45) 50%, transparent 100%);
+  z-index: 5;
+  pointer-events: none;
+  opacity: 0.6;
+  transition: opacity 0.4s ease;
+}
+
 .work-card:hover {
-  border-color: rgba(255, 255, 255, 0.22);
+  transform: translateY(-8px) scale(1.02) !important;
+  border-color: rgba(255, 255, 255, 0.28);
   box-shadow:
-    0 22px 50px -12px rgba(0, 0, 0, 0.75),
-    0 0 0 1px rgba(255, 255, 255, 0.14),
-    0 8px 30px rgba(232, 67, 26, 0.12);
+    inset 0 1px 1px 0 rgba(255, 255, 255, 0.38),
+    0 26px 56px -12px rgba(0, 0, 0, 0.85),
+    0 0 0 1px rgba(255, 255, 255, 0.16),
+    0 10px 30px rgba(232, 67, 26, 0.16);
+}
+.work-card:hover::before {
+  opacity: 1;
 }
 
 /* Card face (gradient BG) */
@@ -862,19 +884,23 @@ img { display: block; max-width: 100%; }
   display: flex;
   align-items: center;
   justify-content: center;
-  transition: transform 0.45s cubic-bezier(0.16, 1, 0.3, 1);
+  transition: transform 0.45s cubic-bezier(0.16, 1, 0.3, 1), filter 0.45s cubic-bezier(0.16, 1, 0.3, 1);
 }
-.work-card:hover .card-face { transform: scale(1.025); }
+.work-card:hover .card-face {
+  transform: scale(1.035);
+  filter: brightness(1.15);
+}
 .cf-icon {
   font-size: clamp(40px, 5vw, 72px);
-  color: rgba(255, 255, 255, 0.10);
-  transition: color 0.4s cubic-bezier(0.16, 1, 0.3, 1), transform 0.45s cubic-bezier(0.16, 1, 0.3, 1);
+  color: rgba(255, 255, 255, 0.12);
+  transition: color 0.4s cubic-bezier(0.16, 1, 0.3, 1), transform 0.45s cubic-bezier(0.16, 1, 0.3, 1), filter 0.4s cubic-bezier(0.16, 1, 0.3, 1);
   display: block;
   text-align: center;
 }
 .work-card:hover .cf-icon {
-  color: rgba(255, 255, 255, 0.22);
-  transform: scale(1.06);
+  color: rgba(255, 255, 255, 0.35);
+  transform: scale(1.08);
+  filter: drop-shadow(0 0 16px rgba(255, 255, 255, 0.16));
 }
 
 /* Card info overlay */
@@ -883,8 +909,8 @@ img { display: block; max-width: 100%; }
   bottom: 0; left: 0; right: 0;
   padding: 24px 22px 18px;
   background: linear-gradient(to top, rgba(7, 9, 15, 0.96) 0%, rgba(7, 9, 15, 0.65) 60%, transparent 100%);
-  backdrop-filter: blur(14px);
-  -webkit-backdrop-filter: blur(14px);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
   transform: translateY(6px);
   opacity: 0;
   transition: opacity 0.35s cubic-bezier(0.16, 1, 0.3, 1), transform 0.35s cubic-bezier(0.16, 1, 0.3, 1);
@@ -897,12 +923,14 @@ img { display: block; max-width: 100%; }
   text-transform: uppercase;
   color: var(--acc);
   margin-bottom: 4px;
+  text-shadow: 0 0 12px var(--acc-glow);
 }
 .card-title {
   font-family: var(--display);
-  font-size: 23px;
+  font-size: 24px;
   letter-spacing: 0.05em;
   color: var(--white);
+  text-shadow: 0 2px 8px rgba(0, 0, 0, 0.8);
 }
 
 /* Card shine (Apple-style soft cursor spotlight) */
@@ -912,11 +940,11 @@ img { display: block; max-width: 100%; }
   pointer-events: none;
   opacity: 0;
   transition: opacity 0.35s ease;
-  border-radius: 18px;
+  border-radius: 20px;
   background: radial-gradient(
     550px circle at var(--mx, 50%) var(--my, 50%),
-    rgba(255, 255, 255, 0.09) 0%,
-    rgba(255, 255, 255, 0.02) 40%,
+    rgba(255, 255, 255, 0.11) 0%,
+    rgba(255, 255, 255, 0.03) 40%,
     transparent 70%
   );
 }
