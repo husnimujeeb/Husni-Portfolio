@@ -1727,10 +1727,10 @@ img { display: block; max-width: 100%; }
 }
 .contact-headline {
   font-family: var(--display);
-  font-size: clamp(28px, 5.5vw, 68px);
+  font-size: clamp(26px, 4.2vw, 56px);
   letter-spacing: 0.03em;
-  line-height: 1.15;
-  max-width: 820px;
+  line-height: 1.18;
+  max-width: 1140px;
   margin: 0 auto;
 }
 .contact-headline .acc { color: var(--acc); }
