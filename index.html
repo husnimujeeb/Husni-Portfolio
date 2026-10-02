@@ -8,7 +8,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Caveat:wght@600;700&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
-  <link rel="stylesheet" href="style.css?v=13.0" />
+  <link rel="stylesheet" href="style.css?v=15.0" />
 </head>
 <body>
 
@@ -65,19 +65,16 @@
   <div class="hero-scroll-track" id="hero-scroll-track">
     <div class="cinematic-stage" id="cinematic-stage">
       
-      <!-- Layer 1: Sky Background -->
-      <div class="cinematic-layer layer-sky" id="layer-sky">
-        <img src="assets/hero-sky.jpg?v=7.0" alt="Night sky" class="sky-bg-img" id="hero-sky" />
+      <!-- Layer 1: 3D Wintry Snowy Night Scene from Blender -->
+      <div class="cinematic-layer layer-scene-3d" id="layer-scene-3d">
+        <img src="assets/zoom_step_0.webp?v=15.0" alt="3D Wintry Snowy Night Scene" class="scene-3d-img step-0" id="scene-3d-step-0" />
+        <img src="assets/zoom_step_1.webp?v=15.0" alt="" class="scene-3d-img step-1" id="scene-3d-step-1" />
+        <img src="assets/zoom_step_2.webp?v=15.0" alt="" class="scene-3d-img step-2" id="scene-3d-step-2" />
       </div>
 
       <!-- Layer 2: 3D PORTFOLIO Typography (behind character) -->
       <div class="cinematic-layer layer-portfolio-title" id="layer-portfolio-title" aria-hidden="true">
         <div class="portfolio-word" id="portfolio-word">PORTFOLIO</div>
-      </div>
-
-      <!-- Layer 3: Tree Silhouettes with Wind Sway -->
-      <div class="cinematic-layer layer-trees" id="layer-trees" aria-hidden="true">
-        <canvas id="trees-canvas" class="trees-canvas"></canvas>
       </div>
 
       <!-- Layer 4: 3D Warm Orange Fireflies Particle Field -->
@@ -535,6 +532,6 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/@studio-freight/lenis@1.0.42/dist/lenis.min.js"></script>
-<script src="script.js?v=13.0"></script>
+<script src="script.js?v=15.0"></script>
 </body>
 </html>

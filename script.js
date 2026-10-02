@@ -68,66 +68,8 @@ if (lenis) {
 }
 
 /* ================================================
-   CINEMATIC 3-STAGE HERO — TREE WIND SWAY & FIREFLIES
+   CINEMATIC 3-STAGE HERO — ATMOSPHERIC FIREFLIES
 ================================================ */
-
-/* ── 1. Realistic 3D Pine Tree Wind Sway Canvas ── */
-function initTreesWind() {
-  const canvas = q('#trees-canvas');
-  if (!canvas) return;
-  const ctx = canvas.getContext('2d');
-  if (!ctx) return;
-
-  const darkImg = new Image();
-  let darkLoaded = false;
-  darkImg.onload = () => { darkLoaded = true; };
-  darkImg.src = 'assets/hero-trees.png?v=7.0';
-  if (darkImg.complete) darkLoaded = true;
-
-  let width = 0, height = 0;
-  function resize() {
-    width  = canvas.width  = window.innerWidth;
-    height = canvas.height = window.innerHeight;
-  }
-  resize();
-  window.addEventListener('resize', resize);
-
-  let time = 0;
-  const sliceCount = 80;
-
-  function renderWind() {
-    requestAnimationFrame(renderWind);
-    if (!width || !height || !darkLoaded) return;
-
-    ctx.clearRect(0, 0, width, height);
-    time += 0.016;
-
-    // Draw tree canopy in vertical slices with organic horizontal sway
-    const sliceWidth = width / sliceCount;
-    const imgSliceWidth = darkImg.naturalWidth / sliceCount;
-
-    for (let i = 0; i < sliceCount; i++) {
-      const xNorm = i / sliceCount;
-      // Multi-harmonic gentle breeze function
-      const windA = Math.sin(time * 1.1 + xNorm * 4.5) * 5;
-      const windB = Math.sin(time * 2.3 + xNorm * 8.0) * 2;
-      const totalSway = windA + windB;
-
-      const sx = i * imgSliceWidth;
-      const sy = 0;
-      const sWidth = imgSliceWidth;
-      const sHeight = darkImg.naturalHeight;
-
-      const dx = i * sliceWidth + totalSway;
-      const dy = 0;
-      const dWidth = sliceWidth + 0.5; // avoid seams
-      const dHeight = height;
-
-      ctx.drawImage(darkImg, sx, sy, sWidth, sHeight, dx, dy, dWidth, dHeight);
-    }
-  }
-  renderWind();
-}
 
 /* ── 2. Atmospheric 3D Warm Orange Fireflies ── */
 function initFireflies() {
@@ -220,19 +162,20 @@ function initFireflies() {
 let heroEntranceTL = null;
 
 function initCinematicHero() {
-  initTreesWind();
   initFireflies();
 
-  const scrollTrack    = q('#hero-scroll-track');
-  const stage          = q('#cinematic-stage');
-  const sky            = q('#layer-sky');
-  const portfolioWord  = q('#portfolio-word');
-  const trees          = q('#layer-trees');
-  const charWrapper    = q('#character-wrapper');
-  const stage3Content  = q('#layer-stage3-content');
-  const scrollHint     = q('#scroll-hint');
-  const nav            = q('#nav');
-  const blackout       = q('#hero-blackout');
+  const scrollTrack     = q('#hero-scroll-track');
+  const stage           = q('#cinematic-stage');
+  const scene3D         = q('#layer-scene-3d');
+  const step0           = q('#scene-3d-step-0');
+  const step1           = q('#scene-3d-step-1');
+  const step2           = q('#scene-3d-step-2');
+  const portfolioWord   = q('#portfolio-word');
+  const charWrapper     = q('#character-wrapper');
+  const stage3Content   = q('#layer-stage3-content');
+  const scrollHint      = q('#scroll-hint');
+  const nav             = q('#nav');
+  const blackout        = q('#hero-blackout');
   const firefliesCanvas = q('#fireflies-canvas');
 
   // Initial State Setup (Stage 1)
@@ -243,8 +186,10 @@ function initCinematicHero() {
 
   if (stage3Content) gsap.set(stage3Content, { opacity: 0, pointerEvents: 'none' });
   if (blackout)      gsap.set(blackout, { opacity: 0, pointerEvents: 'none' });
-  if (sky)           gsap.set(sky, { filter: 'brightness(1) blur(0px)', opacity: 1 });
-  if (trees)         gsap.set(trees, { filter: 'brightness(1) blur(0px)', opacity: 1 });
+  if (scene3D)       gsap.set(scene3D, { filter: 'brightness(1) blur(0px)', opacity: 1 });
+  if (step0)         gsap.set(step0, { scale: 1.02, opacity: 1 });
+  if (step1)         gsap.set(step1, { scale: 0.95, opacity: 0 });
+  if (step2)         gsap.set(step2, { scale: 0.92, opacity: 0 });
 
   // Rapid Counter Animation for Stats Card
   let countersAnimated = false;
@@ -343,8 +288,8 @@ function initCinematicHero() {
         duration: 0.10,
         ease: 'power2.out',
       }, 0.24)
-      // Background brightness slightly dimmed (0.48 - bright enough to see sky & trees, but softly blurred)
-      .to([sky, trees], {
+      // 3D Background softly dimmed (0.48) & blurred so details stand out
+      .to(scene3D, {
         filter: 'brightness(0.48) blur(3.5px)',
         duration: 0.10,
         ease: 'power2.out',
@@ -362,28 +307,46 @@ function initCinematicHero() {
         duration: 0.12,
         ease: 'power1.out',
       }, 0.58)
-      // Restore background brightness and crystal sharpness for the 3D zoom
-      .to([sky, trees], {
+      // Restore 3D background brightness and crystal sharpness for the zoom
+      .to(scene3D, {
         filter: 'brightness(1) blur(0px)',
         duration: 0.10,
         ease: 'power1.inOut',
       }, 0.60)
 
-      // ── PHASE 4: Forward zoom into the realistic 3D forest / trees (0.70 to 0.88) ──
-      .to(trees, {
-        scale: 3.5,
-        yPercent: 24,
-        transformOrigin: '50% 80%',
-        duration: 0.18,
+      // ── PHASE 4: Real 3D Forward Zoom into Snowy Cabin & Winter Trees (0.70 to 0.88) ──
+      // Step 0 moves forward and dissolves
+      .to(step0, {
+        scale: 1.42,
+        opacity: 0,
+        duration: 0.10,
         ease: 'power1.inOut',
       }, 0.70)
-      .to(sky, {
-        scale: 1.5,
-        yPercent: -12,
-        transformOrigin: '50% 50%',
-        duration: 0.18,
+      // Step 1 approaches the deer, tractor & cabin with real 3D camera perspective
+      .fromTo(step1, {
+        scale: 0.95,
+        opacity: 0,
+      }, {
+        scale: 1.30,
+        opacity: 1,
+        duration: 0.10,
         ease: 'power1.inOut',
       }, 0.70)
+      .to(step1, {
+        opacity: 0,
+        duration: 0.08,
+        ease: 'power1.inOut',
+      }, 0.80)
+      // Step 2 zooms right in front of the warm glowing windows & towering winter trees
+      .fromTo(step2, {
+        scale: 0.92,
+        opacity: 0,
+      }, {
+        scale: 1.22,
+        opacity: 1,
+        duration: 0.10,
+        ease: 'power1.inOut',
+      }, 0.78)
       .to(firefliesCanvas, {
         scale: 2.2,
         opacity: 0,
@@ -399,7 +362,7 @@ function initCinematicHero() {
         duration: 0.10,
         ease: 'power2.inOut',
       }, 0.86)
-      .to([trees, sky, firefliesCanvas], {
+      .to([scene3D, firefliesCanvas], {
         opacity: 0,
         duration: 0.08,
         ease: 'power2.inOut',
