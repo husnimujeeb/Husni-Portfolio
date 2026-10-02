@@ -937,20 +937,33 @@ if (photoItems.length && typeof ScrollTrigger !== 'undefined') {
 }
 
 /* ================================================
-   MAGNETIC BUTTONS — fluid follow & liquid scale
+   MAGNETIC BUTTONS — Apple UI Tactile Press & Follow
 ================================================ */
 qa('.magnetic-btn').forEach(btn => {
   if (window.matchMedia('(hover: none)').matches) return;
+  let isPressed = false;
+
+  btn.addEventListener('mousedown', () => {
+    isPressed = true;
+    gsap.to(btn, { scale: 0.95, duration: 0.08, ease: 'power2.out', overwrite: 'auto' });
+  });
+
+  btn.addEventListener('mouseup', () => {
+    isPressed = false;
+    gsap.to(btn, { scale: 1.02, duration: 0.25, ease: 'back.out(2)', overwrite: 'auto' });
+  });
 
   btn.addEventListener('mousemove', e => {
+    if (isPressed) return;
     const rect = btn.getBoundingClientRect();
-    const x = (e.clientX - rect.left - rect.width  / 2) * 0.35;
-    const y = (e.clientY - rect.top  - rect.height / 2) * 0.35;
-    gsap.to(btn, { x, y, scale: 1.035, duration: 0.25, ease: 'power2.out', overwrite: 'auto' });
+    const x = (e.clientX - rect.left - rect.width  / 2) * 0.3;
+    const y = (e.clientY - rect.top  - rect.height / 2) * 0.3;
+    gsap.to(btn, { x, y, scale: 1.02, duration: 0.25, ease: 'power2.out', overwrite: 'auto' });
   });
 
   btn.addEventListener('mouseleave', () => {
-    gsap.to(btn, { x: 0, y: 0, scale: 1, duration: 0.6, ease: 'elastic.out(1, 0.4)', overwrite: 'auto' });
+    isPressed = false;
+    gsap.to(btn, { x: 0, y: 0, scale: 1, duration: 0.5, ease: 'elastic.out(1, 0.4)', overwrite: 'auto' });
   });
 });
 
