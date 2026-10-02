@@ -937,7 +937,7 @@ if (photoItems.length && typeof ScrollTrigger !== 'undefined') {
 }
 
 /* ================================================
-   MAGNETIC BUTTONS
+   MAGNETIC BUTTONS — fluid follow & liquid scale
 ================================================ */
 qa('.magnetic-btn').forEach(btn => {
   if (window.matchMedia('(hover: none)').matches) return;
@@ -946,11 +946,11 @@ qa('.magnetic-btn').forEach(btn => {
     const rect = btn.getBoundingClientRect();
     const x = (e.clientX - rect.left - rect.width  / 2) * 0.35;
     const y = (e.clientY - rect.top  - rect.height / 2) * 0.35;
-    gsap.to(btn, { x, y, duration: 0.25, ease: 'power2.out' });
+    gsap.to(btn, { x, y, scale: 1.035, duration: 0.25, ease: 'power2.out', overwrite: 'auto' });
   });
 
   btn.addEventListener('mouseleave', () => {
-    gsap.to(btn, { x: 0, y: 0, duration: 0.6, ease: 'elastic.out(1, 0.4)' });
+    gsap.to(btn, { x: 0, y: 0, scale: 1, duration: 0.6, ease: 'elastic.out(1, 0.4)', overwrite: 'auto' });
   });
 });
 
