@@ -1375,7 +1375,12 @@ function openProjectModal(projectKey) {
     }
   }
 
-  if (scrollArea) scrollArea.scrollTop = 0;
+  if (scrollArea) {
+    scrollArea.scrollTop = 0;
+    setTimeout(() => {
+      scrollArea.focus({ preventScroll: true });
+    }, 50);
+  }
 
   if (lenis) lenis.stop();
   document.body.style.overflow = 'hidden';
@@ -1418,6 +1423,8 @@ function closeGuidelineLightbox() {
 
 function initBrandingProjectModal() {
   const modal = q('#project-modal');
+  const modalCard = q('.project-modal-card');
+  const scrollArea = q('.project-modal-scroll');
   const closeBtn = q('#project-modal-close');
   const lb = q('#guideline-lightbox');
   const lbCloseBtn = q('#guideline-lightbox-close');
@@ -1428,6 +1435,26 @@ function initBrandingProjectModal() {
       if (key) openProjectModal(key);
     });
   });
+
+  // Ensure mouse wheel and touch gestures scroll inside the modal without outer interference
+  if (modalCard) {
+    modalCard.addEventListener('wheel', e => {
+      e.stopPropagation();
+    }, { passive: true });
+
+    modalCard.addEventListener('touchmove', e => {
+      e.stopPropagation();
+    }, { passive: true });
+  }
+
+  if (modal) {
+    modal.addEventListener('wheel', e => {
+      if (scrollArea && (e.target === modal || !scrollArea.contains(e.target))) {
+        e.preventDefault();
+        scrollArea.scrollTop += e.deltaY;
+      }
+    }, { passive: false });
+  }
 
   if (closeBtn) closeBtn.addEventListener('click', closeProjectModal);
   if (modal) {

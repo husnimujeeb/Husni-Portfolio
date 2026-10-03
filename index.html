@@ -11,7 +11,7 @@
   <meta http-equiv="Pragma" content="no-cache" />
   <meta http-equiv="Expires" content="0" />
   <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Caveat:wght@600;700&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
-  <link rel="stylesheet" href="style.css?v=29.0" />
+  <link rel="stylesheet" href="style.css?v=30.0" />
 </head>
 <body>
 
@@ -467,8 +467,8 @@
 </section>
 
 <!-- ========== FEEDBACK DETAIL POPUP MODAL ========== -->
-<div id="feedback-modal" class="modal-overlay" aria-hidden="true">
-  <div class="modal-card panel">
+<div id="feedback-modal" class="modal-overlay" data-lenis-prevent="true" aria-hidden="true">
+  <div class="modal-card panel" data-lenis-prevent="true">
     <button class="modal-close" id="modal-close" aria-label="Close popup">✕</button>
     <div class="modal-header">
       <img id="modal-avatar" src="" alt="" class="modal-avatar-img" />
@@ -488,11 +488,11 @@
 </div>
 
 <!-- ========== BRANDING PROJECT DETAILS POPUP MODAL ========== -->
-<div id="project-modal" class="project-modal-overlay" aria-hidden="true" role="dialog" aria-modal="true" aria-labelledby="project-modal-title">
-  <div class="project-modal-card">
+<div id="project-modal" class="project-modal-overlay" data-lenis-prevent="true" aria-hidden="true" role="dialog" aria-modal="true" aria-labelledby="project-modal-title">
+  <div class="project-modal-card" data-lenis-prevent="true">
     <button class="project-modal-close" id="project-modal-close" aria-label="Close project modal">✕</button>
 
-    <div class="project-modal-scroll">
+    <div class="project-modal-scroll" data-lenis-prevent="true" tabindex="0">
       <!-- Modal Header / Brand Hero -->
       <div class="project-modal-header" id="project-modal-header">
         <div class="project-modal-glow" id="project-modal-glow"></div>
@@ -650,6 +650,6 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/@studio-freight/lenis@1.0.42/dist/lenis.min.js"></script>
-<script src="script.js?v=29.0"></script>
+<script src="script.js?v=30.0"></script>
 </body>
 </html>

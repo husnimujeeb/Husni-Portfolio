@@ -1742,23 +1742,32 @@ img { display: block; max-width: 100%; }
 }
 
 .project-modal-scroll {
+  flex: 1 1 auto;
+  min-height: 0;
+  max-height: 88vh;
   overflow-y: auto;
   overflow-x: hidden;
+  overscroll-behavior: contain;
   padding: 38px 40px 48px;
   -webkit-overflow-scrolling: touch;
+  touch-action: pan-y;
+  scrollbar-width: thin;
+  scrollbar-color: rgba(255, 255, 255, 0.25) rgba(255, 255, 255, 0.03);
+  outline: none;
 }
 .project-modal-scroll::-webkit-scrollbar {
-  width: 6px;
+  width: 8px;
 }
 .project-modal-scroll::-webkit-scrollbar-track {
   background: rgba(255, 255, 255, 0.03);
-}
-.project-modal-scroll::-webkit-scrollbar-thumb {
-  background: rgba(255, 255, 255, 0.2);
   border-radius: 4px;
 }
+.project-modal-scroll::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.25);
+  border-radius: 6px;
+}
 .project-modal-scroll::-webkit-scrollbar-thumb:hover {
-  background: rgba(255, 255, 255, 0.35);
+  background: var(--acc);
 }
 
 /* Modal Hero Header */
