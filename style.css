@@ -1322,6 +1322,20 @@ img { display: block; max-width: 100%; }
   border-color: rgba(255, 255, 255, 0.5);
 }
 
+.fb-avatar.fb-avatar-initials {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 14.5px;
+  font-weight: 700;
+  color: #ffffff;
+  background: linear-gradient(135deg, rgba(255, 255, 255, 0.16), rgba(255, 255, 255, 0.05));
+  border: 1.5px solid rgba(255, 255, 255, 0.22);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
+  letter-spacing: 0.04em;
+  user-select: none;
+}
+
 .fb-meta {
   display: flex;
   flex-direction: column;
@@ -1642,6 +1656,17 @@ img { display: block; max-width: 100%; }
   border-radius: 50%;
   object-fit: cover;
   border: 2px solid var(--acc);
+}
+.modal-avatar-img.modal-avatar-initials {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 19px;
+  font-weight: 700;
+  color: #ffffff;
+  background: linear-gradient(135deg, rgba(255, 255, 255, 0.16), rgba(255, 255, 255, 0.05));
+  border: 2px solid var(--acc);
+  user-select: none;
 }
 .modal-client-name {
   font-family: var(--display);

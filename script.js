@@ -951,7 +951,7 @@ const defaultFeedbacks = [
     project: 'Luxury Brand Identity',
     rating: 5,
     message: 'Husni completely transformed our visual brand. The precision, cinematic typography, and creative direction exceeded every expectation. Truly world-class work!',
-    avatar: 'https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=150&auto=format&fit=crop&q=80',
+    avatar: '',
     attachedImg: ''
   },
   {
@@ -960,7 +960,7 @@ const defaultFeedbacks = [
     project: 'SaaS Mobile App UI/UX',
     rating: 5,
     message: 'Working with Husni on our product redesign was an absolute pleasure. Intuitive UX layouts, state-of-the-art aesthetic, and prompt delivery on every milestone.',
-    avatar: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=150&auto=format&fit=crop&q=80',
+    avatar: '',
     attachedImg: ''
   },
   {
@@ -968,8 +968,8 @@ const defaultFeedbacks = [
     name: 'Elena Rostova',
     project: 'Fashion Lookbook Photography',
     rating: 5,
-    message: 'Incredible photographic eye and lighting direction! Captured our entire seasonal collection with cinematic mood and breathtaking editorial quality.',
-    avatar: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=150&auto=format&fit=crop&q=80',
+    message: 'Incredible photographic eye and lighting direction! Captured our seasonal collection with cinematic mood and breathtaking editorial quality.',
+    avatar: '',
     attachedImg: ''
   },
   {
@@ -978,7 +978,7 @@ const defaultFeedbacks = [
     project: 'AI Generative Campaign',
     rating: 5,
     message: 'The AI content generation and custom prompt engineering Husni delivered gave our marketing campaign massive organic engagement. Highly recommended!',
-    avatar: 'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=150&auto=format&fit=crop&q=80',
+    avatar: '',
     attachedImg: ''
   },
   {
@@ -987,46 +987,25 @@ const defaultFeedbacks = [
     project: 'Corporate Rebrand & Packaging',
     rating: 5,
     message: 'Husni’s creative vision and meticulous attention to detail gave our enterprise packaging a timeless luxury feel. Outstanding artist & director!',
-    avatar: 'https://images.unsplash.com/photo-1544005313-94ddf0286df2?w=150&auto=format&fit=crop&q=80',
+    avatar: '',
     attachedImg: ''
   }
 ];
 
-// Initials Monogram Avatar (Generated SVG Data-URI)
-function getInitialsAvatar(name) {
+function getInitials(name) {
   const cleanName = (name || 'User').trim();
   const parts = cleanName.split(/\s+/).filter(Boolean);
-  let initials = 'U';
   if (parts.length === 1) {
-    initials = parts[0].slice(0, 2).toUpperCase();
+    return parts[0].slice(0, 2).toUpperCase();
   } else if (parts.length >= 2) {
-    initials = (parts[0][0] + parts[parts.length - 1][0]).toUpperCase();
+    return (parts[0][0] + parts[parts.length - 1][0]).toUpperCase();
   }
-
-  // Generate consistent subtle hue based on user's name
-  let hash = 0;
-  for (let i = 0; i < cleanName.length; i++) {
-    hash = cleanName.charCodeAt(i) + ((hash << 5) - hash);
-  }
-  const hue = Math.abs(hash % 360);
-
-  const svg = `<svg xmlns="http://www.w3.org/2000/svg" width="160" height="160" viewBox="0 0 160 160">
-    <defs>
-      <linearGradient id="bg-${hue}" x1="0%" y1="0%" x2="100%" y2="100%">
-        <stop offset="0%" stop-color="hsl(${hue}, 40%, 22%)"/>
-        <stop offset="100%" stop-color="hsl(${hue}, 50%, 10%)"/>
-      </linearGradient>
-    </defs>
-    <rect width="160" height="160" rx="80" fill="url(#bg-${hue})"/>
-    <circle cx="80" cy="80" r="78" fill="none" stroke="rgba(255,255,255,0.18)" stroke-width="2"/>
-    <text x="80" y="96" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="52" font-weight="700" fill="#ffffff" text-anchor="middle" letter-spacing="1.5">${initials}</text>
-  </svg>`;
-  return 'data:image/svg+xml;utf8,' + encodeURIComponent(svg);
+  return 'U';
 }
 
-// Check if an email has a registered avatar (Gravatar SHA-256), else return initials
-async function getEmailAvatar(email, name) {
-  if (!email) return getInitialsAvatar(name);
+// Check if an email has a registered public avatar (Gravatar SHA-256), else return empty string
+async function getEmailAvatar(email) {
+  if (!email) return '';
   const normalized = email.trim().toLowerCase();
 
   try {
@@ -1057,10 +1036,10 @@ async function getEmailAvatar(email, name) {
       return gravatarUrl;
     }
   } catch (e) {
-    // If Web Crypto or network fails, fallback to initials
+    // If Web Crypto or network fails, no avatar
   }
 
-  return getInitialsAvatar(name);
+  return '';
 }
 
 function getStoredFeedbacks() {
@@ -1070,16 +1049,20 @@ function getStoredFeedbacks() {
       const parsed = JSON.parse(saved);
       if (Array.isArray(parsed) && parsed.length > 0) {
         return parsed.map(item => {
-          // If avatar was the hardcoded Unsplash photo or empty, replace with monogram initials
-          if (!item.avatar || item.avatar.includes('photo-1535713875002-d1d0cf377fde')) {
-            return { ...item, avatar: getInitialsAvatar(item.name) };
+          let cleanAvatar = item.avatar || '';
+          // Strip out ANY random unsplash image or mock data
+          if (cleanAvatar.includes('unsplash.com') || cleanAvatar.includes('photo-') || cleanAvatar.includes('data:image')) {
+            cleanAvatar = '';
           }
-          return item;
+          return {
+            ...item,
+            avatar: cleanAvatar
+          };
         });
       }
     }
   } catch(e) {}
-  return [...defaultFeedbacks];
+  return defaultFeedbacks.map(item => ({ ...item, avatar: '' }));
 }
 
 function saveFeedbacks(list) {
@@ -1100,15 +1083,18 @@ function renderMarqueeTrack() {
 
   track.innerHTML = displayList.map((fb, idx) => {
     const stars = '★'.repeat(fb.rating) + '☆'.repeat(5 - fb.rating);
-    const avatarSrc = (fb.avatar && !fb.avatar.includes('photo-1535713875002-d1d0cf377fde'))
-      ? fb.avatar
-      : getInitialsAvatar(fb.name);
+    const hasAvatar = fb.avatar && !fb.avatar.includes('unsplash.com') && !fb.avatar.includes('data:image');
+    const initials = getInitials(fb.name);
+    const avatarMarkup = hasAvatar
+      ? `<img src="${fb.avatar}" alt="${fb.name}" class="fb-avatar" loading="lazy" />`
+      : `<div class="fb-avatar fb-avatar-initials">${initials}</div>`;
+
     return `
       <div class="fb-card panel" data-index="${idx % feedbacks.length}">
         <div class="fb-liquid-shine" aria-hidden="true"></div>
         <div class="panel-glow"></div>
         <div class="fb-header">
-          <img src="${avatarSrc}" alt="${fb.name}" class="fb-avatar" loading="lazy" />
+          ${avatarMarkup}
           <div class="fb-meta">
             <h4 class="fb-name">${fb.name}</h4>
             <span class="fb-project">${fb.project}</span>
@@ -1145,6 +1131,7 @@ function openFeedbackModal(fb) {
   if (!modal) return;
 
   const avatar = q('#modal-avatar');
+  const avatarInitials = q('#modal-avatar-initials');
   const name = q('#modal-name');
   const project = q('#modal-project');
   const stars = q('#modal-stars');
@@ -1152,14 +1139,26 @@ function openFeedbackModal(fb) {
   const imgWrapper = q('#modal-image-wrapper');
   const attachedImg = q('#modal-attached-img');
 
-  const avatarSrc = (fb.avatar && !fb.avatar.includes('photo-1535713875002-d1d0cf377fde'))
-    ? fb.avatar
-    : getInitialsAvatar(fb.name);
+  const hasAvatar = fb.avatar && !fb.avatar.includes('unsplash.com') && !fb.avatar.includes('data:image');
 
-  if (avatar) {
-    avatar.src = avatarSrc;
-    avatar.alt = fb.name;
+  if (hasAvatar) {
+    if (avatar) {
+      avatar.src = fb.avatar;
+      avatar.alt = fb.name;
+      avatar.classList.remove('hidden');
+    }
+    if (avatarInitials) avatarInitials.classList.add('hidden');
+  } else {
+    if (avatar) {
+      avatar.src = '';
+      avatar.classList.add('hidden');
+    }
+    if (avatarInitials) {
+      avatarInitials.textContent = getInitials(fb.name);
+      avatarInitials.classList.remove('hidden');
+    }
   }
+
   if (name) name.textContent = fb.name;
   if (project) project.textContent = fb.project;
   if (stars) stars.textContent = '★'.repeat(fb.rating) + '☆'.repeat(5 - fb.rating);
@@ -1188,6 +1187,21 @@ function closeFeedbackModal() {
 }
 
 function initFeedbackSystem() {
+  // Proactively purge any legacy unsplash images in localStorage
+  try {
+    const raw = localStorage.getItem('husni_feedbacks');
+    if (raw && (raw.includes('unsplash.com') || raw.includes('photo-') || raw.includes('data:image'))) {
+      const parsed = JSON.parse(raw);
+      if (Array.isArray(parsed)) {
+        const cleaned = parsed.map(item => ({
+          ...item,
+          avatar: (item.avatar && (item.avatar.includes('unsplash.com') || item.avatar.includes('photo-') || item.avatar.includes('data:image'))) ? '' : (item.avatar || '')
+        }));
+        localStorage.setItem('husni_feedbacks', JSON.stringify(cleaned));
+      }
+    }
+  } catch (e) {}
+
   renderMarqueeTrack();
 
   const closeBtn = q('#modal-close');
@@ -1262,12 +1276,12 @@ function initFeedbackSystem() {
         submitBtn.innerHTML = 'Submitting Feedback...';
       }
 
-      // Check if user's email has a Gravatar image, else fallback to clean initials monogram
+      // Check if user's email has a genuine registered avatar, else no image
       let userAvatar = '';
       try {
-        userAvatar = await getEmailAvatar(email, name);
+        userAvatar = await getEmailAvatar(email);
       } catch (err) {
-        userAvatar = getInitialsAvatar(name);
+        userAvatar = '';
       }
 
       const newFb = {
