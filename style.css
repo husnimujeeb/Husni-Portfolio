@@ -1003,6 +1003,106 @@ img { display: block; max-width: 100%; }
 .work-card:hover .card-shine { opacity: 1; }
 
 /* ================================================
+   BRANDING PROJECTS GRID (4 project cards)
+================================================ */
+.branding-grid {
+  grid-template-columns: repeat(4, 1fr);
+  gap: 20px;
+}
+.branding-grid .work-card {
+  aspect-ratio: 4 / 3.4;
+}
+
+/* Logo Presentation Stage */
+.card-logo-stage {
+  position: absolute;
+  inset: 0;
+  bottom: 56px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 22px 24px;
+  pointer-events: none;
+  z-index: 2;
+}
+.card-ambient-glow {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  z-index: 1;
+  opacity: 0.85;
+  transition: opacity 0.4s ease;
+}
+.work-card:hover .card-ambient-glow {
+  opacity: 1;
+}
+
+.card-brand-logo {
+  max-width: 82%;
+  max-height: 72%;
+  width: auto;
+  height: auto;
+  object-fit: contain;
+  filter: drop-shadow(0 6px 16px rgba(0, 0, 0, 0.45));
+  transition: transform 0.45s cubic-bezier(0.16, 1, 0.3, 1), filter 0.45s cubic-bezier(0.16, 1, 0.3, 1);
+}
+.work-card:hover .card-brand-logo {
+  transform: scale(1.06);
+  filter: drop-shadow(0 14px 28px rgba(0, 0, 0, 0.65));
+}
+.card-brand-logo.logo-circle {
+  clip-path: circle(33.4% at 50% 50%);
+  transform: scale(1.36);
+}
+.work-card:hover .card-brand-logo.logo-circle {
+  transform: scale(1.44);
+}
+
+/* Card Info clearly visible on Branding Project Cards */
+.branding-grid .card-info {
+  opacity: 1;
+  transform: translateY(0);
+  background: linear-gradient(to top, rgba(7, 9, 15, 0.95) 0%, rgba(7, 9, 15, 0.65) 65%, transparent 100%);
+  padding: 16px 20px 14px;
+}
+.branding-grid .card-cat {
+  font-size: 10px;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: var(--acc);
+  margin-bottom: 2px;
+}
+.branding-grid .card-title {
+  font-family: var(--display);
+  font-size: 23px;
+  letter-spacing: 0.04em;
+  color: var(--white);
+  line-height: 1.1;
+  transition: color 0.3s ease, text-shadow 0.3s ease;
+}
+.branding-grid .work-card:hover .card-title {
+  color: #ffffff;
+  text-shadow: 0 0 16px rgba(255, 255, 255, 0.35);
+}
+
+@media (max-width: 1100px) {
+  .branding-grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 18px;
+  }
+}
+@media (max-width: 600px) {
+  .branding-grid {
+    grid-template-columns: 1fr;
+    gap: 16px;
+    padding: 0 16px 40px;
+  }
+  .branding-grid .work-card {
+    aspect-ratio: 16 / 11;
+  }
+}
+
+/* ================================================
    PHOTOGRAPHY GRID (masonry)
 ================================================ */
 .photo-grid {
