@@ -736,8 +736,10 @@ qa('.sec-intro').forEach(intro => {
 });
 
 /* ================================================
-   APPLE UI SYSTEM SMOOTH HOVER ON HEADINGS
+   APPLE UI SYSTEM SMOOTH DOCK WAVE ON HEADINGS
    (MY WORKS, BRANDING, SOCIAL MEDIA, PRINTING, PHOTOGRAPHY, CLIENT FEEDBACK)
+   Letter under cursor lifts up; adjacent side letters gently curve up ("ready to up")
+   with smooth Apple cosine interpolation and cohesive color shift.
 ================================================ */
 function initHeadingHoverEffects() {
   const handleBoxes = qa('.handles-box');
@@ -746,60 +748,101 @@ function initHeadingHoverEffects() {
     const titleEl = box.querySelector('.big-title');
     if (!titleEl) return;
 
+    // Pre-split characters if not split yet
+    if (!titleEl.querySelectorAll('.char').length) {
+      splitChars(titleEl);
+    }
+    const chars = titleEl.querySelectorAll('.char');
+
     // Reset any leftover 3D perspective / rotation on box
     gsap.set(box, { transformPerspective: 'none', rotateX: 0, rotateY: 0 });
 
-    const enterAnim = () => {
-      // Apple UI smooth upward lift and cohesive color shift
-      gsap.to(titleEl, {
-        y: -7,
-        color: '#E8431A',
-        textShadow: '0 0 20px rgba(232, 67, 26, 0.35)',
-        duration: 0.38,
-        ease: 'power3.out',
-        overwrite: 'auto',
-      });
+    const applyWave = (clientX, clientY) => {
+      const radius = 125; // Area of smooth Apple wave influence
 
-      const chars = titleEl.querySelectorAll('.char');
-      if (chars.length) {
-        gsap.to(chars, {
-          color: '#E8431A',
-          duration: 0.38,
-          ease: 'power3.out',
-          overwrite: 'auto',
-        });
-      }
+      chars.forEach(char => {
+        const charRect = char.getBoundingClientRect();
+        const charCenterX = charRect.left + charRect.width / 2;
+        const charCenterY = charRect.top + charRect.height / 2;
+
+        const dx = clientX - charCenterX;
+        const dy = (clientY - charCenterY) * 1.2;
+        const dist = Math.hypot(dx, dy);
+
+        if (dist < radius) {
+          // Smooth Apple cosine bell curve (0 to 1)
+          const norm = dist / radius;
+          const power = 0.5 * (1 + Math.cos(norm * Math.PI));
+          const liftY = -14 * power;
+
+          // Liquid color interpolation towards accent orange (#E8431A)
+          const r = Math.round(255 - 23 * power);
+          const g = Math.round(255 - 188 * power);
+          const b = Math.round(255 - 229 * power);
+
+          gsap.to(char, {
+            y: liftY,
+            color: `rgb(${r}, ${g}, ${b})`,
+            textShadow: power > 0.35 ? `0 0 ${(14 * power).toFixed(1)}px rgba(232, 67, 26, 0.4)` : 'none',
+            rotate: 0,
+            scale: 1,
+            duration: 0.18,
+            ease: 'power2.out',
+            overwrite: 'auto',
+          });
+        } else {
+          gsap.to(char, {
+            y: 0,
+            color: '#ffffff',
+            textShadow: 'none',
+            rotate: 0,
+            scale: 1,
+            duration: 0.32,
+            ease: 'power2.out',
+            overwrite: 'auto',
+          });
+        }
+      });
     };
 
-    const leaveAnim = () => {
-      // Apple UI smooth return glide
-      gsap.to(titleEl, {
-        y: 0,
-        color: '#ffffff',
-        textShadow: 'none',
-        duration: 0.45,
-        ease: 'power3.out',
-        overwrite: 'auto',
-      });
-
-      const chars = titleEl.querySelectorAll('.char');
-      if (chars.length) {
-        gsap.to(chars, {
+    const resetChars = () => {
+      chars.forEach(char => {
+        gsap.to(char, {
+          y: 0,
           color: '#ffffff',
-          duration: 0.45,
+          textShadow: 'none',
+          rotate: 0,
+          scale: 1,
+          duration: 0.42,
           ease: 'power3.out',
           overwrite: 'auto',
         });
-      }
+      });
     };
 
-    box.addEventListener('mouseenter', enterAnim);
-    box.addEventListener('mouseleave', leaveAnim);
+    // Smooth Desktop Mousemove Wave
+    box.addEventListener('mousemove', e => {
+      applyWave(e.clientX, e.clientY);
+    });
 
-    // Mobile / touch support
-    box.addEventListener('touchstart', enterAnim, { passive: true });
+    // Reset when cursor leaves the heading box
+    box.addEventListener('mouseleave', resetChars);
+
+    // Touch support for mobile devices
+    box.addEventListener('touchstart', e => {
+      if (e.touches && e.touches[0]) {
+        applyWave(e.touches[0].clientX, e.touches[0].clientY);
+      }
+    }, { passive: true });
+
+    box.addEventListener('touchmove', e => {
+      if (e.touches && e.touches[0]) {
+        applyWave(e.touches[0].clientX, e.touches[0].clientY);
+      }
+    }, { passive: true });
+
     box.addEventListener('touchend', () => {
-      setTimeout(leaveAnim, 300);
+      setTimeout(resetChars, 300);
     }, { passive: true });
   });
 }
