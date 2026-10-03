@@ -1017,11 +1017,11 @@ img { display: block; max-width: 100%; }
 .card-logo-stage {
   position: absolute;
   inset: 0;
-  bottom: 56px;
+  bottom: 52px;
   display: flex;
   align-items: center;
   justify-content: center;
-  padding: 22px 24px;
+  padding: 14px 18px;
   pointer-events: none;
   z-index: 2;
 }
@@ -1038,24 +1038,17 @@ img { display: block; max-width: 100%; }
 }
 
 .card-brand-logo {
-  max-width: 82%;
-  max-height: 72%;
+  max-width: 88%;
+  max-height: 80%;
   width: auto;
   height: auto;
   object-fit: contain;
-  filter: drop-shadow(0 6px 16px rgba(0, 0, 0, 0.45));
+  filter: drop-shadow(0 8px 20px rgba(0, 0, 0, 0.5));
   transition: transform 0.45s cubic-bezier(0.16, 1, 0.3, 1), filter 0.45s cubic-bezier(0.16, 1, 0.3, 1);
 }
 .work-card:hover .card-brand-logo {
-  transform: scale(1.06);
-  filter: drop-shadow(0 14px 28px rgba(0, 0, 0, 0.65));
-}
-.card-brand-logo.logo-circle {
-  clip-path: circle(33.4% at 50% 50%);
-  transform: scale(1.36);
-}
-.work-card:hover .card-brand-logo.logo-circle {
-  transform: scale(1.44);
+  transform: scale(1.07);
+  filter: drop-shadow(0 14px 28px rgba(0, 0, 0, 0.7));
 }
 
 /* Card Info clearly visible on Branding Project Cards */
