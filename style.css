@@ -1038,8 +1038,8 @@ img { display: block; max-width: 100%; }
 }
 
 .card-brand-logo {
-  max-width: 88%;
-  max-height: 80%;
+  max-width: 76%;
+  max-height: 68%;
   width: auto;
   height: auto;
   object-fit: contain;
