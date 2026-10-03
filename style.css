@@ -765,13 +765,13 @@ img { display: block; max-width: 100%; }
   position: relative;
   z-index: 1;
   cursor: default;
+  will-change: transform, color;
 }
 /* Individual chars (added by JS) */
 .char {
   display: inline-block;
   color: inherit;
-  will-change: transform, color, text-shadow;
-  transition: color 0.15s ease, text-shadow 0.15s ease;
+  will-change: color;
 }
 
 /* Cursor arrow accent */
