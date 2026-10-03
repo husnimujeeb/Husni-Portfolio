@@ -1186,6 +1186,51 @@ function closeFeedbackModal() {
   }
 }
 
+let currentPromptFeedbackText = '';
+
+function openGooglePromptModal(name, rating, message) {
+  const modal = q('#google-prompt-modal');
+  if (!modal) return;
+
+  currentPromptFeedbackText = message || '';
+
+  const userNameEl = q('#gmodal-user-name');
+  const starsEl = q('#gmodal-stars');
+  const msgEl = q('#gmodal-message');
+  const copyLabel = q('#gmodal-copy-label');
+
+  if (userNameEl) {
+    const firstName = (name || '').trim().split(/\s+/)[0] || 'Friend';
+    userNameEl.textContent = firstName;
+  }
+  if (starsEl) {
+    const r = parseInt(rating) || 5;
+    starsEl.textContent = '★'.repeat(r) + '☆'.repeat(5 - r);
+  }
+  if (msgEl) {
+    msgEl.textContent = `"${message}"`;
+  }
+  if (copyLabel) {
+    copyLabel.textContent = 'Copy Text';
+  }
+
+  // Pre-copy text to clipboard seamlessly so it's already copied
+  if (navigator.clipboard && navigator.clipboard.writeText && message) {
+    navigator.clipboard.writeText(message).catch(() => {});
+  }
+
+  modal.classList.add('active');
+  modal.setAttribute('aria-hidden', 'false');
+}
+
+function closeGooglePromptModal() {
+  const modal = q('#google-prompt-modal');
+  if (modal) {
+    modal.classList.remove('active');
+    modal.setAttribute('aria-hidden', 'true');
+  }
+}
+
 function initFeedbackSystem() {
   // Proactively purge any legacy unsplash images in localStorage
   try {
@@ -1212,8 +1257,70 @@ function initFeedbackSystem() {
       if (e.target === modal) closeFeedbackModal();
     });
   }
+
+  // Google Prompt Modal Controls
+  const gModal = q('#google-prompt-modal');
+  const gCloseBtn = q('#gmodal-close');
+  const gDismissBtn = q('#gmodal-dismiss-btn');
+  const gCopyBtn = q('#gmodal-copy-btn');
+  const gPostBtn = q('#gmodal-post-btn');
+  const gCopyLabel = q('#gmodal-copy-label');
+
+  if (gCloseBtn) gCloseBtn.addEventListener('click', closeGooglePromptModal);
+  if (gDismissBtn) gDismissBtn.addEventListener('click', closeGooglePromptModal);
+  if (gModal) {
+    gModal.addEventListener('click', e => {
+      if (e.target === gModal) closeGooglePromptModal();
+    });
+  }
+
+  async function copyReviewText() {
+    if (!currentPromptFeedbackText) return false;
+    try {
+      if (navigator.clipboard && navigator.clipboard.writeText) {
+        await navigator.clipboard.writeText(currentPromptFeedbackText);
+        return true;
+      } else {
+        const ta = document.createElement('textarea');
+        ta.value = currentPromptFeedbackText;
+        ta.style.position = 'fixed';
+        ta.style.opacity = '0';
+        document.body.appendChild(ta);
+        ta.select();
+        document.execCommand('copy');
+        document.body.removeChild(ta);
+        return true;
+      }
+    } catch (e) {
+      return false;
+    }
+  }
+
+  if (gCopyBtn) {
+    gCopyBtn.addEventListener('click', async () => {
+      const ok = await copyReviewText();
+      if (gCopyLabel) {
+        gCopyLabel.textContent = ok ? '✓ Copied!' : 'Text copied!';
+        setTimeout(() => { if (gCopyLabel) gCopyLabel.textContent = 'Copy Text'; }, 2500);
+      }
+    });
+  }
+
+  if (gPostBtn) {
+    gPostBtn.addEventListener('click', async () => {
+      await copyReviewText();
+      if (gCopyLabel) gCopyLabel.textContent = '✓ Copied to clipboard!';
+      setTimeout(() => {
+        closeGooglePromptModal();
+      }, 1500);
+    });
+  }
+
   document.addEventListener('keydown', e => {
-    if (e.key === 'Escape') closeFeedbackModal();
+    if (e.key === 'Escape') {
+      closeFeedbackModal();
+      closeGooglePromptModal();
+    }
   });
 
   const starOpts = qa('.star-opt');
@@ -1317,6 +1424,11 @@ function initFeedbackSystem() {
         submitBtn.disabled = false;
         submitBtn.innerHTML = origBtnHtml;
       }
+
+      // Automatically show attractive Google Review popup with review text pre-copied
+      setTimeout(() => {
+        openGooglePromptModal(name, rating, message);
+      }, 450);
     });
   }
 }

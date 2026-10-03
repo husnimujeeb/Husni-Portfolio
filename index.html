@@ -11,7 +11,7 @@
   <meta http-equiv="Pragma" content="no-cache" />
   <meta http-equiv="Expires" content="0" />
   <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Caveat:wght@600;700&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
-  <link rel="stylesheet" href="style.css?v=34.0" />
+  <link rel="stylesheet" href="style.css?v=35.0" />
 </head>
 <body>
 
@@ -529,6 +529,60 @@
   </div>
 </div>
 
+<!-- ========== GOOGLE REVIEW INVITATION POPUP MODAL ========== -->
+<div id="google-prompt-modal" class="modal-overlay google-prompt-overlay" data-lenis-prevent="true" aria-hidden="true" role="dialog" aria-modal="true" aria-labelledby="gmodal-title">
+  <div class="modal-card panel google-prompt-card" data-lenis-prevent="true">
+    <button class="modal-close" id="gmodal-close" aria-label="Close modal">✕</button>
+    
+    <div class="gmodal-badge-wrapper">
+      <div class="gmodal-icon-halo"></div>
+      <div class="gmodal-google-icon">
+        <svg viewBox="0 0 24 24" width="34" height="34">
+          <path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/>
+          <path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/>
+          <path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.06H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.94l2.85-2.22.81-.63z"/>
+          <path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.06l3.66 2.84c.87-2.6 3.3-4.52 6.16-4.52z"/>
+        </svg>
+      </div>
+      <span class="gmodal-pill-tag">OFFICIAL GOOGLE REVIEW</span>
+    </div>
+
+    <h3 class="gmodal-title" id="gmodal-title">Thank You, <span id="gmodal-user-name" class="acc">Friend</span>!</h3>
+    <p class="gmodal-subtitle">Your review is now live! Could you do me a quick 10-second favor and rate on Google Maps too?</p>
+
+    <div class="gmodal-preview-box">
+      <div class="gmodal-preview-header">
+        <span class="gmodal-preview-label">YOUR REVIEW (READY TO PASTE)</span>
+        <button type="button" class="gmodal-copy-btn" id="gmodal-copy-btn" aria-label="Copy review text">
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
+          <span id="gmodal-copy-label">Copy Text</span>
+        </button>
+      </div>
+      <div class="gmodal-stars" id="gmodal-stars">★★★★★</div>
+      <p class="gmodal-message" id="gmodal-message">"..."</p>
+    </div>
+
+    <div class="gmodal-steps">
+      <div class="gmodal-step-item">
+        <span class="gmodal-step-num">1</span>
+        <span class="gmodal-step-txt">Click the button below (copies review text automatically)</span>
+      </div>
+      <div class="gmodal-step-item">
+        <span class="gmodal-step-num">2</span>
+        <span class="gmodal-step-txt">On Google Maps, pick 5 stars &amp; simply <strong>Paste</strong></span>
+      </div>
+    </div>
+
+    <div class="gmodal-actions">
+      <a href="https://g.page/r/CVcUJ5AXvozFECE/review" target="_blank" rel="noopener noreferrer" class="hero-btn primary-btn gmodal-submit-btn magnetic-btn" id="gmodal-post-btn">
+        <span>Copy &amp; Open Google Review</span>
+        <span class="btn-arrow">↗</span>
+      </a>
+      <button type="button" class="gmodal-dismiss-btn" id="gmodal-dismiss-btn">Maybe Later</button>
+    </div>
+  </div>
+</div>
+
 <!-- ========== BRANDING PROJECT DETAILS POPUP MODAL ========== -->
 <div id="project-modal" class="project-modal-overlay" data-lenis-prevent="true" aria-hidden="true" role="dialog" aria-modal="true" aria-labelledby="project-modal-title">
   <div class="project-modal-card" data-lenis-prevent="true">
@@ -695,6 +749,6 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/@studio-freight/lenis@1.0.42/dist/lenis.min.js"></script>
-<script src="script.js?v=34.0"></script>
+<script src="script.js?v=35.0"></script>
 </body>
 </html>
