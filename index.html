@@ -11,7 +11,7 @@
   <meta http-equiv="Pragma" content="no-cache" />
   <meta http-equiv="Expires" content="0" />
   <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Caveat:wght@600;700&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
-  <link rel="stylesheet" href="style.css?v=31.0" />
+  <link rel="stylesheet" href="style.css?v=32.0" />
 </head>
 <body>
 
@@ -597,26 +597,29 @@
       <div class="contact-form-card panel">
         <div class="panel-glow"></div>
         <h3 class="cform-title">Send a Direct Message</h3>
-        <form id="contact-form" class="contact-form">
+        <form id="contact-form" class="contact-form" action="https://formsubmit.co/husnimujeeb.co@gmail.com" method="POST">
+          <input type="hidden" name="_captcha" value="false" />
+          <input type="hidden" name="_template" value="table" />
+          <input type="hidden" name="_subject" id="c-subject-hidden" value="New Portfolio Inquiry" />
           <div class="form-row">
             <div class="form-group">
               <label for="c-name" class="form-label">Name *</label>
-              <input type="text" id="c-name" class="form-input" placeholder="Your Name" required />
+              <input type="text" id="c-name" name="name" class="form-input" placeholder="Your Name" required />
             </div>
             <div class="form-group">
               <label for="c-phone" class="form-label">Contact Number *</label>
-              <input type="tel" id="c-phone" class="form-input" placeholder="+94 77 123 4567" required />
+              <input type="tel" id="c-phone" name="phone" class="form-input" placeholder="+94 77 123 4567" required />
             </div>
           </div>
           <div class="form-group">
             <label for="c-email" class="form-label">Email Address *</label>
-            <input type="email" id="c-email" class="form-input" placeholder="yourname@gmail.com" required />
+            <input type="email" id="c-email" name="email" class="form-input" placeholder="yourname@gmail.com" required />
           </div>
           <div class="form-group">
             <label for="c-message" class="form-label">Your Message *</label>
-            <textarea id="c-message" class="form-input form-textarea" rows="4" placeholder="Tell me about your project or inquiry..." required></textarea>
+            <textarea id="c-message" name="message" class="form-input form-textarea" rows="4" placeholder="Tell me about your project or inquiry..." required></textarea>
           </div>
-          <button type="submit" class="hero-btn primary-btn submit-btn magnetic-btn">
+          <button type="submit" id="c-submit-btn" class="hero-btn primary-btn submit-btn magnetic-btn">
             Send Message ↗
           </button>
           <div id="contact-status" class="form-status" aria-live="polite"></div>
@@ -662,6 +665,6 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/@studio-freight/lenis@1.0.42/dist/lenis.min.js"></script>
-<script src="script.js?v=31.0"></script>
+<script src="script.js?v=32.0"></script>
 </body>
 </html>

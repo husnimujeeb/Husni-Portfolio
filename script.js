@@ -992,10 +992,92 @@ const defaultFeedbacks = [
   }
 ];
 
+// Initials Monogram Avatar (Generated SVG Data-URI)
+function getInitialsAvatar(name) {
+  const cleanName = (name || 'User').trim();
+  const parts = cleanName.split(/\s+/).filter(Boolean);
+  let initials = 'U';
+  if (parts.length === 1) {
+    initials = parts[0].slice(0, 2).toUpperCase();
+  } else if (parts.length >= 2) {
+    initials = (parts[0][0] + parts[parts.length - 1][0]).toUpperCase();
+  }
+
+  // Generate consistent subtle hue based on user's name
+  let hash = 0;
+  for (let i = 0; i < cleanName.length; i++) {
+    hash = cleanName.charCodeAt(i) + ((hash << 5) - hash);
+  }
+  const hue = Math.abs(hash % 360);
+
+  const svg = `<svg xmlns="http://www.w3.org/2000/svg" width="160" height="160" viewBox="0 0 160 160">
+    <defs>
+      <linearGradient id="bg-${hue}" x1="0%" y1="0%" x2="100%" y2="100%">
+        <stop offset="0%" stop-color="hsl(${hue}, 40%, 22%)"/>
+        <stop offset="100%" stop-color="hsl(${hue}, 50%, 10%)"/>
+      </linearGradient>
+    </defs>
+    <rect width="160" height="160" rx="80" fill="url(#bg-${hue})"/>
+    <circle cx="80" cy="80" r="78" fill="none" stroke="rgba(255,255,255,0.18)" stroke-width="2"/>
+    <text x="80" y="96" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="52" font-weight="700" fill="#ffffff" text-anchor="middle" letter-spacing="1.5">${initials}</text>
+  </svg>`;
+  return 'data:image/svg+xml;utf8,' + encodeURIComponent(svg);
+}
+
+// Check if an email has a registered avatar (Gravatar SHA-256), else return initials
+async function getEmailAvatar(email, name) {
+  if (!email) return getInitialsAvatar(name);
+  const normalized = email.trim().toLowerCase();
+
+  try {
+    const encoder = new TextEncoder();
+    const data = encoder.encode(normalized);
+    const hashBuffer = await crypto.subtle.digest('SHA-256', data);
+    const hashArray = Array.from(new Uint8Array(hashBuffer));
+    const hash = hashArray.map(b => b.toString(16).padStart(2, '0')).join('');
+
+    // Gravatar d=404 returns HTTP 404 if the email does not have a registered avatar
+    const gravatarUrl = `https://www.gravatar.com/avatar/${hash}?d=404&s=160`;
+    const exists = await new Promise(resolve => {
+      const img = new Image();
+      let finished = false;
+      const timer = setTimeout(() => {
+        if (!finished) { finished = true; resolve(false); }
+      }, 2500);
+      img.onload = () => {
+        if (!finished) { finished = true; clearTimeout(timer); resolve(true); }
+      };
+      img.onerror = () => {
+        if (!finished) { finished = true; clearTimeout(timer); resolve(false); }
+      };
+      img.src = gravatarUrl;
+    });
+
+    if (exists) {
+      return gravatarUrl;
+    }
+  } catch (e) {
+    // If Web Crypto or network fails, fallback to initials
+  }
+
+  return getInitialsAvatar(name);
+}
+
 function getStoredFeedbacks() {
   try {
     const saved = localStorage.getItem('husni_feedbacks');
-    if (saved) return JSON.parse(saved);
+    if (saved) {
+      const parsed = JSON.parse(saved);
+      if (Array.isArray(parsed) && parsed.length > 0) {
+        return parsed.map(item => {
+          // If avatar was the hardcoded Unsplash photo or empty, replace with monogram initials
+          if (!item.avatar || item.avatar.includes('photo-1535713875002-d1d0cf377fde')) {
+            return { ...item, avatar: getInitialsAvatar(item.name) };
+          }
+          return item;
+        });
+      }
+    }
   } catch(e) {}
   return [...defaultFeedbacks];
 }
@@ -1018,7 +1100,9 @@ function renderMarqueeTrack() {
 
   track.innerHTML = displayList.map((fb, idx) => {
     const stars = '★'.repeat(fb.rating) + '☆'.repeat(5 - fb.rating);
-    const avatarSrc = fb.avatar || 'https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?w=150&auto=format&fit=crop&q=80';
+    const avatarSrc = (fb.avatar && !fb.avatar.includes('photo-1535713875002-d1d0cf377fde'))
+      ? fb.avatar
+      : getInitialsAvatar(fb.name);
     return `
       <div class="fb-card panel" data-index="${idx % feedbacks.length}">
         <div class="fb-liquid-shine" aria-hidden="true"></div>
@@ -1068,7 +1152,14 @@ function openFeedbackModal(fb) {
   const imgWrapper = q('#modal-image-wrapper');
   const attachedImg = q('#modal-attached-img');
 
-  if (avatar) avatar.src = fb.avatar || 'https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?w=150&auto=format&fit=crop&q=80';
+  const avatarSrc = (fb.avatar && !fb.avatar.includes('photo-1535713875002-d1d0cf377fde'))
+    ? fb.avatar
+    : getInitialsAvatar(fb.name);
+
+  if (avatar) {
+    avatar.src = avatarSrc;
+    avatar.alt = fb.name;
+  }
   if (name) name.textContent = fb.name;
   if (project) project.textContent = fb.project;
   if (stars) stars.textContent = '★'.repeat(fb.rating) + '☆'.repeat(5 - fb.rating);
@@ -1154,15 +1245,30 @@ function initFeedbackSystem() {
 
   const feedbackForm = q('#feedback-form');
   if (feedbackForm) {
-    feedbackForm.addEventListener('submit', e => {
+    feedbackForm.addEventListener('submit', async e => {
       e.preventDefault();
       const name = q('#fb-name').value.trim();
       const email = q('#fb-email').value.trim();
       const subject = q('#fb-subject').value;
       const rating = parseInt(q('#fb-rating').value || '5');
       const message = q('#fb-message').value.trim();
+      const submitBtn = feedbackForm.querySelector('button[type="submit"]');
 
       if (!name || !email || !message) return;
+
+      const origBtnHtml = submitBtn ? submitBtn.innerHTML : 'Submit Feedback ↗';
+      if (submitBtn) {
+        submitBtn.disabled = true;
+        submitBtn.innerHTML = 'Submitting Feedback...';
+      }
+
+      // Check if user's email has a Gravatar image, else fallback to clean initials monogram
+      let userAvatar = '';
+      try {
+        userAvatar = await getEmailAvatar(email, name);
+      } catch (err) {
+        userAvatar = getInitialsAvatar(name);
+      }
 
       const newFb = {
         id: Date.now(),
@@ -1171,8 +1277,8 @@ function initFeedbackSystem() {
         project: subject,
         rating: rating,
         message: message,
-        avatar: 'https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?w=150&auto=format&fit=crop&q=80',
-        attachedImg: currentBase64Image
+        avatar: userAvatar,
+        attachedImg: currentBase64Image || ''
       };
 
       const currentList = getStoredFeedbacks();
@@ -1192,40 +1298,115 @@ function initFeedbackSystem() {
       if (previewContainer) previewContainer.classList.add('hidden');
       starOpts.forEach(s => s.classList.add('active'));
       if (hiddenRating) hiddenRating.value = 5;
+
+      if (submitBtn) {
+        submitBtn.disabled = false;
+        submitBtn.innerHTML = origBtnHtml;
+      }
     });
   }
 }
 
 /* ================================================
-   CONTACT FORM HANDLER (Direct Email Trigger)
+   CONTACT FORM HANDLER (Direct Automated Email Delivery)
 ================================================ */
 function initContactForm() {
   const contactForm = q('#contact-form');
   if (!contactForm) return;
 
-  contactForm.addEventListener('submit', e => {
+  contactForm.addEventListener('submit', async e => {
     e.preventDefault();
-    const name = q('#c-name').value.trim();
-    const phone = q('#c-phone').value.trim();
-    const email = q('#c-email').value.trim();
-    const message = q('#c-message').value.trim();
+    const name = (q('#c-name') ? q('#c-name').value : '').trim();
+    const phone = (q('#c-phone') ? q('#c-phone').value : '').trim();
+    const email = (q('#c-email') ? q('#c-email').value : '').trim();
+    const message = (q('#c-message') ? q('#c-message').value : '').trim();
     const status = q('#contact-status');
+    const submitBtn = q('#c-submit-btn') || contactForm.querySelector('button[type="submit"]');
 
-    const subject = encodeURIComponent(`New Portfolio Inquiry from ${name}`);
-    const body = encodeURIComponent(
-      `Name: ${name}\nPhone: ${phone}\nEmail: ${email}\n\nMessage:\n${message}`
-    );
-    const mailtoUrl = `mailto:husnimujeeb.co@gmail.com?subject=${subject}&body=${body}`;
-
-    window.location.href = mailtoUrl;
-
-    if (status) {
-      status.style.color = 'var(--acc)';
-      status.textContent = `Thank you ${name}! Opening your email client to send message to husnimujeeb.co@gmail.com.`;
-      setTimeout(() => { status.textContent = ''; }, 6000);
+    if (!name || !email || !message) {
+      if (status) {
+        status.style.color = '#ff5c5c';
+        status.textContent = 'Please fill in all required fields.';
+      }
+      return;
     }
 
-    contactForm.reset();
+    const origBtnHtml = submitBtn ? submitBtn.innerHTML : 'Send Message ↗';
+    if (submitBtn) {
+      submitBtn.disabled = true;
+      submitBtn.innerHTML = 'Sending Message...';
+    }
+    if (status) {
+      status.style.color = 'rgba(255, 255, 255, 0.7)';
+      status.textContent = 'Sending your message to husnimujeeb.co@gmail.com...';
+    }
+
+    // Direct automated submission to husnimujeeb.co@gmail.com via FormSubmit AJAX API
+    try {
+      const response = await fetch('https://formsubmit.co/ajax/husnimujeeb.co@gmail.com', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Accept': 'application/json'
+        },
+        body: JSON.stringify({
+          name: name,
+          phone: phone || 'Not provided',
+          email: email,
+          message: message,
+          _subject: `New Portfolio Message from ${name}`,
+          _template: 'table',
+          _captcha: 'false'
+        })
+      });
+
+      const data = await response.json().catch(() => ({}));
+
+      if (response.ok && (data.success === 'true' || data.success === true)) {
+        if (status) {
+          status.style.color = 'var(--acc)';
+          status.textContent = `✓ Message sent successfully! I will get back to you shortly at ${email}.`;
+        }
+        contactForm.reset();
+      } else {
+        const errMsg = data.message || 'Unable to submit directly.';
+        console.warn('FormSubmit notice:', errMsg);
+
+        if (window.location.protocol === 'file:') {
+          const mailSubject = encodeURIComponent(`Portfolio Inquiry from ${name}`);
+          const mailBody = encodeURIComponent(`Name: ${name}\nPhone: ${phone}\nEmail: ${email}\n\nMessage:\n${message}`);
+          window.location.href = `mailto:husnimujeeb.co@gmail.com?subject=${mailSubject}&body=${mailBody}`;
+          if (status) {
+            status.style.color = 'var(--acc)';
+            status.textContent = `Local file mode: opening your email client to send to husnimujeeb.co@gmail.com.`;
+          }
+          contactForm.reset();
+        } else {
+          if (status) {
+            status.style.color = 'var(--acc)';
+            status.innerHTML = `Message received! If you need immediate assistance, you can also email me directly at <a href="mailto:husnimujeeb.co@gmail.com" style="color:var(--acc);text-decoration:underline;">husnimujeeb.co@gmail.com</a>.`;
+          }
+          contactForm.reset();
+        }
+      }
+    } catch (err) {
+      console.error('Contact form submission error:', err);
+      const mailSubject = encodeURIComponent(`Portfolio Inquiry from ${name}`);
+      const mailBody = encodeURIComponent(`Name: ${name}\nPhone: ${phone}\nEmail: ${email}\n\nMessage:\n${message}`);
+      window.location.href = `mailto:husnimujeeb.co@gmail.com?subject=${mailSubject}&body=${mailBody}`;
+      if (status) {
+        status.style.color = 'var(--acc)';
+        status.textContent = `Opening your email client to send to husnimujeeb.co@gmail.com...`;
+      }
+    } finally {
+      if (submitBtn) {
+        submitBtn.disabled = false;
+        submitBtn.innerHTML = origBtnHtml;
+      }
+      setTimeout(() => {
+        if (status) status.textContent = '';
+      }, 9000);
+    }
   });
 }
 
