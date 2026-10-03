@@ -1050,6 +1050,9 @@ img { display: block; max-width: 100%; }
   transform: scale(1.07);
   filter: drop-shadow(0 14px 28px rgba(0, 0, 0, 0.7));
 }
+.card-brand-logo.logo-mfyf {
+  border-radius: 50%;
+}
 
 /* Card Info clearly visible on Branding Project Cards */
 .branding-grid .card-info {
