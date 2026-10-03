@@ -1303,8 +1303,8 @@ function initFeedbackSystem() {
       const status = q('#form-status');
       if (status) {
         status.style.color = 'var(--acc)';
-        status.textContent = `Thank you, ${name}! Your feedback has been published live in the marquee.`;
-        setTimeout(() => { status.textContent = ''; }, 6000);
+        status.innerHTML = `Thank you, ${name}! Your feedback is live. Have a Google account? <a href="https://g.page/r/CVcUJ5AXvozFECE/review" target="_blank" rel="noopener noreferrer" style="color:#ffffff;text-decoration:underline;margin-left:6px;font-weight:600;">Rate 5★ on Google too ↗</a>`;
+        setTimeout(() => { status.textContent = ''; }, 12000);
       }
 
       feedbackForm.reset();
