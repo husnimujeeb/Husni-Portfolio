@@ -1055,18 +1055,47 @@ img { display: block; max-width: 100%; }
 }
 
 /* Card Info clearly visible on Branding Project Cards */
+.branding-grid .work-card {
+  cursor: pointer;
+}
 .branding-grid .card-info {
   opacity: 1;
   transform: translateY(0);
   background: linear-gradient(to top, rgba(7, 9, 15, 0.95) 0%, rgba(7, 9, 15, 0.65) 65%, transparent 100%);
   padding: 16px 20px 14px;
 }
+.branding-grid .card-info-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 3px;
+}
+.branding-grid .card-action-badge {
+  font-size: 9.5px;
+  font-weight: 600;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.6);
+  background: rgba(255, 255, 255, 0.08);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  padding: 2px 7px;
+  border-radius: 999px;
+  display: inline-flex;
+  align-items: center;
+  gap: 3px;
+  transition: all 0.3s ease;
+}
+.branding-grid .work-card:hover .card-action-badge {
+  background: rgba(232, 67, 26, 0.25);
+  border-color: var(--acc);
+  color: #ffffff;
+}
 .branding-grid .card-cat {
   font-size: 10px;
   letter-spacing: 0.22em;
   text-transform: uppercase;
   color: var(--acc);
-  margin-bottom: 2px;
+  margin-bottom: 0;
 }
 .branding-grid .card-title {
   font-family: var(--display);
@@ -1643,6 +1672,424 @@ img { display: block; max-width: 100%; }
   width: 100%;
   max-height: 280px;
   object-fit: cover;
+}
+
+/* ================================================
+   BRANDING PROJECT DETAILS POPUP MODAL
+================================================ */
+.project-modal-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 2200;
+  background: rgba(3, 4, 8, 0.84);
+  backdrop-filter: blur(24px);
+  -webkit-backdrop-filter: blur(24px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 24px;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+}
+.project-modal-overlay.active {
+  opacity: 1;
+  pointer-events: auto;
+}
+.project-modal-card {
+  position: relative;
+  width: 100%;
+  max-width: 960px;
+  max-height: 88vh;
+  background: #0c0e15;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: 26px;
+  box-shadow: 0 40px 100px rgba(0, 0, 0, 0.88), 0 0 50px rgba(255, 255, 255, 0.03);
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  transform: translateY(26px) scale(0.97);
+  transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+}
+.project-modal-overlay.active .project-modal-card {
+  transform: translateY(0) scale(1);
+}
+
+.project-modal-close {
+  position: absolute;
+  top: 20px;
+  right: 22px;
+  z-index: 30;
+  background: rgba(255, 255, 255, 0.08);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  color: var(--white);
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  font-size: 15px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  backdrop-filter: blur(8px);
+  transition: background 0.25s ease, transform 0.25s ease, border-color 0.25s ease;
+}
+.project-modal-close:hover {
+  background: var(--acc);
+  border-color: var(--acc);
+  color: #fff;
+  transform: rotate(90deg) scale(1.08);
+}
+
+.project-modal-scroll {
+  overflow-y: auto;
+  overflow-x: hidden;
+  padding: 38px 40px 48px;
+  -webkit-overflow-scrolling: touch;
+}
+.project-modal-scroll::-webkit-scrollbar {
+  width: 6px;
+}
+.project-modal-scroll::-webkit-scrollbar-track {
+  background: rgba(255, 255, 255, 0.03);
+}
+.project-modal-scroll::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.2);
+  border-radius: 4px;
+}
+.project-modal-scroll::-webkit-scrollbar-thumb:hover {
+  background: rgba(255, 255, 255, 0.35);
+}
+
+/* Modal Hero Header */
+.project-modal-header {
+  position: relative;
+  border-radius: 20px;
+  padding: 30px 32px;
+  display: flex;
+  align-items: center;
+  gap: 28px;
+  background: linear-gradient(135deg, rgba(255, 255, 255, 0.04) 0%, rgba(255, 255, 255, 0.01) 100%);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  overflow: hidden;
+  margin-bottom: 34px;
+}
+.project-modal-glow {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  opacity: 0.35;
+  filter: blur(45px);
+  z-index: 0;
+}
+.project-modal-logo-stage {
+  position: relative;
+  z-index: 1;
+  width: 120px;
+  height: 120px;
+  flex-shrink: 0;
+  border-radius: 18px;
+  background: rgba(0, 0, 0, 0.55);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 16px;
+  box-shadow: inset 0 2px 10px rgba(255, 255, 255, 0.02), 0 10px 24px rgba(0, 0, 0, 0.5);
+}
+.project-modal-logo {
+  max-width: 90%;
+  max-height: 90%;
+  width: auto;
+  height: auto;
+  object-fit: contain;
+  filter: drop-shadow(0 6px 16px rgba(0, 0, 0, 0.6));
+}
+.project-modal-logo.logo-mfyf {
+  border-radius: 50%;
+}
+.project-modal-header-info {
+  position: relative;
+  z-index: 1;
+  flex: 1;
+}
+.project-modal-badge {
+  display: inline-block;
+  font-size: 11px;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: var(--acc);
+  font-weight: 600;
+  margin-bottom: 6px;
+}
+.project-modal-title {
+  font-family: var(--display);
+  font-size: clamp(32px, 4.5vw, 46px);
+  letter-spacing: 0.04em;
+  color: var(--white);
+  line-height: 1.1;
+  margin: 0 0 6px;
+}
+.project-modal-subtitle {
+  font-size: 13.5px;
+  color: rgba(255, 255, 255, 0.6);
+  letter-spacing: 0.02em;
+}
+
+/* Modal Sections */
+.project-modal-section {
+  margin-bottom: 34px;
+}
+.project-modal-section:last-child {
+  margin-bottom: 0;
+}
+.project-section-header {
+  display: flex;
+  align-items: baseline;
+  gap: 12px;
+  margin-bottom: 14px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+  padding-bottom: 10px;
+}
+.project-section-tag {
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--acc);
+  background: rgba(232, 67, 26, 0.12);
+  padding: 3px 8px;
+  border-radius: 4px;
+}
+.project-section-title {
+  font-family: var(--display);
+  font-size: 21px;
+  letter-spacing: 0.05em;
+  color: var(--white);
+  margin: 0;
+}
+.project-modal-desc {
+  font-size: 15.5px;
+  line-height: 1.85;
+  color: rgba(240, 242, 248, 0.9);
+  font-weight: 400;
+  max-width: 860px;
+  margin: 0;
+}
+.project-guidelines-sub {
+  font-size: 13px;
+  color: rgba(255, 255, 255, 0.52);
+  margin: 0 0 18px;
+}
+
+/* Visual Identity Guidelines Grid */
+.project-guidelines-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 18px;
+}
+.guideline-card {
+  position: relative;
+  border-radius: 16px;
+  overflow: hidden;
+  background: rgba(18, 21, 30, 0.7);
+  border: 1px solid rgba(255, 255, 255, 0.09);
+  transition: transform 0.35s cubic-bezier(0.16, 1, 0.3, 1), border-color 0.35s ease, box-shadow 0.35s ease;
+  cursor: pointer;
+  display: flex;
+  flex-direction: column;
+}
+.guideline-card:hover {
+  transform: translateY(-5px);
+  border-color: rgba(255, 255, 255, 0.28);
+  box-shadow: 0 18px 36px rgba(0, 0, 0, 0.65), 0 0 20px rgba(255, 255, 255, 0.03);
+}
+.guideline-card-img-wrap {
+  width: 100%;
+  aspect-ratio: 1024 / 723;
+  overflow: hidden;
+  background: #000;
+  position: relative;
+}
+.guideline-card-img-wrap img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  display: block;
+  transition: transform 0.45s ease;
+}
+.guideline-card:hover .guideline-card-img-wrap img {
+  transform: scale(1.035);
+}
+.guideline-card-overlay {
+  position: absolute;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.45);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+  pointer-events: none;
+}
+.guideline-card:hover .guideline-card-overlay {
+  opacity: 1;
+}
+.guideline-zoom-pill {
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: #fff;
+  background: rgba(0, 0, 0, 0.75);
+  border: 1px solid rgba(255, 255, 255, 0.25);
+  backdrop-filter: blur(8px);
+  padding: 6px 12px;
+  border-radius: 999px;
+  transform: translateY(6px);
+  transition: transform 0.3s ease;
+}
+.guideline-card:hover .guideline-zoom-pill {
+  transform: translateY(0);
+}
+.guideline-card-footer {
+  padding: 12px 14px;
+  background: rgba(12, 14, 20, 0.95);
+  border-top: 1px solid rgba(255, 255, 255, 0.06);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+.guideline-card-info {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+.guideline-card-page {
+  font-size: 10px;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: var(--acc);
+  font-weight: 600;
+}
+.guideline-card-name {
+  font-size: 13px;
+  font-weight: 600;
+  color: #fff;
+  margin: 0;
+}
+.guideline-card-icon {
+  font-size: 13px;
+  color: rgba(255, 255, 255, 0.45);
+  transition: color 0.25s, transform 0.25s;
+}
+.guideline-card:hover .guideline-card-icon {
+  color: var(--acc);
+  transform: translate(2px, -2px);
+}
+
+/* Lightbox Modal */
+.guideline-lightbox {
+  position: fixed;
+  inset: 0;
+  z-index: 2350;
+  background: rgba(2, 3, 6, 0.94);
+  backdrop-filter: blur(28px);
+  -webkit-backdrop-filter: blur(28px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 24px;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.3s ease;
+}
+.guideline-lightbox.active {
+  opacity: 1;
+  pointer-events: auto;
+}
+.guideline-lightbox-close {
+  position: absolute;
+  top: 24px;
+  right: 24px;
+  width: 42px;
+  height: 42px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  color: #fff;
+  font-size: 16px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background 0.2s, transform 0.2s;
+  z-index: 10;
+}
+.guideline-lightbox-close:hover {
+  background: var(--acc);
+  transform: scale(1.08);
+}
+.guideline-lightbox-content {
+  max-width: 1200px;
+  max-height: 90vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+#guideline-lightbox-img {
+  max-width: 100%;
+  max-height: 80vh;
+  border-radius: 12px;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  box-shadow: 0 30px 80px rgba(0, 0, 0, 0.95);
+  object-fit: contain;
+}
+.guideline-lightbox-caption {
+  margin-top: 14px;
+  font-size: 13.5px;
+  color: rgba(255, 255, 255, 0.75);
+  letter-spacing: 0.04em;
+  text-align: center;
+}
+
+/* Modal Responsive Media Queries */
+@media (max-width: 900px) {
+  .project-guidelines-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+  .project-modal-scroll {
+    padding: 30px 26px 36px;
+  }
+  .project-modal-header {
+    flex-direction: column;
+    text-align: center;
+    gap: 18px;
+    padding: 24px 20px;
+  }
+}
+@media (max-width: 600px) {
+  .project-guidelines-grid {
+    grid-template-columns: 1fr;
+  }
+  .project-modal-scroll {
+    padding: 24px 18px 30px;
+  }
+  .project-modal-card {
+    max-height: 92vh;
+    border-radius: 20px;
+  }
+  .project-modal-logo-stage {
+    width: 95px;
+    height: 95px;
+  }
+  .project-modal-title {
+    font-size: 28px;
+  }
+  .project-modal-desc {
+    font-size: 14px;
+    line-height: 1.7;
+  }
 }
 
 /* Contact Grid & Contact Info Cards */

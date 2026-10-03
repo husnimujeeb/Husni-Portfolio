@@ -1229,9 +1229,237 @@ function initContactForm() {
   });
 }
 
-/* Initialize Form Systems */
+/* ================================================
+   BRANDING PROJECT CASE STUDY MODAL SYSTEM
+================================================ */
+const BRANDING_PROJECTS = {
+  'legacy-lence': {
+    id: 'legacy-lence',
+    name: 'Legacy Lense',
+    category: 'Brand Identity',
+    subtitle: 'Art Direction & Visual Storytelling',
+    logo: 'assets/branding-legacy-clean.png?v=3',
+    logoClass: '',
+    glowColor: 'rgba(255, 255, 255, 0.16)',
+    about: 'Legacy Lense is a photography brand created to capture meaningful moments and preserve them as lasting visual memories. The branding focuses on creating a timeless, elegant, and emotionally engaging visual identity that reflects the art of photography and visual storytelling.',
+    guidelinesTitle: 'Visual Identity',
+    guidelines: [
+      {
+        src: 'assets/legacy-guideline-01.png',
+        title: 'Brand Guideline',
+        page: 'Page 01',
+        caption: 'Brand Guideline · Core Visual Identity & Concept Overview'
+      },
+      {
+        src: 'assets/legacy-guideline-02.png',
+        title: 'Logo System',
+        page: 'Page 02',
+        caption: 'Logo System · Primary Mark, Inverted & Signature Gold Variations'
+      },
+      {
+        src: 'assets/legacy-guideline-03.png',
+        title: 'Colour Palette',
+        page: 'Page 03',
+        caption: 'Colour Palette · Legacy Black (50%), Warm Ivory (25%), Signature Gold (25%)'
+      }
+    ]
+  },
+  'zoro-visuals': {
+    id: 'zoro-visuals',
+    name: 'Zoro Visuals',
+    category: 'Brand Identity',
+    subtitle: 'Photography & Videography Studio',
+    logo: 'assets/branding-zoro-clean.png?v=3',
+    logoClass: '',
+    glowColor: 'rgba(232, 67, 26, 0.22)',
+    about: 'Zoro Visuals is a photography and videography studio focused on creating high-quality visual stories for individuals, brands, and special events. The branding was developed to give the studio a modern, creative, and professional identity that represents its visual storytelling approach.',
+    guidelinesTitle: 'Visual Identity',
+    guidelines: []
+  },
+  'spaira-ceylon': {
+    id: 'spaira-ceylon',
+    name: 'Spaira Ceylon',
+    category: 'Brand Identity',
+    subtitle: 'Food Brand & Premium Spices',
+    logo: 'assets/branding-spaira-clean.png?v=3',
+    logoClass: '',
+    glowColor: 'rgba(212, 160, 23, 0.22)',
+    about: 'Spaira Ceylon is a food brand specializing in authentic spices and a variety of delicious food products. The branding was designed to create a distinctive and appealing identity that communicates the richness of its products while maintaining a warm, memorable, and premium food-brand feel.',
+    guidelinesTitle: 'Visual Identity',
+    guidelines: []
+  },
+  'mfyf': {
+    id: 'mfyf',
+    name: 'MFYF',
+    category: 'Brand Identity',
+    subtitle: 'Moving Forward Youth Foundation',
+    logo: 'assets/branding-mfyf-clean.png?v=3',
+    logoClass: 'logo-mfyf',
+    glowColor: 'rgba(30, 150, 85, 0.22)',
+    about: 'Moving Forward Youth Foundation (MFYF) is a non-profit foundation focused on supporting and empowering young people through educational, social, and community-focused initiatives. The branding was developed to create a positive, youthful, and trustworthy identity that represents the foundation’s vision of helping youth move forward and build a better future.',
+    guidelinesTitle: 'Visual Identity',
+    guidelines: []
+  }
+};
+
+function openProjectModal(projectKey) {
+  const project = BRANDING_PROJECTS[projectKey];
+  if (!project) return;
+
+  const modal = q('#project-modal');
+  if (!modal) return;
+
+  const logoEl = q('#project-modal-logo');
+  const catEl = q('#project-modal-cat');
+  const titleEl = q('#project-modal-title');
+  const subEl = q('#project-modal-sub');
+  const aboutEl = q('#project-modal-about');
+  const glowEl = q('#project-modal-glow');
+  const guidelinesSec = q('#project-guidelines-section');
+  const guidelinesGrid = q('#project-guidelines-grid');
+  const guidelinesTitle = q('#project-guidelines-title');
+  const scrollArea = q('.project-modal-scroll');
+
+  if (logoEl) {
+    logoEl.src = project.logo;
+    logoEl.alt = `${project.name} Logo`;
+    logoEl.className = 'project-modal-logo ' + (project.logoClass || '');
+  }
+  if (catEl) catEl.textContent = project.category;
+  if (titleEl) titleEl.textContent = project.name;
+  if (subEl) subEl.textContent = project.subtitle;
+  if (aboutEl) aboutEl.textContent = project.about;
+  if (glowEl) glowEl.style.background = `radial-gradient(circle at 50% 50%, ${project.glowColor} 0%, transparent 70%)`;
+
+  // Render Visual Identity / Guidelines if available
+  if (guidelinesSec && guidelinesGrid) {
+    if (project.guidelines && project.guidelines.length > 0) {
+      guidelinesSec.style.display = 'block';
+      if (guidelinesTitle) guidelinesTitle.textContent = project.guidelinesTitle || 'VISUAL IDENTITY';
+
+      guidelinesGrid.innerHTML = project.guidelines.map((img, i) => `
+        <div class="guideline-card" data-idx="${i}" tabindex="0" role="button" aria-label="View ${img.title}">
+          <div class="guideline-card-img-wrap">
+            <img src="${img.src}" alt="${img.title}" loading="lazy" />
+            <div class="guideline-card-overlay">
+              <span class="guideline-zoom-pill">Preview Fullscreen ↗</span>
+            </div>
+          </div>
+          <div class="guideline-card-footer">
+            <div class="guideline-card-info">
+              <span class="guideline-card-page">${img.page}</span>
+              <h4 class="guideline-card-name">${img.title}</h4>
+            </div>
+            <span class="guideline-card-icon" aria-hidden="true">↗</span>
+          </div>
+        </div>
+      `).join('');
+
+      qa('.guideline-card', guidelinesGrid).forEach(card => {
+        const handleOpen = () => {
+          const idx = parseInt(card.getAttribute('data-idx'), 10);
+          const item = project.guidelines[idx];
+          if (item) openGuidelineLightbox(item);
+        };
+        card.addEventListener('click', handleOpen);
+        card.addEventListener('keydown', e => {
+          if (e.key === 'Enter' || e.key === ' ') {
+            e.preventDefault();
+            handleOpen();
+          }
+        });
+      });
+    } else {
+      guidelinesSec.style.display = 'none';
+      guidelinesGrid.innerHTML = '';
+    }
+  }
+
+  if (scrollArea) scrollArea.scrollTop = 0;
+
+  if (lenis) lenis.stop();
+  document.body.style.overflow = 'hidden';
+
+  modal.classList.add('active');
+  modal.setAttribute('aria-hidden', 'false');
+}
+
+function closeProjectModal() {
+  const modal = q('#project-modal');
+  if (!modal || !modal.classList.contains('active')) return;
+
+  modal.classList.remove('active');
+  modal.setAttribute('aria-hidden', 'true');
+
+  if (lenis) lenis.start();
+  document.body.style.overflow = '';
+}
+
+function openGuidelineLightbox(item) {
+  const lb = q('#guideline-lightbox');
+  if (!lb) return;
+  const img = q('#guideline-lightbox-img');
+  const cap = q('#guideline-lightbox-caption');
+  if (img) {
+    img.src = item.src;
+    img.alt = item.title;
+  }
+  if (cap) cap.textContent = item.caption || item.title;
+  lb.classList.add('active');
+  lb.setAttribute('aria-hidden', 'false');
+}
+
+function closeGuidelineLightbox() {
+  const lb = q('#guideline-lightbox');
+  if (!lb || !lb.classList.contains('active')) return;
+  lb.classList.remove('active');
+  lb.setAttribute('aria-hidden', 'true');
+}
+
+function initBrandingProjectModal() {
+  const modal = q('#project-modal');
+  const closeBtn = q('#project-modal-close');
+  const lb = q('#guideline-lightbox');
+  const lbCloseBtn = q('#guideline-lightbox-close');
+
+  qa('.branding-grid .work-card').forEach(card => {
+    card.addEventListener('click', () => {
+      const key = card.getAttribute('data-project');
+      if (key) openProjectModal(key);
+    });
+  });
+
+  if (closeBtn) closeBtn.addEventListener('click', closeProjectModal);
+  if (modal) {
+    modal.addEventListener('click', e => {
+      if (e.target === modal) closeProjectModal();
+    });
+  }
+
+  if (lbCloseBtn) lbCloseBtn.addEventListener('click', closeGuidelineLightbox);
+  if (lb) {
+    lb.addEventListener('click', e => {
+      if (e.target === lb || e.target.classList.contains('guideline-lightbox-content')) {
+        closeGuidelineLightbox();
+      }
+    });
+  }
+
+  document.addEventListener('keydown', e => {
+    if (e.key === 'Escape') {
+      if (lb && lb.classList.contains('active')) {
+        closeGuidelineLightbox();
+      } else if (modal && modal.classList.contains('active')) {
+        closeProjectModal();
+      }
+    }
+  });
+}
+
+/* Initialize Form & Modal Systems */
 initFeedbackSystem();
 initContactForm();
+initBrandingProjectModal();
 
 /* ================================================
    RESIZE — refresh ScrollTrigger

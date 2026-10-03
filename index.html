@@ -11,7 +11,7 @@
   <meta http-equiv="Pragma" content="no-cache" />
   <meta http-equiv="Expires" content="0" />
   <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Caveat:wght@600;700&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
-  <link rel="stylesheet" href="style.css?v=28.0" />
+  <link rel="stylesheet" href="style.css?v=29.0" />
 </head>
 <body>
 
@@ -211,21 +211,24 @@
     </div>
   </div>
   <div class="work-grid branding-grid">
-    <div class="work-card tilt-card" id="bc-1">
+    <div class="work-card tilt-card" id="bc-1" data-project="legacy-lence">
       <div class="card-face" style="--g1:#090b10;--g2:#121622">
         <div class="card-ambient-glow" style="background: radial-gradient(circle at 50% 42%, rgba(255, 255, 255, 0.07) 0%, transparent 68%);"></div>
         <div class="card-logo-stage">
-          <img src="assets/branding-legacy-clean.png?v=3" alt="Legacy Lence" class="card-brand-logo" loading="lazy" />
+          <img src="assets/branding-legacy-clean.png?v=3" alt="Legacy Lense" class="card-brand-logo" loading="lazy" />
         </div>
       </div>
       <div class="card-info">
-        <span class="card-cat">Branding</span>
-        <h3 class="card-title">Legacy Lence</h3>
+        <div class="card-info-header">
+          <span class="card-cat">Branding</span>
+          <span class="card-action-badge">Case Study ↗</span>
+        </div>
+        <h3 class="card-title">Legacy Lense</h3>
       </div>
       <div class="card-shine"></div>
     </div>
 
-    <div class="work-card tilt-card" id="bc-2">
+    <div class="work-card tilt-card" id="bc-2" data-project="zoro-visuals">
       <div class="card-face" style="--g1:#110905;--g2:#241208">
         <div class="card-ambient-glow" style="background: radial-gradient(circle at 50% 42%, rgba(232, 67, 26, 0.16) 0%, transparent 68%);"></div>
         <div class="card-logo-stage">
@@ -233,13 +236,16 @@
         </div>
       </div>
       <div class="card-info">
-        <span class="card-cat">Branding</span>
+        <div class="card-info-header">
+          <span class="card-cat">Branding</span>
+          <span class="card-action-badge">Case Study ↗</span>
+        </div>
         <h3 class="card-title">Zoro Visuals</h3>
       </div>
       <div class="card-shine"></div>
     </div>
 
-    <div class="work-card tilt-card" id="bc-3">
+    <div class="work-card tilt-card" id="bc-3" data-project="spaira-ceylon">
       <div class="card-face" style="--g1:#120609;--g2:#240d14">
         <div class="card-ambient-glow" style="background: radial-gradient(circle at 50% 42%, rgba(212, 160, 23, 0.16) 0%, transparent 68%);"></div>
         <div class="card-logo-stage">
@@ -247,13 +253,16 @@
         </div>
       </div>
       <div class="card-info">
-        <span class="card-cat">Branding</span>
+        <div class="card-info-header">
+          <span class="card-cat">Branding</span>
+          <span class="card-action-badge">Case Study ↗</span>
+        </div>
         <h3 class="card-title">Spaira Ceylon</h3>
       </div>
       <div class="card-shine"></div>
     </div>
 
-    <div class="work-card tilt-card" id="bc-4">
+    <div class="work-card tilt-card" id="bc-4" data-project="mfyf">
       <div class="card-face" style="--g1:#050d12;--g2:#0a1b24">
         <div class="card-ambient-glow" style="background: radial-gradient(circle at 50% 42%, rgba(30, 150, 85, 0.16) 0%, transparent 68%);"></div>
         <div class="card-logo-stage">
@@ -261,7 +270,10 @@
         </div>
       </div>
       <div class="card-info">
-        <span class="card-cat">Branding</span>
+        <div class="card-info-header">
+          <span class="card-cat">Branding</span>
+          <span class="card-action-badge">Case Study ↗</span>
+        </div>
         <h3 class="card-title">MFYF</h3>
       </div>
       <div class="card-shine"></div>
@@ -475,6 +487,58 @@
   </div>
 </div>
 
+<!-- ========== BRANDING PROJECT DETAILS POPUP MODAL ========== -->
+<div id="project-modal" class="project-modal-overlay" aria-hidden="true" role="dialog" aria-modal="true" aria-labelledby="project-modal-title">
+  <div class="project-modal-card">
+    <button class="project-modal-close" id="project-modal-close" aria-label="Close project modal">✕</button>
+
+    <div class="project-modal-scroll">
+      <!-- Modal Header / Brand Hero -->
+      <div class="project-modal-header" id="project-modal-header">
+        <div class="project-modal-glow" id="project-modal-glow"></div>
+        <div class="project-modal-logo-stage">
+          <img id="project-modal-logo" src="" alt="Brand Logo" class="project-modal-logo" />
+        </div>
+        <div class="project-modal-header-info">
+          <div class="project-modal-badge" id="project-modal-cat">BRAND IDENTITY</div>
+          <h2 class="project-modal-title" id="project-modal-title"></h2>
+          <div class="project-modal-subtitle" id="project-modal-sub"></div>
+        </div>
+      </div>
+
+      <!-- About Section -->
+      <div class="project-modal-section">
+        <div class="project-section-header">
+          <span class="project-section-tag">OVERVIEW</span>
+          <h3 class="project-section-title">ABOUT THE PROJECT</h3>
+        </div>
+        <p class="project-modal-desc" id="project-modal-about"></p>
+      </div>
+
+      <!-- Brand Guidelines / Visual Identity Section -->
+      <div class="project-modal-section" id="project-guidelines-section">
+        <div class="project-section-header">
+          <span class="project-section-tag">IDENTITY SYSTEM</span>
+          <h3 class="project-section-title" id="project-guidelines-title">VISUAL IDENTITY</h3>
+        </div>
+        <p class="project-guidelines-sub">Brand guidelines, design principles, and visual identity system.</p>
+        <div class="project-guidelines-grid" id="project-guidelines-grid">
+          <!-- Dynamically populated via script -->
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Guideline Image Lightbox Preview -->
+<div id="guideline-lightbox" class="guideline-lightbox" aria-hidden="true">
+  <button class="guideline-lightbox-close" id="guideline-lightbox-close" aria-label="Close preview">✕</button>
+  <div class="guideline-lightbox-content">
+    <img id="guideline-lightbox-img" src="" alt="Guideline Fullscreen Preview" />
+    <div id="guideline-lightbox-caption" class="guideline-lightbox-caption"></div>
+  </div>
+</div>
+
 <!-- ==================================== -->
 <!--   SECTION 8 — CONTACT               -->
 <!-- ==================================== -->
@@ -586,6 +650,6 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/@studio-freight/lenis@1.0.42/dist/lenis.min.js"></script>
-<script src="script.js?v=27.0"></script>
+<script src="script.js?v=29.0"></script>
 </body>
 </html>
