@@ -1581,7 +1581,26 @@ const BRANDING_PROJECTS = {
     glowColor: 'rgba(232, 67, 26, 0.22)',
     about: 'Zoro Visuals is a photography and videography studio focused on creating high-quality visual stories for individuals, brands, and special events. The branding was developed to give the studio a modern, creative, and professional identity that represents its visual storytelling approach.',
     guidelinesTitle: 'Visual Identity',
-    guidelines: []
+    guidelines: [
+      {
+        src: 'assets/zoro-guideline-01.png',
+        title: 'Brand Guideline',
+        page: 'Page 01',
+        caption: 'Brand Guideline · Core Visual Identity & Studio Direction'
+      },
+      {
+        src: 'assets/zoro-guideline-02.png',
+        title: 'Logo System',
+        page: 'Page 02',
+        caption: 'Logo System · Primary Wordmark, Monogram & Layout Variations'
+      },
+      {
+        src: 'assets/zoro-guideline-03.png',
+        title: 'Colour Palette',
+        page: 'Page 03',
+        caption: 'Colour Palette · Zoro Dark, Studio Orange & Contrast Highlights'
+      }
+    ]
   },
   'spaira-ceylon': {
     id: 'spaira-ceylon',
