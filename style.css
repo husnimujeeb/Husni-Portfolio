@@ -342,12 +342,13 @@ img { display: block; max-width: 100%; }
 }
 .portfolio-word {
   font-family: var(--display);
-  font-size: clamp(80px, 17.5vw, 240px);
+  font-size: clamp(60px, 13vw, 205px);
   color: #ffffff;
   opacity: 0.9;
   letter-spacing: 0.08em;
   line-height: 0.85;
   text-align: center;
+  white-space: nowrap;
   user-select: none;
   transform-origin: center center;
   will-change: transform, opacity;
@@ -2709,7 +2710,7 @@ img { display: block; max-width: 100%; }
     height: 250vh;
   }
   .portfolio-word {
-    font-size: clamp(52px, 16vw, 130px);
+    font-size: clamp(40px, 11.5vw, 110px);
   }
   .character-wrapper {
     max-width: 600px;
@@ -2845,9 +2846,9 @@ img { display: block; max-width: 100%; }
   /* ── Hero scroll track — more room for 3 stages ── */
   .hero-scroll-track { height: 280vh; }
 
-  /* PORTFOLIO word — smaller so it fits above character */
+  /* HUSNI MUJEEB title — smaller so it fits above character */
   .portfolio-word {
-    font-size: clamp(36px, 11vw, 64px);
+    font-size: clamp(26px, 8.5vw, 54px);
     margin-top: 0;
     letter-spacing: 0.05em;
   }
